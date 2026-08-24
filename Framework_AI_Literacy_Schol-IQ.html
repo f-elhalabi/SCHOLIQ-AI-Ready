@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AI Literacy Framework | Schol-IQ</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;font-family:"Inter",sans-serif;background:#EEF4FF;color:#1E293B}
+.shell{display:grid;grid-template-columns:240px 1fr;grid-template-rows:58px 1fr;height:100vh}
+
+/* TOPBAR */
+.topbar{grid-column:1/-1;background:#0A1628;display:flex;align-items:center;padding:0 20px;gap:12px;position:relative;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.25)}
+.t-logo{height:30px;object-fit:contain;flex-shrink:0}
+.t-div{width:1px;height:22px;background:rgba(255,255,255,.15)}
+.t-badge{background:rgba(37,99,235,.3);border:1px solid rgba(37,99,235,.5);color:#93C5FD;font-size:10px;font-weight:700;padding:3px 11px;border-radius:20px;letter-spacing:.04em}
+.t-pill{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);color:#CBD5E1;font-size:10px;font-weight:600;padding:3px 11px;border-radius:20px}
+.t-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.lang-sw{display:flex;background:rgba(0,0,0,.25);border-radius:6px;padding:2px;gap:1px}
+.lbtn{padding:3px 10px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;color:rgba(255,255,255,.5);user-select:none}
+.lbtn.active{background:#ffffff;color:#0A1628}
+.t-portal{color:rgba(255,255,255,.6);font-size:11px;font-weight:600;padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.12);cursor:pointer;display:flex;align-items:center;gap:5px}
+.t-portal i{font-size:13px}
+
+/* SIDEBAR */
+.sidebar{background:#ffffff;border-right:1px solid #E2E8F0;overflow-y:auto;display:flex;flex-direction:column;scrollbar-width:thin;scrollbar-color:#E2E8F0 transparent}
+.sb-top{padding:16px;border-bottom:1px solid #F1F5F9}
+.sb-tag{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:#94A3B8;font-weight:700;margin-bottom:5px}
+.sb-title{font-family:"Space Grotesk",sans-serif;font-size:12px;font-weight:700;color:#0A1628;line-height:1.4}
+.sb-ver{font-size:10px;color:#94A3B8;margin-top:4px}
+.sb-nav{flex:1;padding:8px 0}
+.sb-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:#94A3B8;font-weight:700;padding:10px 16px 3px}
+.nl{display:flex;align-items:center;gap:9px;padding:8px 16px;font-size:12px;color:#475569;cursor:pointer;border-left:3px solid transparent;text-decoration:none}
+.nl:hover{background:#F8FAFC;color:#0A1628}
+.nl.active{background:#EEF4FF;color:#1D4ED8;border-left-color:#2563EB;font-weight:600}
+.nl i{font-size:14px;width:18px;text-align:center;flex-shrink:0;color:inherit}
+.nl span{color:inherit}
+.ndiv{height:1px;background:#F1F5F9;margin:5px 14px}
+.sb-foot{padding:14px 16px;border-top:1px solid #F1F5F9}
+.sb-ref{font-size:10px;color:#94A3B8;display:flex;align-items:center;gap:5px;margin-bottom:3px}
+.sb-ref i{font-size:12px;color:#2563EB}
+
+/* MAIN */
+.main{overflow-y:auto;overflow-x:hidden;background:#EEF4FF;scrollbar-width:thin;scrollbar-color:#E2E8F0 transparent}
+.sec{padding:36px 40px;border-bottom:1px solid #E2E8F0}
+.sec:last-child{border-bottom:none}
+
+/* COVER */
+.cover{background:#0A1628;padding:50px 40px 44px;position:relative;overflow:hidden}
+.cover-kicker{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.4);font-weight:700;margin-bottom:14px}
+.cover-title{font-family:"Space Grotesk",sans-serif;font-size:32px;font-weight:800;color:#ffffff;line-height:1.15;margin-bottom:10px}
+.cover-sub{font-size:14px;color:rgba(255,255,255,.65);line-height:1.7;max-width:580px;margin-bottom:22px}
+.cover-chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.82);font-size:10px;padding:4px 12px;border-radius:20px;display:flex;align-items:center;gap:5px}
+.chip i{font-size:12px}
+
+/* SECTION HEAD */
+.sh{display:flex;align-items:flex-start;gap:14px;margin-bottom:22px}
+.sh-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sh-icon i{font-size:20px;color:#ffffff}
+.sh-title{font-family:"Space Grotesk",sans-serif;font-size:22px;font-weight:800;color:#0A1628;line-height:1.2;margin-bottom:3px}
+.sh-sub{font-size:12px;color:#94A3B8;font-weight:500}
+
+/* CARDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.card{background:#ffffff;border:1px solid #E2E8F0;border-radius:10px;padding:18px 20px}
+.card-sm{background:#ffffff;border:1px solid #E2E8F0;border-radius:10px;padding:14px 16px}
+.ctit{font-size:12px;font-weight:700;color:#0A1628;margin-bottom:7px;display:flex;align-items:center;gap:7px}
+.ctit i{font-size:15px}
+.cbody{font-size:12.5px;color:#475569;line-height:1.75}
+
+/* BIGQ */
+.bigq{background:#0A1628;border-radius:10px;padding:24px 28px;margin-bottom:16px}
+.bigq-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.45);font-weight:700;margin-bottom:10px}
+.bigq-txt{font-family:"Space Grotesk",sans-serif;font-size:17px;font-weight:700;color:#ffffff;line-height:1.5}
+.bigq-ar{font-size:14px;color:rgba(255,255,255,.7);margin-top:8px;line-height:1.6;display:none}
+
+/* INFO BOX */
+.ibox{border-radius:10px;padding:14px 17px;margin-bottom:14px;display:flex;gap:11px;align-items:flex-start}
+.ibox i{font-size:18px;flex-shrink:0;margin-top:1px}
+.ibox-b{font-size:12.5px;line-height:1.65}
+.ibox-b b{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.ib-bl{background:#EEF4FF;border:1px solid #BFDBFE}.ib-bl i,.ib-bl b{color:#2563EB}.ib-bl .ibox-b{color:#1E3A8A}
+.ib-pu{background:#F5F3FF;border:1px solid #DDD6FE}.ib-pu i,.ib-pu b{color:#7C3AED}.ib-pu .ibox-b{color:#4C1D95}
+.ib-cy{background:#ECFEFF;border:1px solid #67E8F9}.ib-cy i,.ib-cy b{color:#06B6D4}.ib-cy .ibox-b{color:#0C4A6E}
+.ib-dk{background:#F1F5F9;border:1px solid #CBD5E1}.ib-dk i,.ib-dk b{color:#0A1628}.ib-dk .ibox-b{color:#1E293B}
+
+/* TABLE */
+.ctab{min-width:600px;width:100%;border-collapse:collapse;font-size:12px;background:#ffffff;border-radius:10px;overflow:hidden;border:1px solid #E2E8F0;margin-bottom:16px;direction:ltr}
+.ctab thead tr{background:#0A1628}
+.ctab th{padding:10px 16px;text-align:left;font-weight:600;font-size:11.5px;color:#ffffff}
+.ctab td{padding:9px 16px;border-bottom:1px solid #F1F5F9;color:#334155;line-height:1.55}
+.ctab tr:last-child td{border-bottom:none}
+.ctab tr:nth-child(even) td{background:#F8FAFC}
+
+/* KC CARDS */
+.kc{background:#ffffff;border:1px solid #E2E8F0;border-radius:10px;padding:18px 20px;position:relative;overflow:hidden;margin-bottom:10px}
+.kc::before{content:"";position:absolute;top:0;left:0;width:4px;height:100%;border-radius:4px 0 0 4px}
+.kc1::before{background:#2563EB}.kc2::before{background:#06B6D4}.kc3::before{background:#7C3AED}.kc4::before{background:#10B981}.kc5::before{background:#F59E0B}
+.kc-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:800;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+.kb1{background:#EEF4FF;color:#1D4ED8}.kb2{background:#ECFEFF;color:#0C4A6E}.kb3{background:#F5F3FF;color:#4C1D95}.kb4{background:#ECFDF5;color:#064E3B}.kb5{background:#FFFBEB;color:#78350F}
+.kc-t{font-family:"Space Grotesk",sans-serif;font-size:14px;font-weight:700;color:#0A1628;margin-bottom:6px}
+.kc-d{font-size:12px;color:#475569;line-height:1.65}
+
+/* JOURNEY */
+.jrow{display:flex;gap:6px;margin-bottom:20px}
+.jcard{flex:1;background:#ffffff;border:1px solid #E2E8F0;border-radius:10px;padding:16px 12px;text-align:center}
+.jcard:hover{box-shadow:0 4px 20px rgba(10,22,40,.1)}
+.jnum{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#ffffff;margin:0 auto 10px;font-family:"Space Grotesk",sans-serif}
+.jn1{background:#2563EB}.jn2{background:#06B6D4}.jn3{background:#7C3AED}.jn4{background:#10B981}.jn5{background:#F59E0B}
+.j-stage{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:#94A3B8;font-weight:700;margin-bottom:4px}
+.j-title{font-size:12px;font-weight:700;color:#0A1628;margin-bottom:3px;font-family:"Space Grotesk",sans-serif;line-height:1.3}
+.j-kc{font-size:10px;color:#94A3B8}
+.j-dur{font-size:10px;font-weight:600;color:#2563EB;margin-top:5px}
+
+/* PRINCIPLES */
+.pcard{background:#ffffff;border:1px solid #E2E8F0;border-radius:10px;padding:16px 18px;display:flex;gap:14px;margin-bottom:10px}
+.pcard:hover{border-color:#2563EB;background:#EEF4FF}
+.pnum{font-family:"Space Grotesk",sans-serif;font-size:20px;font-weight:800;color:#2563EB;opacity:.25;min-width:30px;padding-top:2px}
+.pcard:hover .pnum{opacity:1}
+.p-title{font-size:13px;font-weight:700;color:#0A1628;margin-bottom:4px}
+.p-desc{font-size:12px;color:#475569;line-height:1.65}
+
+/* PHILOSOPHY */
+.phil-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.ph{border-radius:10px;padding:20px;position:relative;overflow:hidden}
+.ph1{background:#0A1628}.ph2{background:#1D4ED8}.ph3{background:#7C3AED}.ph4{background:#0891B2}
+.ph-icon{font-size:24px;color:rgba(255,255,255,.55);margin-bottom:10px}
+.ph-t{font-family:"Space Grotesk",sans-serif;font-size:14px;font-weight:700;color:#ffffff;margin-bottom:6px}
+.ph-d{font-size:12px;color:rgba(255,255,255,.72);line-height:1.65}
+
+/* GRAD DOMAINS */
+.gdom{background:#ffffff;border:1px solid #E2E8F0;border-radius:10px;padding:18px 20px;margin-bottom:12px}
+.gdom-h{font-size:12px;font-weight:700;color:#0A1628;margin-bottom:12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #F1F5F9;padding-bottom:10px}
+.gdom-h i{font-size:16px}
+.gitem{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:#334155;line-height:1.55;margin-bottom:7px}
+.gck{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px}
+
+/* ASSESS */
+.ag{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.acard{background:#ffffff;border:1px solid #E2E8F0;border-radius:10px;padding:14px 16px;border-top:3px solid transparent}
+.ac1{border-top-color:#2563EB}.ac2{border-top-color:#06B6D4}.ac3{border-top-color:#7C3AED}.ac4{border-top-color:#10B981}.ac5{border-top-color:#F59E0B}
+.a-type{font-size:11px;font-weight:700;color:#0A1628;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+.a-tools{font-size:12px;color:#475569;line-height:1.7}
+
+/* REFS */
+.rcard{background:#ffffff;border:1px solid #E2E8F0;border-radius:10px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;margin-bottom:8px}
+.rlogo{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#ffffff;flex-shrink:0;font-family:"Space Grotesk",sans-serif}
+.r-title{font-size:12.5px;font-weight:700;color:#0A1628;margin-bottom:3px}
+.r-year{font-size:10px;color:#94A3B8;margin-bottom:4px}
+.r-role{font-size:11.5px;color:#475569;line-height:1.55}
+
+/* QUALITY */
+.qcard{background:#ffffff;border:1px solid #E2E8F0;border-radius:10px;padding:16px}
+.q-h{font-size:12px;font-weight:700;color:#0A1628;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.q-h i{font-size:15px}
+.q-item{display:flex;gap:7px;font-size:11.5px;color:#475569;margin-bottom:5px;align-items:flex-start}
+
+
+/* Bilingual row visibility */
+body:not(.ar) .ar-only { display: none !important; }
+body.ar .en-only { display: none !important; }
+table .ar-only, table .en-only { display: table-row; }
+body.ar table .en-only { display: none !important; }
+body.ar table .ar-only { display: table-row !important; }
+body:not(.ar) table .ar-only { display: none !important; }
+/* Fix table headers in AR */
+body.ar .ctab { direction: rtl; }
+body:not(.ar) .ctab { direction: ltr; }
+body.ar .ctab th, body.ar .ctab td { text-align: right; }
+body:not(.ar) .ctab th, body:not(.ar) .ctab td { text-align: left; }
+
+/* AR */
+body.ar{direction:rtl}
+body.ar .sidebar{border-right:none;border-left:1px solid #E2E8F0}
+body.ar .nl{border-left:none;border-right:3px solid transparent}
+body.ar .nl.active{border-right-color:#2563EB}
+body.ar .kc::before{left:auto;right:0;border-radius:0 4px 4px 0}
+body.ar .ctab th,body.ar .ctab td{text-align:right}
+
+/* AR hidden/shown */
+.ar-only{display:none}
+body.ar .ar-only{display:block}
+body.ar .en-only{display:none}
+
+/* Robust bilingual table layout */
+.ctab { direction:ltr; table-layout:fixed; }
+body.ar .ctab { direction:rtl; }
+body.ar .ctab td, body.ar .ctab th { direction:rtl; unicode-bidi:plaintext; }
+body:not(.ar) .ctab td, body:not(.ar) .ctab th { direction:ltr; unicode-bidi:plaintext; }
+body.ar .ctab th { white-space:normal; }
+
+</style>
+</head>
+<body>
+<div class="shell">
+
+<div class="topbar">
+  <img src="data:image/png;base64,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" class="t-logo" alt="Schol-IQ">
+  <div class="t-div"></div>
+  <div class="t-badge">AI Ready</div>
+  <div class="t-pill en-only">Curriculum Framework</div>
+  <div class="t-pill ar-only">إطار المنهاج</div>
+  <div class="t-right">
+    <div class="t-portal"><i class="ti ti-layout-grid"></i> <span class="en-only">Portal</span><span class="ar-only">البوابة</span></div>
+    <div class="lang-sw">
+      <div class="lbtn active" id="le" onclick="setLang('en')">EN</div>
+      <div class="lbtn" id="la" onclick="setLang('ar')">AR</div>
+    </div>
+  </div>
+</div>
+
+<div class="sidebar">
+  <div class="sb-top">
+    <div class="sb-tag en-only">Teacher Reference Document</div>
+    <div class="sb-tag ar-only">وثيقة مرجعية للمعلمين</div>
+    <div class="sb-title en-only">AI Literacy Curriculum Framework</div>
+    <div class="sb-title ar-only">إطار منهاج محو الأمية بالذكاء الاصطناعي</div>
+    <div class="sb-ver">Version 1.0 &middot; 2026</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-lbl en-only">Overview</div>
+    <div class="sb-lbl ar-only">نظرة عامة</div>
+    <a class="nl active" href="#why" onclick="act(this)"><i class="ti ti-bulb"></i><span class="en-only">Why AI Literacy?</span><span class="ar-only">لماذا محو الأمية؟</span></a>
+    <a class="nl" href="#vision" onclick="act(this)"><i class="ti ti-eye"></i><span class="en-only">Vision &amp; Mission</span><span class="ar-only">الرؤية والرسالة</span></a>
+    <div class="ndiv"></div>
+    <div class="sb-lbl en-only">Philosophy</div>
+    <div class="sb-lbl ar-only">الفلسفة</div>
+    <a class="nl" href="#philosophy" onclick="act(this)"><i class="ti ti-atom"></i><span class="en-only">Educational Philosophy</span><span class="ar-only">الفلسفة التعليمية</span></a>
+    <a class="nl" href="#principles" onclick="act(this)"><i class="ti ti-dna"></i><span class="en-only">Learning Principles</span><span class="ar-only">مبادئ التعلم</span></a>
+    <div class="ndiv"></div>
+    <div class="sb-lbl en-only">Curriculum</div>
+    <div class="sb-lbl ar-only">المنهاج</div>
+    <a class="nl" href="#objectives" onclick="act(this)"><i class="ti ti-target"></i><span class="en-only">Curriculum Objectives</span><span class="ar-only">الأهداف العامة</span></a>
+    <a class="nl" href="#competencies" onclick="act(this)"><i class="ti ti-award"></i><span class="en-only">Core Competencies</span><span class="ar-only">الكفايات الكبرى</span></a>
+    <a class="nl" href="#progression" onclick="act(this)"><i class="ti ti-trending-up"></i><span class="en-only">Learning Progression</span><span class="ar-only">مسار التعلم التدرجي</span></a>
+    <a class="nl" href="#journey" onclick="act(this)"><i class="ti ti-route"></i><span class="en-only">Learner Journey</span><span class="ar-only">رحلة المتعلم</span></a>
+    <a class="nl" href="#outcomes" onclick="act(this)"><i class="ti ti-list-check"></i><span class="en-only">Learning Outcomes</span><span class="ar-only">نواتج التعلم</span></a>
+    <a class="nl" href="#graduate" onclick="act(this)"><i class="ti ti-school"></i><span class="en-only">Graduate Profile</span><span class="ar-only">ملف الخريج</span></a>
+    <div class="ndiv"></div>
+    <div class="sb-lbl en-only">Structure</div>
+    <div class="sb-lbl ar-only">الهيكل</div>
+    <a class="nl" href="#template" onclick="act(this)"><i class="ti ti-template"></i><span class="en-only">Unit Template</span><span class="ar-only">قالب الوحدة</span></a>
+    <a class="nl" href="#mapping" onclick="act(this)"><i class="ti ti-table"></i><span class="en-only">Competency Mapping</span><span class="ar-only">مصفوفة الكفايات</span></a>
+    <a class="nl" href="#scope" onclick="act(this)"><i class="ti ti-layout-list"></i><span class="en-only">Scope &amp; Sequence</span><span class="ar-only">النطاق والتتابع</span></a>
+    <a class="nl" href="#assessment" onclick="act(this)"><i class="ti ti-clipboard-check"></i><span class="en-only">Assessment Philosophy</span><span class="ar-only">فلسفة التقييم</span></a>
+    <a class="nl" href="#quality" onclick="act(this)"><i class="ti ti-shield-check"></i><span class="en-only">Quality Standards</span><span class="ar-only">معايير الجودة</span></a>
+    <div class="ndiv"></div>
+    <div class="sb-lbl en-only">References</div>
+    <div class="sb-lbl ar-only">المراجع</div>
+    <a class="nl" href="#references" onclick="act(this)"><i class="ti ti-world"></i><span class="en-only">International References</span><span class="ar-only">المراجع الدولية</span></a>
+  </nav>
+  <div class="sb-foot">
+    <div class="sb-ref"><i class="ti ti-circle-check"></i> UNESCO 2024</div>
+    <div class="sb-ref"><i class="ti ti-circle-check"></i> OECD 2023</div>
+    <div class="sb-ref"><i class="ti ti-circle-check"></i> ISTE 2023</div>
+    <div style="font-size:10px;color:#94A3B8;margin-top:6px" class="en-only">Grades 7&ndash;12 &middot; Arabic Educational Context</div>
+    <div style="font-size:10px;color:#94A3B8;margin-top:6px" class="ar-only">الصفوف 7–12 &middot; السياق التعليمي العربي</div>
+  </div>
+</div>
+
+<div class="main" id="main">
+<!-- COVER -->
+<div class="cover" id="cover">
+  <div class="cover-kicker">Schol-IQ &middot; AI Ready Student &middot; Grades 7&ndash;12</div>
+  <div class="cover-title"><span class="en-only">AI Literacy<br>Curriculum Framework</span><span class="ar-only">إطار منهاج<br>محو الأمية بالذكاء الاصطناعي</span></div>
+  <div class="cover-sub en-only">A comprehensive reference for educators — covering the philosophy, competencies, learner journey, and pedagogical principles behind the AI Ready Student curriculum.</div>
+  <div class="cover-sub ar-only">مرجع شامل للمعلمين — يغطي الفلسفة والكفايات ورحلة المتعلم والمبادئ التربوية التي يقوم عليها منهاج الطالب المستعد للذكاء الاصطناعي.</div>
+  <div class="cover-chips">
+    <div class="chip"><i class="ti ti-book"></i> Blueprint v1.0 &middot; 2026</div>
+    <div class="chip"><i class="ti ti-users"></i> <span class="en-only">Grades 7&ndash;12</span><span class="ar-only">الصفوف 7–12</span></div>
+    <div class="chip"><i class="ti ti-world"></i> <span class="en-only">6 International Frameworks</span><span class="ar-only">6 أطر دولية</span></div>
+    <div class="chip"><i class="ti ti-award"></i> <span class="en-only">5 Core Competencies</span><span class="ar-only">5 كفايات كبرى</span></div>
+    <div class="chip"><i class="ti ti-clock"></i> <span class="en-only">8 Weeks &middot; 5 Units</span><span class="ar-only">8 أسابيع &middot; 5 وحدات</span></div>
+  </div>
+</div>
+
+<!-- S1: WHY -->
+<div class="sec" id="why">
+  <div class="sh"><div class="sh-icon" style="background:#0A1628"><i class="ti ti-bulb"></i></div><div><div class="sh-title en-only">Why AI Literacy?</div><div class="sh-title ar-only">لماذا محو الأمية بالذكاء الاصطناعي؟</div><div class="sh-sub en-only">Section 1 — The case for structured AI education</div><div class="sh-sub ar-only">القسم 1 — مبرر التعليم المنظم للذكاء الاصطناعي</div></div></div>
+  <div class="bigq">
+    <div class="bigq-lbl en-only">The question that drives this curriculum</div>
+    <div class="bigq-lbl ar-only">السؤال الذي يقود هذا المنهاج</div>
+    <div class="bigq-txt en-only">The question is no longer: "Will students use AI?"<br>The question today is: "How will they use it?"</div>
+    <div class="bigq-txt ar-only">السؤال لم يعد: "هل سيستخدم الطلاب الذكاء الاصطناعي؟"<br>السؤال اليوم: "كيف سيستخدمونه؟"</div>
+  </div>
+  <div style="overflow-x:auto"><table class="ctab">
+  <thead>
+    <tr class="en-only"><th style="color:#fff;width:220px">Challenge Without Education</th><th style="color:#fff">How It Manifests</th></tr>
+    <tr class="ar-only"><th style="color:#fff;width:220px">التحدي</th><th style="color:#fff">التجلّي في غياب التعليم</th></tr>
+  </thead>
+  <tbody>
+    <tr class="en-only"><td style="font-weight:700;color:#0A1628">Cognitive Dependency</td><td style="color:#334155">The student uses AI as a substitute for thinking, not as a tool to enhance it.</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#0A1628">Blind Consumption</td><td style="color:#334155;background:#F8FAFC">The student accepts AI outputs without verification or critical evaluation.</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#0A1628">Academic Dishonesty</td><td style="color:#334155">The student submits work that is not their own, bypassing academic integrity boundaries.</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#0A1628">Privacy at Risk</td><td style="color:#334155;background:#F8FAFC">The student shares sensitive data without awareness of the risks involved.</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#0A1628">The Digital Divide</td><td style="color:#334155">Students vary widely in their ability to use technology effectively, deepening inequality.</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#0A1628">الاتكالية المعرفية</td><td style="color:#334155">يستخدم الطالب الذكاء الاصطناعي بديلاً عن التفكير لا أداةً لتعزيزه.</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#0A1628">الاستهلاك الأعمى</td><td style="color:#334155;background:#F8FAFC">يقبل الطالب مخرجات الذكاء الاصطناعي دون تحقق أو نقد.</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#0A1628">الغش الأكاديمي</td><td style="color:#334155">يُقدّم الطالب أعمالاً ليست له، متجاوزاً حدود النزاهة الأكاديمية.</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#0A1628">الخصوصية المهددة</td><td style="color:#334155;background:#F8FAFC">يشارك الطالب بيانات حساسة دون وعي بالمخاطر.</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#0A1628">الفجوة الرقمية</td><td style="color:#334155">يتفاوت الطلاب في القدرة على توظيف التقنية، مما يُعمّق التفاوت في الفرص.</td></tr>
+  </tbody>
+</table></div>
+  <div class="ibox ib-cy"><i class="ti ti-check-circle"></i><div class="ibox-b"><b class="en-only">What This Curriculum Offers</b><b class="ar-only">ما يقدمه هذا المنهاج</b><span class="en-only">This curriculum is not about teaching tools. It is about teaching a way of thinking that will hold up against every tool that comes next.</span><span class="ar-only">هذا المنهاج لا يُعلّم الأدوات. إنه يُعلّم طريقة تفكير تصمد أمام كل أداة قادمة.</span></div></div>
+</div>
+
+<!-- S2: VISION -->
+<div class="sec" id="vision">
+  <div class="sh"><div class="sh-icon" style="background:#2563EB"><i class="ti ti-eye"></i></div><div><div class="sh-title en-only">Vision &amp; Mission</div><div class="sh-title ar-only">الرؤية والرسالة</div><div class="sh-sub en-only">Section 2 — Guiding purpose and values</div><div class="sh-sub ar-only">القسم 2 — الغاية الموجِّهة والقيم</div></div></div>
+  <div class="g2">
+    <div class="card" style="border-top:3px solid #2563EB"><div class="ctit"><i class="ti ti-telescope" style="color:#2563EB"></i><span class="en-only">Vision</span><span class="ar-only">الرؤية</span></div><div class="cbody en-only">For every student to be able to engage with AI with critical awareness, responsible creativity, and firm ethical values.</div><div class="cbody ar-only">أن يكون كل طالب قادراً على التعامل مع الذكاء الاصطناعي بوعي نقدي وإبداع مسؤول وقيم أخلاقية راسخة.</div></div>
+    <div class="card" style="border-top:3px solid #7C3AED"><div class="ctit"><i class="ti ti-target" style="color:#7C3AED"></i><span class="en-only">Mission</span><span class="ar-only">الرسالة</span></div><div class="cbody en-only">To equip students in Grades 7&ndash;12 with a comprehensive educational framework that enables them to understand generative AI, use it as a tool for learning and creation, while preserving their critical capacity and intellectual independence.</div><div class="cbody ar-only">تزويد طلاب الصفوف 7–12 بإطار تعليمي شامل يمكّنهم من فهم الذكاء الاصطناعي التوليدي، واستخدامه أداةً للتعلم والإبداع، مع الحفاظ على قدرتهم النقدية واستقلاليتهم الفكرية.</div></div>
+  </div>
+  <div style="overflow-x:auto"><table class="ctab">
+  <thead>
+    <tr class="en-only"><th style="color:#fff;width:200px">Value</th><th style="color:#fff">How It Manifests in the Curriculum</th></tr>
+    <tr class="ar-only"><th style="color:#fff;width:200px">القيمة</th><th style="color:#fff">التجلّي في المنهاج</th></tr>
+  </thead>
+  <tbody>
+    <tr class="en-only"><td style="font-weight:700;color:#2563EB">Intellectual Independence</td><td style="color:#334155">AI is a tool that enhances student thinking — it does not replace it.</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#7C3AED;background:#F8FAFC">Ethical Responsibility</td><td style="color:#334155;background:#F8FAFC">Every use of technology carries an ethical dimension that cannot be ignored.</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#06B6D4">Curiosity &amp; Creativity</td><td style="color:#334155">Learning is a journey of exploration that does not stop at ready-made answers.</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#10B981;background:#F8FAFC">Academic Integrity</td><td style="color:#334155;background:#F8FAFC">Original work is a value that cannot be sold or delegated to a machine.</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#F59E0B">Inclusion &amp; Equity</td><td style="color:#334155">The curriculum addresses all learners regardless of their technical level.</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#2563EB">الاستقلالية الفكرية</td><td style="color:#334155">الذكاء الاصطناعي أداة تُعزز تفكير الطالب ولا تحل محله.</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#7C3AED;background:#F8FAFC">المسؤولية الأخلاقية</td><td style="color:#334155;background:#F8FAFC">كل استخدام للتقنية يحمل بُعداً أخلاقياً لا يمكن تجاهله.</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#06B6D4">الفضول والإبداع</td><td style="color:#334155">التعلم رحلة استكشاف لا تتوقف عند الإجابات الجاهزة.</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#10B981;background:#F8FAFC">النزاهة الأكاديمية</td><td style="color:#334155;background:#F8FAFC">العمل الأصيل قيمة لا تُباع ولا تُفوَّض لآلة.</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#F59E0B">الشمولية والعدالة</td><td style="color:#334155">المنهاج يخاطب جميع المتعلمين بصرف النظر عن مستواهم التقني.</td></tr>
+  </tbody>
+</table></div>
+</div>
+
+<!-- S3: PHILOSOPHY -->
+<div class="sec" id="philosophy">
+  <div class="sh"><div class="sh-icon" style="background:#7C3AED"><i class="ti ti-atom"></i></div><div><div class="sh-title en-only">Educational Philosophy</div><div class="sh-title ar-only">الفلسفة التعليمية</div><div class="sh-sub en-only">Section 3 — Four integrated principles at the core</div><div class="sh-sub ar-only">القسم 3 — أربعة مبادئ متكاملة في الجوهر</div></div></div>
+  <div class="phil-grid">
+    <div class="ph ph1"><div class="ph-icon"><i class="ti ti-building-arch"></i></div><div class="ph-t en-only">Constructivism</div><div class="ph-t ar-only">البنائية</div><div class="ph-d en-only">The student builds knowledge through experience, thinking, and questioning. The lesson is not transmission — it is construction.</div><div class="ph-d ar-only">الطالب يبني المعرفة من خلال التجربة والتفكير والتساؤل. الدرس ليس تلقيناً — إنه بناء.</div></div>
+    <div class="ph ph2"><div class="ph-icon"><i class="ti ti-search"></i></div><div class="ph-t en-only">Inquiry-Based Learning</div><div class="ph-t ar-only">التعلم بالاستفسار</div><div class="ph-d en-only">An essential question drives every unit. The student discovers before they are taught.</div><div class="ph-d ar-only">سؤال جوهري يقود كل وحدة. الطالب يكتشف قبل أن يُعلَّم.</div></div>
+    <div class="ph ph3"><div class="ph-icon"><i class="ti ti-robot"></i></div><div class="ph-t en-only">AI-Assisted Learning</div><div class="ph-t ar-only">التعلم بمساعدة الذكاء الاصطناعي</div><div class="ph-d en-only">AI is a partner in the learning process — not a source of ready-made answers.</div><div class="ph-d ar-only">الذكاء الاصطناعي شريك في عملية التعلم — وليس مصدر إجابات جاهزة.</div></div>
+    <div class="ph ph4"><div class="ph-icon"><i class="ti ti-shield-check"></i></div><div class="ph-t en-only">Responsible AI</div><div class="ph-t ar-only">الذكاء الاصطناعي المسؤول</div><div class="ph-d en-only">Every technical competency is matched by an ethical one. Learning and responsibility are two sides of the same coin.</div><div class="ph-d ar-only">كل كفاية تقنية يقابلها بُعد أخلاقي. التعلم والمسؤولية وجهان لعملة واحدة.</div></div>
+  </div>
+  <div class="bigq" style="background:linear-gradient(135deg,#1E1B4B,#4C1D95)">
+    <div class="bigq-lbl en-only">The Governing Principle</div><div class="bigq-lbl ar-only">المبدأ الحاكم</div>
+    <div class="bigq-txt en-only">Human-Centered AI — The student must remain the decision-maker, the thinker, and the creator. AI improves, accelerates, and suggests — but it does not think on behalf of the human.</div>
+    <div class="bigq-txt ar-only">الذكاء الاصطناعي بمحورية الإنسان — يجب أن يظل الطالب هو صاحب القرار والمفكر والمبدع. الذكاء الاصطناعي يُحسّن ويُسرّع ويقترح — لكنه لا يفكر نيابةً عن الإنسان.</div>
+  </div>
+</div>
+
+<!-- S4: COMPETENCIES -->
+<div class="sec" id="competencies">
+  <div class="sh"><div class="sh-icon" style="background:#06B6D4"><i class="ti ti-award"></i></div><div><div class="sh-title en-only">Core Competencies</div><div class="sh-title ar-only">الكفايات الكبرى الخمس</div><div class="sh-sub en-only">Section 4 — Grounded in UNESCO AI Competency Framework (2024)</div><div class="sh-sub ar-only">القسم 4 — مبنية على إطار UNESCO لكفايات الذكاء الاصطناعي 2024</div></div></div>
+  <div class="kc kc1"><div class="kc-badge kb1"><i class="ti ti-eye" style="font-size:11px"></i> KC-1</div><div class="kc-t en-only">AI Awareness</div><div class="kc-t ar-only">الوعي بالذكاء الاصطناعي</div><div class="kc-d en-only">Understanding what generative AI is, how it works, what it can do, and what it cannot do. The foundation that makes all other competencies possible.</div><div class="kc-d ar-only">فهم ما هو الذكاء الاصطناعي التوليدي، وكيف يعمل، وما يستطيعه، وما لا يستطيعه. الأساس الذي يجعل بقية الكفايات ممكنة.</div></div>
+  <div class="kc kc2"><div class="kc-badge kb2"><i class="ti ti-book" style="font-size:11px"></i> KC-2</div><div class="kc-t en-only">AI-Assisted Learning</div><div class="kc-t ar-only">التعلم بمساعدة الذكاء الاصطناعي</div><div class="kc-d en-only">The ability to use AI as a tool for research, understanding, and effective self-directed learning. Moving from passive consumption to active, AI-enhanced study.</div><div class="kc-d ar-only">القدرة على استخدام الذكاء الاصطناعي أداةً للبحث والفهم والتعلم الذاتي الفعّال. الانتقال من الاستهلاك السلبي إلى الدراسة النشطة المعزّزة بالذكاء الاصطناعي.</div></div>
+  <div class="kc kc3"><div class="kc-badge kb3"><i class="ti ti-zoom-question" style="font-size:11px"></i> KC-3</div><div class="kc-t en-only">Critical Evaluation</div><div class="kc-t ar-only">التفكير النقدي التقييمي</div><div class="kc-d en-only">The ability to examine AI outputs, verify them, and identify biases and errors. The skill that separates an empowered user from a passive consumer.</div><div class="kc-d ar-only">القدرة على فحص مخرجات الذكاء الاصطناعي والتحقق منها وتحديد التحيزات والأخطاء فيها. المهارة التي تفصل المستخدم الواعي عن المستهلك السلبي.</div></div>
+  <div class="kc kc4"><div class="kc-badge kb4"><i class="ti ti-pencil" style="font-size:11px"></i> KC-4</div><div class="kc-t en-only">AI-Enhanced Creation</div><div class="kc-t ar-only">الإنتاج الإبداعي المعزّز</div><div class="kc-d en-only">The ability to produce original and innovative work using AI as a creative partner. The student leads; AI assists.</div><div class="kc-d ar-only">القدرة على إنتاج عمل أصيل ومبتكر باستخدام الذكاء الاصطناعي شريكاً إبداعياً. الطالب يقود؛ الذكاء الاصطناعي يساعد.</div></div>
+  <div class="kc kc5"><div class="kc-badge kb5"><i class="ti ti-shield-check" style="font-size:11px"></i> KC-5</div><div class="kc-t en-only">Ethical Digital Citizenship</div><div class="kc-t ar-only">المواطنة الرقمية الأخلاقية</div><div class="kc-d en-only">A commitment to the responsible use of AI according to clear ethical and academic standards. The competency that ensures all others are exercised with integrity.</div><div class="kc-d ar-only">الالتزام بالاستخدام المسؤول للذكاء الاصطناعي وفق معايير أخلاقية وأكاديمية واضحة. الكفاية التي تضمن ممارسة جميع الكفايات الأخرى بنزاهة.</div></div>
+</div>
+
+<!-- S5: JOURNEY -->
+<div class="sec" id="journey">
+  <div class="sh"><div class="sh-icon" style="background:#0A1628"><i class="ti ti-route"></i></div><div><div class="sh-title en-only">The Learner Journey</div><div class="sh-title ar-only">رحلة المتعلم</div><div class="sh-sub en-only">Section 5 — Five stages &middot; Eight weeks &middot; Five competencies</div><div class="sh-sub ar-only">القسم 5 — خمس مراحل &middot; ثمانية أسابيع &middot; خمس كفايات</div></div></div>
+  <div class="ibox ib-pu" style="margin-bottom:18px"><i class="ti ti-info-circle"></i><div class="ibox-b"><b class="en-only">Why a journey — not a tools course?</b><b class="ar-only">لماذا رحلة — وليس دورة أدوات؟</b><span class="en-only">Tools change every year. Competencies last for decades. In two years ChatGPT may no longer be the most prominent tool — but critical thinking and responsible production will remain valuable forever.</span><span class="ar-only">الأدوات تتغير كل عام. الكفايات تدوم عقوداً. بعد سنتين قد لا يكون ChatGPT الأداة الأبرز — لكن التفكير النقدي والإنتاج المسؤول سيظلان ذوي قيمة للأبد.</span></div></div>
+  <div class="jrow">
+    <div class="jcard"><div class="jnum jn1">1</div><div class="j-stage en-only">Stage 1</div><div class="j-stage ar-only">المرحلة 1</div><div class="j-title en-only">Discover</div><div class="j-title ar-only">اكتشف</div><div class="j-kc">KC-1</div><div class="j-dur en-only">Week 1</div><div class="j-dur ar-only">الأسبوع 1</div></div>
+    <div class="jcard"><div class="jnum jn2">2</div><div class="j-stage en-only">Stage 2</div><div class="j-stage ar-only">المرحلة 2</div><div class="j-title en-only">Learn</div><div class="j-title ar-only">تعلّم</div><div class="j-kc">KC-2</div><div class="j-dur en-only">Weeks 2&ndash;3</div><div class="j-dur ar-only">الأسبوعان 2–3</div></div>
+    <div class="jcard"><div class="jnum jn3">3</div><div class="j-stage en-only">Stage 3</div><div class="j-stage ar-only">المرحلة 3</div><div class="j-title en-only">Think</div><div class="j-title ar-only">فكّر</div><div class="j-kc">KC-3</div><div class="j-dur en-only">Weeks 4&ndash;5</div><div class="j-dur ar-only">الأسبوعان 4–5</div></div>
+    <div class="jcard"><div class="jnum jn4">4</div><div class="j-stage en-only">Stage 4</div><div class="j-stage ar-only">المرحلة 4</div><div class="j-title en-only">Create</div><div class="j-title ar-only">أنشئ</div><div class="j-kc">KC-4</div><div class="j-dur en-only">Weeks 6&ndash;7</div><div class="j-dur ar-only">الأسبوعان 6–7</div></div>
+    <div class="jcard"><div class="jnum jn5">5</div><div class="j-stage en-only">Stage 5</div><div class="j-stage ar-only">المرحلة 5</div><div class="j-title en-only">Act</div><div class="j-title ar-only">تصرّف</div><div class="j-kc">KC-5</div><div class="j-dur en-only">Week 8</div><div class="j-dur ar-only">الأسبوع 8</div></div>
+  </div>
+  <div style="overflow-x:auto"><table class="ctab">
+  <thead>
+    <tr class="en-only"><th style="color:#fff">Stage</th><th style="color:#fff">Unit</th><th style="color:#fff">Title</th><th style="color:#fff">Competency</th><th style="color:#fff">Duration</th></tr>
+    <tr class="ar-only"><th style="color:#fff">المرحلة</th><th style="color:#fff">الوحدة</th><th style="color:#fff">العنوان</th><th style="color:#fff">الكفاية</th><th style="color:#fff">المدة</th></tr>
+  </thead>
+  <tbody>
+    <tr class="en-only"><td style="color:#334155">Stage 1 — Discover</td><td style="font-weight:700;color:#2563EB">Unit 1</td><td style="color:#334155">AI as Your Learning Companion</td><td style="font-weight:700;color:#2563EB">KC-1</td><td style="color:#334155">1 week</td></tr>
+    <tr class="en-only"><td style="color:#334155;background:#F8FAFC">Stage 2 — Learn</td><td style="font-weight:700;color:#06B6D4;background:#F8FAFC">Unit 2</td><td style="color:#334155;background:#F8FAFC">Using AI to Learn</td><td style="font-weight:700;color:#06B6D4;background:#F8FAFC">KC-2</td><td style="color:#334155;background:#F8FAFC">2 weeks</td></tr>
+    <tr class="en-only"><td style="color:#334155">Stage 3 — Think</td><td style="font-weight:700;color:#7C3AED">Unit 3</td><td style="color:#334155">Can I Trust What AI Tells Me?</td><td style="font-weight:700;color:#7C3AED">KC-3</td><td style="color:#334155">2 weeks</td></tr>
+    <tr class="en-only"><td style="color:#334155;background:#F8FAFC">Stage 4 — Create</td><td style="font-weight:700;color:#10B981;background:#F8FAFC">Unit 4</td><td style="color:#334155;background:#F8FAFC">How Do I Use AI to Produce Something New?</td><td style="font-weight:700;color:#10B981;background:#F8FAFC">KC-4</td><td style="color:#334155;background:#F8FAFC">2 weeks</td></tr>
+    <tr class="en-only"><td style="color:#334155">Stage 5 — Act Responsibly</td><td style="font-weight:700;color:#F59E0B">Unit 5</td><td style="color:#334155">Using AI Ethically and Responsibly</td><td style="font-weight:700;color:#F59E0B">KC-5</td><td style="color:#334155">1 week</td></tr>
+    <tr class="ar-only"><td style="color:#334155">المرحلة 1 — Discover</td><td style="font-weight:700;color:#2563EB">الوحدة 1</td><td style="color:#334155">الذكاء الاصطناعي... مساعدك في التعلم</td><td style="font-weight:700;color:#2563EB">KC-1</td><td style="color:#334155">أسبوع 1</td></tr>
+    <tr class="ar-only"><td style="color:#334155;background:#F8FAFC">المرحلة 2 — Learn</td><td style="font-weight:700;color:#06B6D4;background:#F8FAFC">الوحدة 2</td><td style="color:#334155;background:#F8FAFC">أستخدم الذكاء الاصطناعي لأتعلم</td><td style="font-weight:700;color:#06B6D4;background:#F8FAFC">KC-2</td><td style="color:#334155;background:#F8FAFC">أسبوعان 2–3</td></tr>
+    <tr class="ar-only"><td style="color:#334155">المرحلة 3 — Think</td><td style="font-weight:700;color:#7C3AED">الوحدة 3</td><td style="color:#334155">هل أثق بما يقوله الذكاء الاصطناعي؟</td><td style="font-weight:700;color:#7C3AED">KC-3</td><td style="color:#334155">أسبوعان 4–5</td></tr>
+    <tr class="ar-only"><td style="color:#334155;background:#F8FAFC">المرحلة 4 — Create</td><td style="font-weight:700;color:#10B981;background:#F8FAFC">الوحدة 4</td><td style="color:#334155;background:#F8FAFC">أوظّف الذكاء الاصطناعي لأُنتج</td><td style="font-weight:700;color:#10B981;background:#F8FAFC">KC-4</td><td style="color:#334155;background:#F8FAFC">أسبوعان 6–7</td></tr>
+    <tr class="ar-only"><td style="color:#334155">المرحلة 5 — Act Responsibly</td><td style="font-weight:700;color:#F59E0B">الوحدة 5</td><td style="color:#334155">أستخدمه بأخلاق ومسؤولية</td><td style="font-weight:700;color:#F59E0B">KC-5</td><td style="color:#334155">أسبوع 8</td></tr>
+  </tbody>
+</table></div>
+</div>
+
+<!-- S6: PRINCIPLES -->
+<div class="sec" id="principles">
+  <div class="sh"><div class="sh-icon" style="background:#1D4ED8"><i class="ti ti-dna"></i></div><div><div class="sh-title en-only">The 8 Learning Principles</div><div class="sh-title ar-only">مبادئ التعلم الثمانية</div><div class="sh-sub en-only">Section 6 — The DNA of this curriculum</div><div class="sh-sub ar-only">القسم 6 — الحمض النووي للمنهاج</div></div></div>
+  <div class="pcard"><div class="pnum">01</div><div><div class="p-title en-only">Learning begins with a question.</div><div class="p-title ar-only">التعلم يبدأ بسؤال.</div><div class="p-desc en-only">Every unit opens with an essential question that guides the student throughout the exploration journey.</div><div class="p-desc ar-only">كل وحدة تفتح بسؤال جوهري يرشد الطالب طوال رحلة الاستكشاف.</div></div></div>
+  <div class="pcard"><div class="pnum">02</div><div><div class="p-title en-only">Every lesson begins with a real-world scenario.</div><div class="p-title ar-only">كل درس يبدأ بموقف واقعي.</div><div class="p-desc en-only">A genuine scenario is the entry point — because learning takes root when it touches real life.</div><div class="p-desc ar-only">الموقف الحقيقي هو نقطة الدخول — لأن التعلم يترسّخ حين يلمس الحياة الواقعية.</div></div></div>
+  <div class="pcard"><div class="pnum">03</div><div><div class="p-title en-only">Students produce more than they consume.</div><div class="p-title ar-only">الطالب يُنتج أكثر مما يستهلك.</div><div class="p-desc en-only">The goal is not to receive information but to build something — a text, an analysis, a project, a reasoned opinion.</div><div class="p-desc ar-only">الهدف ليس تلقّي المعلومات بل بناء شيء — نص أو تحليل أو مشروع أو رأي مبرَّر.</div></div></div>
+  <div class="pcard"><div class="pnum">04</div><div><div class="p-title en-only">AI does not replace thinking — it is called in after it.</div><div class="p-title ar-only">الذكاء الاصطناعي لا يحل محل التفكير — يُستدعى بعده.</div><div class="p-desc en-only">The student thinks first, then uses AI, then evaluates what it produced.</div><div class="p-desc ar-only">الطالب يفكر أولاً، ثم يستخدم الذكاء الاصطناعي، ثم يُقيّم ما أنتجه.</div></div></div>
+  <div class="pcard"><div class="pnum">05</div><div><div class="p-title en-only">Every activity ends with reflection.</div><div class="p-title ar-only">كل نشاط ينتهي بتأمل.</div><div class="p-desc en-only">Reflection is not an optional extra — it is the step that transforms experience into genuine learning.</div><div class="p-desc ar-only">التأمل ليس إضافة اختيارية — إنه الخطوة التي تحوّل التجربة إلى تعلم حقيقي.</div></div></div>
+  <div class="pcard"><div class="pnum">06</div><div><div class="p-title en-only">The quality of the question matters more than the speed of the answer.</div><div class="p-title ar-only">جودة السؤال أهم من سرعة الإجابة.</div><div class="p-desc en-only">A good prompt reflects good thinking. We train students to question before we train them to use the tool.</div><div class="p-desc ar-only">المطالبة الجيدة تعكس تفكيراً جيداً. نُدرّب الطلاب على التساؤل قبل أن نُدرّبهم على استخدام الأداة.</div></div></div>
+  <div class="pcard"><div class="pnum">07</div><div><div class="p-title en-only">Error is an opportunity for learning.</div><div class="p-title ar-only">الخطأ فرصة للتعلم.</div><div class="p-desc en-only">AI's incorrect outputs, and the student's own errors, are both valuable teaching material.</div><div class="p-desc ar-only">مخرجات الذكاء الاصطناعي الخاطئة، وأخطاء الطالب نفسه، كلاهما مادة تعليمية قيّمة.</div></div></div>
+  <div class="pcard"><div class="pnum">08</div><div><div class="p-title en-only">Diversity in the curriculum is a value, not an obstacle.</div><div class="p-title ar-only">التنوع في المنهاج قيمة لا عائق.</div><div class="p-desc en-only">Every activity is adaptable to different levels, different environments, and different interests.</div><div class="p-desc ar-only">كل نشاط قابل للتكيف مع مستويات مختلفة وبيئات مختلفة واهتمامات مختلفة.</div></div></div>
+</div>
+<!-- S7: OUTCOMES -->
+<div class="sec" id="outcomes">
+  <div class="sh"><div class="sh-icon" style="background:#7C3AED"><i class="ti ti-list-check"></i></div><div><div class="sh-title en-only">Learning Outcomes Framework</div><div class="sh-title ar-only">إطار نواتج التعلم</div><div class="sh-sub en-only">Section 7 — Bloom's taxonomy adapted for AI education</div><div class="sh-sub ar-only">القسم 7 — تصنيف بلوم مُكيَّف للتعليم في الذكاء الاصطناعي</div></div></div>
+  <div class="ibox ib-dk"><i class="ti ti-ruler"></i><div class="ibox-b"><b class="en-only">Framing Standard</b><b class="ar-only">معيار الصياغة</b><span class="en-only">Observable behavioral verb + content + context. Example: "The student distinguishes between generative AI and traditional search engines through the analysis of real-world examples."</span><span class="ar-only">فعل سلوكي ملاحظ + محتوى + سياق. مثال: "يميّز الطالب بين الذكاء الاصطناعي التوليدي ومحركات البحث التقليدية من خلال تحليل أمثلة واقعية."</span></div></div>
+  <div style="overflow-x:auto"><table class="ctab">
+  <thead>
+    <tr class="en-only"><th style="color:#fff;width:80px">Competency</th><th style="color:#fff">Cognitive Level</th><th style="color:#fff">Typical Behavioral Verbs</th></tr>
+    <tr class="ar-only"><th style="color:#fff;width:80px">الكفاية</th><th style="color:#fff">المستوى المعرفي</th><th style="color:#fff">أفعال سلوكية نموذجية</th></tr>
+  </thead>
+  <tbody>
+    <tr class="en-only"><td style="font-weight:700;color:#2563EB">KC-1</td><td style="color:#334155">Remember / Understand</td><td style="color:#334155">Defines · Describes · Explains · Names</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#06B6D4;background:#F8FAFC">KC-2</td><td style="color:#334155;background:#F8FAFC">Apply</td><td style="color:#334155;background:#F8FAFC">Uses · Applies · Executes · Produces</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#7C3AED">KC-3</td><td style="color:#334155">Analyze / Evaluate</td><td style="color:#334155">Analyzes · Compares · Evaluates · Distinguishes · Critiques</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#10B981;background:#F8FAFC">KC-4</td><td style="color:#334155;background:#F8FAFC">Create</td><td style="color:#334155;background:#F8FAFC">Designs · Innovates · Synthesizes · Produces new work</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#F59E0B">KC-5</td><td style="color:#334155">Apply Ethically</td><td style="color:#334155">Commits · Justifies · Advocates · Decides responsibly</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#2563EB">KC-1</td><td style="color:#334155">يتذكر / يفهم</td><td style="color:#334155">يُعرِّف · يصف · يُفسّر · يُسمّي</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#06B6D4;background:#F8FAFC">KC-2</td><td style="color:#334155;background:#F8FAFC">يُطبّق</td><td style="color:#334155;background:#F8FAFC">يستخدم · يُطبّق · ينفّذ · يُنتج</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#7C3AED">KC-3</td><td style="color:#334155">يُحلّل / يُقيّم</td><td style="color:#334155">يُحلّل · يقارن · يُقيّم · يميّز · ينتقد</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#10B981;background:#F8FAFC">KC-4</td><td style="color:#334155;background:#F8FAFC">يُبدع</td><td style="color:#334155;background:#F8FAFC">يصمم · يبتكر · يُركّب · يُنتج عملاً جديداً</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#F59E0B">KC-5</td><td style="color:#334155">يُطبّق بمسؤولية</td><td style="color:#334155">يلتزم · يُبرّر · يُدافع · يقرر بمسؤولية</td></tr>
+  </tbody>
+</table></div>
+</div>
+
+<!-- S8: GRADUATE -->
+<div class="sec" id="graduate">
+  <div class="sh"><div class="sh-icon" style="background:#06B6D4"><i class="ti ti-school"></i></div><div><div class="sh-title en-only">Graduate Profile</div><div class="sh-title ar-only">ملف الخريج</div><div class="sh-sub en-only">Section 8 — The target portrait this curriculum seeks to achieve</div><div class="sh-sub ar-only">القسم 8 — الصورة المستهدفة التي يسعى المنهاج إلى تحقيقها</div></div></div>
+  <div class="bigq" style="background:linear-gradient(135deg,#0C4A6E,#0A1628)">
+    <div class="bigq-lbl en-only">The Target Student</div><div class="bigq-lbl ar-only">الطالب المستهدف</div>
+    <div class="bigq-txt en-only">Not only one who masters AI tools — but one who knows when to use them, how, why, and when never to use them at all.</div>
+    <div class="bigq-txt ar-only">ليس فقط من يتقن أدوات الذكاء الاصطناعي — بل من يعرف متى يستخدمها، وكيف، ولماذا، ومتى لا يستخدمها على الإطلاق.</div>
+  </div>
+  <div class="gdom" style="border-top:3px solid #2563EB"><div class="gdom-h"><i class="ti ti-brain" style="color:#2563EB"></i><span class="en-only">Understanding &amp; Knowledge</span><span class="ar-only">الفهم والمعرفة</span></div>
+    <div class="gitem"><div class="gck" style="background:#EEF4FF;color:#2563EB"><i class="ti ti-check" style="font-size:10px"></i></div><span class="en-only">Understands how generative AI works in a simplified and accurate way.</span><span class="ar-only">يفهم كيف يعمل الذكاء الاصطناعي التوليدي بطريقة مبسّطة ودقيقة.</span></div>
+    <div class="gitem"><div class="gck" style="background:#EEF4FF;color:#2563EB"><i class="ti ti-check" style="font-size:10px"></i></div><span class="en-only">Distinguishes between types of AI and their different applications.</span><span class="ar-only">يميّز بين أنواع الذكاء الاصطناعي وتطبيقاتها المختلفة.</span></div>
+    <div class="gitem"><div class="gck" style="background:#EEF4FF;color:#2563EB"><i class="ti ti-check" style="font-size:10px"></i></div><span class="en-only">Knows AI's limitations and weaknesses before its strengths.</span><span class="ar-only">يعرف قيود الذكاء الاصطناعي ونقاط ضعفه قبل نقاط قوته.</span></div>
+  </div>
+  <div class="gdom" style="border-top:3px solid #06B6D4"><div class="gdom-h"><i class="ti ti-tool" style="color:#06B6D4"></i><span class="en-only">Applied Skills</span><span class="ar-only">المهارات التطبيقية</span></div>
+    <div class="gitem"><div class="gck" style="background:#ECFEFF;color:#06B6D4"><i class="ti ti-check" style="font-size:10px"></i></div><span class="en-only">Writes clear and effective prompts that produce quality outputs.</span><span class="ar-only">يكتب مطالبات واضحة وفعّالة تُنتج مخرجات عالية الجودة.</span></div>
+    <div class="gitem"><div class="gck" style="background:#ECFEFF;color:#06B6D4"><i class="ti ti-check" style="font-size:10px"></i></div><span class="en-only">Produces work that reflects their own voice — not the machine's outputs.</span><span class="ar-only">يُنتج عملاً يعكس صوته الخاص — لا مخرجات الآلة.</span></div>
+  </div>
+  <div class="gdom" style="border-top:3px solid #7C3AED"><div class="gdom-h"><i class="ti ti-zoom-question" style="color:#7C3AED"></i><span class="en-only">Critical Thinking</span><span class="ar-only">التفكير النقدي</span></div>
+    <div class="gitem"><div class="gck" style="background:#F5F3FF;color:#7C3AED"><i class="ti ti-check" style="font-size:10px"></i></div><span class="en-only">Verifies the accuracy of information provided by AI.</span><span class="ar-only">يتحقق من دقة المعلومات التي يقدمها الذكاء الاصطناعي.</span></div>
+    <div class="gitem"><div class="gck" style="background:#F5F3FF;color:#7C3AED"><i class="ti ti-check" style="font-size:10px"></i></div><span class="en-only">Rejects blind reliance and evaluates before accepting.</span><span class="ar-only">يرفض الاعتماد الأعمى ويُقيّم قبل أن يقبل.</span></div>
+  </div>
+  <div class="gdom" style="border-top:3px solid #F59E0B"><div class="gdom-h"><i class="ti ti-shield-check" style="color:#F59E0B"></i><span class="en-only">Ethics &amp; Responsibility</span><span class="ar-only">الأخلاق والمسؤولية</span></div>
+    <div class="gitem"><div class="gck" style="background:#FFFBEB;color:#D97706"><i class="ti ti-check" style="font-size:10px"></i></div><span class="en-only">Upholds academic integrity and discloses their AI use.</span><span class="ar-only">يلتزم بالأمانة الأكاديمية ويُفصح عن استخدامه للذكاء الاصطناعي.</span></div>
+    <div class="gitem"><div class="gck" style="background:#FFFBEB;color:#D97706"><i class="ti ti-check" style="font-size:10px"></i></div><span class="en-only">Uses AI responsibly toward their community and environment.</span><span class="ar-only">يستخدم الذكاء الاصطناعي بمسؤولية تجاه مجتمعه وبيئته.</span></div>
+  </div>
+</div>
+
+<!-- S9: TEMPLATE -->
+<div class="sec" id="template">
+  <div class="sh"><div class="sh-icon" style="background:#0A1628"><i class="ti ti-template"></i></div><div><div class="sh-title en-only">Unit Template — Four Packages</div><div class="sh-title ar-only">قالب الوحدة — أربع حزم</div><div class="sh-sub en-only">Section 9 — Consistent structure across all five units</div><div class="sh-sub ar-only">القسم 9 — هيكل متسق عبر الوحدات الخمس</div></div></div>
+  <div class="g2">
+    <div class="card" style="border-top:3px solid #2563EB"><div class="ctit"><i class="ti ti-book" style="color:#2563EB"></i>Package A — <span class="en-only">Teacher Guide</span><span class="ar-only">دليل المعلم</span></div><div class="cbody en-only">Everything the teacher needs: objectives, session flow, discussion questions, pedagogical notes, Watch For... boxes, and differentiation tips across 8 mandatory sections.</div><div class="cbody ar-only">كل ما يحتاجه المعلم: أهداف، مسار الحصة، أسئلة النقاش، ملاحظات تربوية، صناديق 'انتبه إلى...'، وتلميحات التمايز عبر 8 أقسام إلزامية.</div></div>
+    <div class="card" style="border-top:3px solid #06B6D4"><div class="ctit"><i class="ti ti-pencil" style="color:#06B6D4"></i>Package B — <span class="en-only">Student Workbook</span><span class="ar-only">كتاب الطالب</span></div><div class="cbody en-only">Student activities: exploration, application, and self-reflection. Includes all activities, vocabulary builder, concept map, and success criteria.</div><div class="cbody ar-only">أنشطة الطالب: استكشاف وتطبيق وتأمل ذاتي. يشمل جميع الأنشطة وبناء المفردات وخريطة المفاهيم ومعايير النجاح.</div></div>
+    <div class="card" style="border-top:3px solid #7C3AED"><div class="ctit"><i class="ti ti-presentation" style="color:#7C3AED"></i>Package C — <span class="en-only">Presentation</span><span class="ar-only">العرض التقديمي</span></div><div class="cbody en-only">Ready-to-use presentation slides with full presenter notes on every slide. Designed for display in class.</div><div class="cbody ar-only">شرائح عرض جاهزة للاستخدام مع ملاحظات المقدم الكاملة على كل شريحة. مصممة للعرض في الصف.</div></div>
+    <div class="card" style="border-top:3px solid #10B981"><div class="ctit"><i class="ti ti-clipboard-check" style="color:#10B981"></i>Package D — <span class="en-only">Assessment Pack</span><span class="ar-only">حزمة التقييم</span></div><div class="cbody en-only">Exit Ticket (×2) + Quiz + Rubric + Reflection Form. Five complete, print-ready documents.</div><div class="cbody ar-only">تذكرة خروج (×2) + اختبار + معيار تقييم + استمارة تأمل. خمس وثائق مكتملة وجاهزة للطباعة.</div></div>
+  </div>
+</div>
+
+<!-- S10: ASSESSMENT -->
+<div class="sec" id="assessment">
+  <div class="sh"><div class="sh-icon" style="background:#7C3AED"><i class="ti ti-clipboard-check"></i></div><div><div class="sh-title en-only">Assessment Philosophy</div><div class="sh-title ar-only">فلسفة التقييم</div><div class="sh-sub en-only">Section 10 — Assessment for Learning, not of Learning</div><div class="sh-sub ar-only">القسم 10 — التقييم من أجل التعلم، لا لقياسه فحسب</div></div></div>
+  <div style="overflow-x:auto"><table class="ctab">
+  <thead>
+    <tr class="en-only"><th style="color:#fff;width:180px">Assessment Type</th><th style="color:#fff">Tools Used</th></tr>
+    <tr class="ar-only"><th style="color:#fff;width:180px">نوع التقييم</th><th style="color:#fff">الأدوات المستخدمة</th></tr>
+  </thead>
+  <tbody>
+    <tr class="en-only"><td style="font-weight:700;color:#2563EB">Diagnostic</td><td style="color:#334155">Exploratory questions at the start of each unit · Pre-unit knowledge check</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#06B6D4;background:#F8FAFC">Formative</td><td style="color:#334155;background:#F8FAFC">Exit Ticket · Reflective Activity · Teacher Observation · MCQ scenarios</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#7C3AED">Summative</td><td style="color:#334155">Unit Project · Presentation · Short Quiz · Final product per unit</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#10B981;background:#F8FAFC">Self-Assessment</td><td style="color:#334155;background:#F8FAFC">Reflection Form · Success Criteria checklist · "What I Learned" card</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#F59E0B">Peer Assessment</td><td style="color:#334155">Shared Rubric · Constructive critique session · Peer feedback protocol</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#2563EB">التقييم التشخيصي</td><td style="color:#334155">أسئلة استكشافية في بداية كل وحدة · فحص المعرفة القبلي</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#06B6D4;background:#F8FAFC">التقييم التكويني</td><td style="color:#334155;background:#F8FAFC">تذكرة الخروج · النشاط التأملي · ملاحظة المعلم · سيناريوهات MCQ</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#7C3AED">التقييم الختامي</td><td style="color:#334155">مشروع الوحدة · العرض التقديمي · اختبار قصير · المنتج الختامي</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#10B981;background:#F8FAFC">التقييم الذاتي</td><td style="color:#334155;background:#F8FAFC">استمارة التأمل · قائمة معايير النجاح · بطاقة "ما تعلمته"</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#F59E0B">تقييم الأقران</td><td style="color:#334155">معيار التقييم المشترك · جلسة نقد بنّاء · بروتوكول التغذية الراجعة بين الأقران</td></tr>
+  </tbody>
+</table></div>
+</div>
+
+<!-- S11: QUALITY -->
+<div class="sec" id="quality">
+  <div class="sh"><div class="sh-icon" style="background:#0A1628"><i class="ti ti-shield-check"></i></div><div><div class="sh-title en-only">Quality Standards</div><div class="sh-title ar-only">معايير الجودة</div><div class="sh-sub en-only">Section 11 — 24 criteria &middot; 6 domains &middot; Gateway before unit approval</div><div class="sh-sub ar-only">القسم 11 — 24 معياراً &middot; 6 مجالات &middot; بوابة قبل اعتماد الوحدة</div></div></div>
+  <div class="ibox ib-pu" style="margin-bottom:16px"><i class="ti ti-info-circle"></i><div class="ibox-b"><b class="en-only">Approval Mechanism</b><b class="ar-only">آلية الاعتماد</b><span class="en-only">22&ndash;24 met → APPROVED ✓ &middot; 18&ndash;21 met → Minor review &middot; Fewer than 18 → Returned for development</span><span class="ar-only">22–24 محقق ← مُعتمَد ✓ &middot; 18–21 ← مراجعة بسيطة &middot; أقل من 18 ← مُعاد للتطوير</span></div></div>
+  <div class="g2">
+    <div class="qcard" style="border-top:3px solid #2563EB"><div class="q-h"><i class="ti ti-pencil" style="color:#2563EB"></i><span class="en-only" style="color:#0A1628">Instructional Design</span><span class="ar-only" style="color:#0A1628">التصميم التعليمي</span></div>
+      <div class="q-item">☐ <span class="en-only" style="color:#475569">Opens with a thought-provoking essential question</span><span class="ar-only" style="color:#475569">يفتح بسؤال جوهري محرّك للتفكير</span></div>
+      <div class="q-item">☐ <span class="en-only" style="color:#475569">Opens with a real-world scenario</span><span class="ar-only" style="color:#475569">يفتح بموقف واقعي</span></div>
+      <div class="q-item">☐ <span class="en-only" style="color:#475569">Includes a clear Big Idea</span><span class="ar-only" style="color:#475569">يتضمن فكرة كبرى واضحة</span></div>
+      <div class="q-item">☐ <span class="en-only" style="color:#475569">Ends with specific Success Criteria</span><span class="ar-only" style="color:#475569">ينتهي بمعايير نجاح محددة</span></div>
+    </div>
+    <div class="qcard" style="border-top:3px solid #06B6D4"><div class="q-h"><i class="ti ti-robot" style="color:#06B6D4"></i><span class="en-only" style="color:#0A1628">AI Integration</span><span class="ar-only" style="color:#0A1628">توظيف الذكاء الاصطناعي</span></div>
+      <div class="q-item">☐ <span class="en-only" style="color:#475569">AI used as a thinking tool, not a substitute</span><span class="ar-only" style="color:#475569">الذكاء الاصطناعي كأداة تفكير لا بديل عنه</span></div>
+      <div class="q-item">☐ <span class="en-only" style="color:#475569">Student thinks first before using AI</span><span class="ar-only" style="color:#475569">الطالب يفكر أولاً قبل استخدام الذكاء الاصطناعي</span></div>
+      <div class="q-item">☐ <span class="en-only" style="color:#475569">Includes critical evaluation of AI outputs</span><span class="ar-only" style="color:#475569">يتضمن لحظة تقييم نقدي لمخرجات AI</span></div>
+      <div class="q-item">☐ <span class="en-only" style="color:#475569">Cannot be completed by AI alone</span><span class="ar-only" style="color:#475569">لا يمكن إنجازه بالذكاء الاصطناعي وحده</span></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- S_CHALLENGES TABLE — fixed LTR -->
+<!-- Already in Why section, but the table needs dir=ltr fix -->
+
+<!-- S5: CURRICULUM OBJECTIVES -->
+<div class="sec" id="objectives">
+  <div class="sh"><div class="sh-icon" style="background:#1D4ED8"><i class="ti ti-target"></i></div><div>
+    <div class="sh-title en-only">General Curriculum Objectives</div>
+    <div class="sh-title ar-only">الأهداف العامة للمنهاج</div>
+    <div class="sh-sub en-only">Section 5 — By the end of the curriculum, the student will have achieved the following</div>
+    <div class="sh-sub ar-only">القسم 5 — بنهاية المنهاج يكون الطالب قد حقق ما يلي</div>
+  </div></div>
+  <div style="overflow-x:auto">
+  <table class="ctab">
+    <thead>
+      <tr class="en-only">
+        <th style="color:#fff;width:130px">Objective</th>
+        <th style="color:#fff">Statement</th>
+      </tr>
+      <tr class="ar-only">
+        <th style="color:#fff;width:130px">الهدف</th>
+        <th style="color:#fff">البيان</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td style="color:#334155;font-weight:600"><span class="en-only">Knowledge Objective</span><span class="ar-only">الهدف المعرفي</span></td><td style="color:#334155"><span class="en-only">The student understands the nature of generative AI, its basic mechanisms, its capabilities, and its limitations.</span><span class="ar-only">أن يفهم الطالب ماهية الذكاء الاصطناعي التوليدي، وآليات عمله الأساسية، وقدراته وحدوده.</span></td></tr>
+      <tr><td style="color:#334155;font-weight:600"><span class="en-only">Skills Objective</span><span class="ar-only">الهدف المهاري</span></td><td style="color:#334155"><span class="en-only">The student applies AI tools in authentic learning and productive contexts with efficiency and effectiveness.</span><span class="ar-only">أن يوظّف الطالب أدوات الذكاء الاصطناعي في سياقات تعليمية وإنتاجية حقيقية بكفاءة وفاعلية.</span></td></tr>
+      <tr><td style="color:#334155;font-weight:600"><span class="en-only">Critical Thinking Objective</span><span class="ar-only">الهدف النقدي</span></td><td style="color:#334155"><span class="en-only">The student evaluates AI outputs critically, verifies their accuracy, and understands their limitations.</span><span class="ar-only">أن يُقيّم الطالب مخرجات الذكاء الاصطناعي نقدياً، ويتحقق من دقتها، ويدرك حدودها.</span></td></tr>
+      <tr><td style="color:#334155;font-weight:600"><span class="en-only">Creative Objective</span><span class="ar-only">الهدف الإبداعي</span></td><td style="color:#334155"><span class="en-only">The student produces original work with AI assistance without compromising their intellectual authorship.</span><span class="ar-only">أن يُنتج الطالب أعمالاً أصيلة بمساعدة الذكاء الاصطناعي دون الإخلال بصاحبيّته الفكرية.</span></td></tr>
+      <tr><td style="color:#334155;font-weight:600"><span class="en-only">Ethical Objective</span><span class="ar-only">الهدف الأخلاقي</span></td><td style="color:#334155"><span class="en-only">The student uses AI with ethical responsibility, respect for privacy, and academic integrity.</span><span class="ar-only">أن يستخدم الطالب الذكاء الاصطناعي بمسؤولية أخلاقية، واحترام للخصوصية، والتزام بالنزاهة الأكاديمية.</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- S7: LEARNING PROGRESSION -->
+<div class="sec" id="progression">
+  <div class="sh"><div class="sh-icon" style="background:#7C3AED"><i class="ti ti-trending-up"></i></div><div>
+    <div class="sh-title en-only">Learning Progression</div>
+    <div class="sh-title ar-only">مسار التعلم التدرجي</div>
+    <div class="sh-sub en-only">Section 7 — How each competency grows from awareness to independent transfer</div>
+    <div class="sh-sub ar-only">القسم 7 — كيف تنمو كل كفاية من الوعي إلى النقل المستقل</div>
+  </div></div>
+  <div class="ibox ib-pu" style="margin-bottom:14px"><i class="ti ti-info-circle"></i><div class="ibox-b">
+    <b class="en-only">Note</b><b class="ar-only">ملاحظة</b>
+    <span class="en-only">The five levels are inspired by Bloom's revised taxonomy, adapted for the educational AI context.</span>
+    <span class="ar-only">المستويات الخمسة مُستلهَمة من تصنيف بلوم المُنقَّح، مُكيَّفةً للسياق التعليمي في الذكاء الاصطناعي.</span>
+  </div></div>
+  <div style="overflow-x:auto">
+  <table class="ctab">
+    <thead>
+      <tr class="en-only">
+        <th style="color:#fff;width:120px">Competency</th>
+        <th style="color:#fff">Level 1 — Remembers</th>
+        <th style="color:#fff">Level 2 — Understands</th>
+        <th style="color:#fff">Level 3 — Analyzes</th>
+        <th style="color:#fff">Level 4 — Applies</th>
+        <th style="color:#fff">Level 5 — Transfers</th>
+      </tr>
+      <tr class="ar-only">
+        <th style="color:#fff;width:120px">الكفاية</th>
+        <th style="color:#fff">المستوى 1 — يتذكّر</th>
+        <th style="color:#fff">المستوى 2 — يفهم</th>
+        <th style="color:#fff">المستوى 3 — يحلّل</th>
+        <th style="color:#fff">المستوى 4 — يطبّق</th>
+        <th style="color:#fff">المستوى 5 — ينقل</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="en-only">
+        <td style="color:#1D4ED8;font-weight:700">KC-1 AI Awareness</td>
+        <td style="color:#334155">Defines AI in simple terms</td>
+        <td style="color:#334155">Explains how a language model works</td>
+        <td style="color:#334155">Distinguishes AI from search engines</td>
+        <td style="color:#334155">Applies understanding to choose the right tool</td>
+        <td style="color:#334155">Teaches peers and corrects their misconceptions</td>
+      </tr>
+      <tr class="en-only">
+        <td style="color:#06B6D4;font-weight:700">KC-2 AI-Assisted Learning</td>
+        <td style="color:#334155">Uses AI for initial research</td>
+        <td style="color:#334155">Writes basic prompts to summarize content</td>
+        <td style="color:#334155">Improves prompts for more accurate responses</td>
+        <td style="color:#334155">Deploys AI in learning projects</td>
+        <td style="color:#334155">Designs a personal learning strategy with AI assistance</td>
+      </tr>
+      <tr class="en-only">
+        <td style="color:#7C3AED;font-weight:700">KC-3 Critical Evaluation</td>
+        <td style="color:#334155">Notices that AI can be wrong</td>
+        <td style="color:#334155">Verifies a claim using an external source</td>
+        <td style="color:#334155">Analyzes a response and identifies its weaknesses</td>
+        <td style="color:#334155">Evaluates the reliability of multiple outputs and compares them</td>
+        <td style="color:#334155">Critiques a result and reformulates it with stronger reasoning</td>
+      </tr>
+      <tr class="en-only">
+        <td style="color:#10B981;font-weight:700">KC-4 AI-Enhanced Creation</td>
+        <td style="color:#334155">Uses AI to generate initial ideas</td>
+        <td style="color:#334155">Produces a first draft with AI assistance</td>
+        <td style="color:#334155">Revises and develops work while preserving their own voice</td>
+        <td style="color:#334155">Produces a complete work that integrates their creativity and AI tools</td>
+        <td style="color:#334155">Guides peers in using AI creatively</td>
+      </tr>
+      <tr class="en-only">
+        <td style="color:#F59E0B;font-weight:700">KC-5 Ethical Digital Citizenship</td>
+        <td style="color:#334155">Knows that AI has ethical limits</td>
+        <td style="color:#334155">Discloses their AI use in their work</td>
+        <td style="color:#334155">Consistently applies academic integrity policy</td>
+        <td style="color:#334155">Evaluates the ethical impact of a digital decision</td>
+        <td style="color:#334155">Advocates for responsible AI practices in their environment</td>
+      </tr>
+      <!-- Arabic rows -->
+      <tr class="ar-only" style="display:none">
+        <td style="color:#1D4ED8;font-weight:700">KC-1 الوعي بالذكاء الاصطناعي</td>
+        <td style="color:#334155">يُعرِّف الذكاء الاصطناعي بلغة بسيطة</td>
+        <td style="color:#334155">يُفسّر كيف يعمل النموذج اللغوي</td>
+        <td style="color:#334155">يُمييّز بين الذكاء الاصطناعي ومحركات البحث</td>
+        <td style="color:#334155">يُطبّق فهمه في اختيار الأداة المناسبة</td>
+        <td style="color:#334155">يُعلّم زملاءه ويُصحّح مفاهيمهم الخاطئة</td>
+      </tr>
+      <tr class="ar-only" style="display:none">
+        <td style="color:#06B6D4;font-weight:700">KC-2 التعلم بمساعدة الذكاء الاصطناعي</td>
+        <td style="color:#334155">يستخدم الذكاء الاصطناعي للبحث الأوّلي</td>
+        <td style="color:#334155">يصيغ Prompts أساسية لتلخيص المحتوى</td>
+        <td style="color:#334155">يُحسّن Prompts للحصول على إجابات أدق</td>
+        <td style="color:#334155">يُوظّف الذكاء الاصطناعي في مشاريع تعلّمية</td>
+        <td style="color:#334155">يُصمّم استراتيجية تعلّم شخصية بمساعدته</td>
+      </tr>
+      <tr class="ar-only" style="display:none">
+        <td style="color:#7C3AED;font-weight:700">KC-3 التفكير النقدي التقييمي</td>
+        <td style="color:#334155">يلاحظ أن الذكاء الاصطناعي قد يُخطئ</td>
+        <td style="color:#334155">يتحقق من معلومة بمصدر خارجي</td>
+        <td style="color:#334155">يحلّل إجابة ويُحدّد نقاط ضعفها</td>
+        <td style="color:#334155">يُقيّم موثوقية مخرجات متعددة ويُقارنها</td>
+        <td style="color:#334155">ينقد نتيجة ويُعيد صياغتها بمنطق أقوى</td>
+      </tr>
+      <tr class="ar-only" style="display:none">
+        <td style="color:#10B981;font-weight:700">KC-4 الإنتاج الإبداعي المعزز</td>
+        <td style="color:#334155">يستخدم الذكاء الاصطناعي لتوليد أفكار أوّلية</td>
+        <td style="color:#334155">يُنتج مسودة أولى بمساعدة الذكاء الاصطناعي</td>
+        <td style="color:#334155">يُراجع ويُطوّر العمل محافظاً على صوته الخاص</td>
+        <td style="color:#334155">يُنتج عملاً مكتملاً يدمج إبداعه وأدوات الذكاء الاصطناعي</td>
+        <td style="color:#334155">يُرشد زملاءه في توظيف الذكاء الاصطناعي إبداعياً</td>
+      </tr>
+      <tr class="ar-only" style="display:none">
+        <td style="color:#F59E0B;font-weight:700">KC-5 المواطنة الرقمية الأخلاقية</td>
+        <td style="color:#334155">يعرف أن للذكاء الاصطناعي حدوداً أخلاقية</td>
+        <td style="color:#334155">يُفصح عن استخدامه للذكاء الاصطناعي في أعماله</td>
+        <td style="color:#334155">يُطبّق سياسة النزاهة الأكاديمية باستمرار</td>
+        <td style="color:#334155">يُقيّم الأثر الأخلاقي لقرار رقمي</td>
+        <td style="color:#334155">يُدافع عن ممارسات الذكاء الاصطناعي المسؤولة في محيطه</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- S13: COMPETENCY MAPPING MATRIX -->
+<div class="sec" id="mapping">
+  <div class="sh"><div class="sh-icon" style="background:#06B6D4"><i class="ti ti-table"></i></div><div>
+    <div class="sh-title en-only">Competency Mapping Matrix</div>
+    <div class="sh-title ar-only">مصفوفة ربط الكفايات</div>
+    <div class="sh-sub en-only">Section 13 — The "reference contract" of the curriculum</div>
+    <div class="sh-sub ar-only">القسم 13 — العقد المرجعي للمنهاج</div>
+  </div></div>
+  <div class="ibox ib-cy" style="margin-bottom:14px"><i class="ti ti-info-circle"></i><div class="ibox-b">
+    <b class="en-only">How to read this matrix</b><b class="ar-only">كيف تُقرأ هذه الخريطة</b>
+    <span class="en-only">Each row = one complete, self-contained unit. Columns are interconnected: assessment measures learning outcomes, and the final product embodies the core competency. Any change in one column requires reviewing the next.</span>
+    <span class="ar-only">كل صف = وحدة كاملة مستقلة. الأعمدة مترابطة؛ التقويم يقيس نواتج التعلم، والمنتج الختامي يُجسّد الكفاية الكبرى. أي تعديل في عمود يستدعي مراجعة العمود الذي يليه.</span>
+  </div></div>
+  <div style="overflow-x:auto">
+  <table class="ctab">
+    <thead>
+      <tr class="en-only">
+        <th style="color:#fff;width:70px">Unit</th>
+        <th style="color:#fff;width:90px">Stage</th>
+        <th style="color:#fff;width:80px">Competency</th>
+        <th style="color:#fff">Key Learning Outcomes</th>
+        <th style="color:#fff;width:150px">Assessment Tools</th>
+        <th style="color:#fff;width:140px">Final Product</th>
+      </tr>
+      <tr class="ar-only">
+        <th style="color:#fff;width:70px">الوحدة</th>
+        <th style="color:#fff;width:90px">المرحلة</th>
+        <th style="color:#fff;width:80px">الكفاية</th>
+        <th style="color:#fff">نواتج التعلّم الرئيسة</th>
+        <th style="color:#fff;width:150px">أدوات التقويم</th>
+        <th style="color:#fff;width:140px">المنتج الختامي</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- EN rows -->
+      <tr class="en-only"><td style="font-weight:700;color:#2563EB">Unit 1</td><td style="color:#334155">Discover</td><td style="font-weight:700;color:#2563EB">KC-1</td><td style="color:#334155">Defines generative AI; distinguishes AI from search engines; names educational uses; explains why AI cannot be relied upon alone</td><td style="color:#334155">Exit Ticket &middot; Short Quiz</td><td style="color:#334155;font-weight:600">Concept Map</td></tr>
+      <tr class="en-only"><td style="font-weight:700;color:#06B6D4">Unit 2</td><td style="color:#334155">Learn</td><td style="font-weight:700;color:#06B6D4">KC-2</td><td style="color:#334155">Writes effective prompts; uses AI to summarize content; applies AI for self-directed learning; designs a study plan with AI assistance</td><td style="color:#334155">Performance Task &middot; Teacher Observation</td><td style="color:#334155;font-weight:600">Personal Study Plan</td></tr>
+      <tr class="en-only"><td style="font-weight:700;color:#7C3AED">Unit 3</td><td style="color:#334155">Think</td><td style="font-weight:700;color:#7C3AED">KC-3</td><td style="color:#334155">Verifies the accuracy of a claim; analyzes AI outputs critically; identifies biases and errors; compares multiple sources</td><td style="color:#334155">Fact-check Task &middot; Critical Rubric</td><td style="color:#334155;font-weight:600">Fact-Check Report</td></tr>
+      <tr class="en-only"><td style="font-weight:700;color:#10B981">Unit 4</td><td style="color:#334155">Create</td><td style="font-weight:700;color:#10B981">KC-4</td><td style="color:#334155">Produces original work with AI assistance; preserves their own voice in production; documents their production process; revises based on feedback</td><td style="color:#334155">Portfolio &middot; Peer Assessment</td><td style="color:#334155;font-weight:600">Original Creative Project</td></tr>
+      <tr class="en-only"><td style="font-weight:700;color:#F59E0B">Unit 5</td><td style="color:#334155">Act Responsibly</td><td style="font-weight:700;color:#F59E0B">KC-5</td><td style="color:#334155">Discloses AI use in their work; upholds academic integrity; evaluates the ethical impact of decisions; advocates for responsible AI practices</td><td style="color:#334155">Reflection Form &middot; Self-Assessment</td><td style="color:#334155;font-weight:600">AI Responsibility Charter</td></tr>
+      <!-- AR rows -->
+      <tr class="ar-only" style="display:none"><td style="font-weight:700;color:#2563EB">الوحدة 1</td><td style="color:#334155">Discover</td><td style="font-weight:700;color:#2563EB">KC-1</td><td style="color:#334155">يعرّف الذكاء الاصطناعي التوليدي؛ يميّز بين AI ومحركات البحث؛ يذكر استخدامات تعليمية؛ يفسّر لماذا لا يُعتمد عليه وحده</td><td style="color:#334155">Exit Ticket &middot; Quiz قصير</td><td style="color:#334155;font-weight:600">Concept Map خريطة مفاهيم</td></tr>
+      <tr class="ar-only" style="display:none"><td style="font-weight:700;color:#06B6D4">الوحدة 2</td><td style="color:#334155">Learn</td><td style="font-weight:700;color:#06B6D4">KC-2</td><td style="color:#334155">يصيغ Prompts فعّالة؛ يستخدم AI لتلخيص محتوى؛ يوظّف AI في التعلم الذاتي؛ يُصمّم خطة دراسة بمساعدة AI</td><td style="color:#334155">Performance Task &middot; ملاحظة المعلم</td><td style="color:#334155;font-weight:600">Study Plan خطة تعلّم شخصية</td></tr>
+      <tr class="ar-only" style="display:none"><td style="font-weight:700;color:#7C3AED">الوحدة 3</td><td style="color:#334155">Think</td><td style="font-weight:700;color:#7C3AED">KC-3</td><td style="color:#334155">يتحقق من صحة معلومة؛ يحلّل مخرجات AI نقدياً؛ يُحدّد التحيزات والأخطاء؛ يقارن مصادر متعددة</td><td style="color:#334155">Fact-check Task &middot; Rubric نقدي</td><td style="color:#334155;font-weight:600">Fact-check Report تقرير تحقق</td></tr>
+      <tr class="ar-only" style="display:none"><td style="font-weight:700;color:#10B981">الوحدة 4</td><td style="color:#334155">Create</td><td style="font-weight:700;color:#10B981">KC-4</td><td style="color:#334155">ينتج عملاً أصيلاً بمساعدة AI؛ يحتفظ بصوته الخاص؛ يوثّق مسار إنتاجه؛ يُراجع بناءً على تغذية راجعة</td><td style="color:#334155">Portfolio &middot; Peer Assessment</td><td style="color:#334155;font-weight:600">Original Project مشروع إبداعي أصيل</td></tr>
+      <tr class="ar-only" style="display:none"><td style="font-weight:700;color:#F59E0B">الوحدة 5</td><td style="color:#334155">Act Responsibly</td><td style="font-weight:700;color:#F59E0B">KC-5</td><td style="color:#334155">يُفصح عن استخدام AI؛ يلتزم بالنزاهة الأكاديمية؛ يُقيّم الأثر الأخلاقي لقراراته؛ يُدافع عن ممارسات AI المسؤولة</td><td style="color:#334155">Reflection Form &middot; Self-Assessment</td><td style="color:#334155;font-weight:600">AI Charter ميثاق مسؤولية</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- S14: SCOPE AND SEQUENCE -->
+<div class="sec" id="scope">
+  <div class="sh"><div class="sh-icon" style="background:#0A1628"><i class="ti ti-layout-list"></i></div><div>
+    <div class="sh-title en-only">Scope and Sequence</div>
+    <div class="sh-title ar-only">النطاق والتتابع</div>
+    <div class="sh-sub en-only">Section 14 — The curriculum map at a glance</div>
+    <div class="sh-sub ar-only">القسم 14 — خريطة المنهاج في نظرة واحدة</div>
+  </div></div>
+  <div class="ibox ib-dk" style="margin-bottom:14px"><i class="ti ti-route"></i><div class="ibox-b">
+    <b class="en-only">Intended Progression</b><b class="ar-only">التصاعد المقصود</b>
+    <span class="en-only">The student's journey begins with understanding (I know), moves toward use (I apply), then critique (I evaluate), then creation (I produce), and reaches its peak with responsibility (I commit).</span>
+    <span class="ar-only">تبدأ رحلة الطالب بالفهم (أعرف)، وتتدرّج نحو الاستخدام (أُطبّق)، ثم النقد (أُقيّم)، ثم الإبداع (أُنتج)، وتصل ذروتها بالمسؤولية (ألتزم).</span>
+  </div></div>
+  <div style="overflow-x:auto">
+  <table class="ctab">
+    <thead>
+      <tr class="en-only">
+        <th style="color:#fff;width:70px">Unit</th>
+        <th style="color:#fff;width:90px">Duration</th>
+        <th style="color:#fff">Key Concepts</th>
+        <th style="color:#fff">Core Skills</th>
+        <th style="color:#fff;width:140px">Final Product</th>
+        <th style="color:#fff">Link to Next Unit</th>
+      </tr>
+      <tr class="ar-only">
+        <th style="color:#fff;width:70px">الوحدة</th>
+        <th style="color:#fff;width:90px">المدة</th>
+        <th style="color:#fff">المفاهيم الرئيسة</th>
+        <th style="color:#fff">المهارات الأساسية</th>
+        <th style="color:#fff;width:140px">المنتج الختامي</th>
+        <th style="color:#fff">الارتباط بالوحدة التالية</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- EN rows -->
+      <tr class="en-only"><td style="font-weight:700;color:#2563EB">Unit 1<br>Discover</td><td style="color:#334155">Week 1</td><td style="color:#334155">&bull; Generative AI &bull; Chatbot &bull; Prompt &bull; Language Model &bull; AI limitations</td><td style="color:#334155">Defines &middot; Explains &middot; Distinguishes</td><td style="color:#334155;font-weight:600">Concept Map</td><td style="color:#334155;font-style:italic">Understanding leads to use</td></tr>
+      <tr class="en-only"><td style="font-weight:700;color:#06B6D4">Unit 2<br>Learn</td><td style="color:#334155">Weeks 2&ndash;3</td><td style="color:#334155">&bull; Prompt Engineering &bull; AI Tools &bull; Self-directed learning &bull; Summarization</td><td style="color:#334155">Writes &middot; Applies &middot; Plans</td><td style="color:#334155;font-weight:600">Personal Study Plan</td><td style="color:#334155;font-style:italic">Use leads to evaluation</td></tr>
+      <tr class="en-only"><td style="font-weight:700;color:#7C3AED">Unit 3<br>Think</td><td style="color:#334155">Weeks 4&ndash;5</td><td style="color:#334155">&bull; Critical Thinking &bull; Fact-checking &bull; Bias &bull; Credibility</td><td style="color:#334155">Analyzes &middot; Verifies &middot; Evaluates</td><td style="color:#334155;font-weight:600">Fact-Check Report</td><td style="color:#334155;font-style:italic">Critique leads to creation</td></tr>
+      <tr class="en-only"><td style="font-weight:700;color:#10B981">Unit 4<br>Create</td><td style="color:#334155">Weeks 6&ndash;7</td><td style="color:#334155">&bull; Co-creation &bull; Original Work &bull; Authorship &bull; Documentation</td><td style="color:#334155">Designs &middot; Produces &middot; Revises</td><td style="color:#334155;font-weight:600">Original Creative Project</td><td style="color:#334155;font-style:italic">Creation leads to responsibility</td></tr>
+      <tr class="en-only"><td style="font-weight:700;color:#F59E0B">Unit 5<br>Act</td><td style="color:#334155">Week 8</td><td style="color:#334155">&bull; AI Ethics &bull; Academic Integrity &bull; Privacy &bull; Digital Citizenship</td><td style="color:#334155">Commits &middot; Advocates &middot; Initiates</td><td style="color:#334155;font-weight:600">AI Responsibility Charter</td><td style="color:#334155;font-style:italic">Beginning of a lifelong journey</td></tr>
+      <!-- AR rows -->
+      <tr class="ar-only" style="display:none"><td style="font-weight:700;color:#2563EB">الوحدة 1<br>Discover</td><td style="color:#334155">أسبوع 1</td><td style="color:#334155">&bull; Generative AI &bull; Chatbot &bull; Prompt &bull; النموذج اللغوي &bull; حدود AI</td><td style="color:#334155">يعرّف &middot; يُفسّر &middot; يُميّز</td><td style="color:#334155;font-weight:600">Concept Map خريطة مفاهيم</td><td style="color:#334155;font-style:italic">الفهم يقود إلى الاستخدام</td></tr>
+      <tr class="ar-only" style="display:none"><td style="font-weight:700;color:#06B6D4">الوحدة 2<br>Learn</td><td style="color:#334155">أسبوعان 2&ndash;3</td><td style="color:#334155">&bull; Prompt Engineering &bull; AI Tools &bull; التعلم الذاتي &bull; التلخيص</td><td style="color:#334155">يُصيغ &middot; يُوظّف &middot; يُخطّط</td><td style="color:#334155;font-weight:600">Study Plan خطة تعلّم شخصية</td><td style="color:#334155;font-style:italic">الاستخدام يقود إلى التقييم</td></tr>
+      <tr class="ar-only" style="display:none"><td style="font-weight:700;color:#7C3AED">الوحدة 3<br>Think</td><td style="color:#334155">أسبوعان 4&ndash;5</td><td style="color:#334155">&bull; Critical Thinking &bull; Fact-checking &bull; التحيز &bull; الموثوقية</td><td style="color:#334155">يُحلّل &middot; يتحقق &middot; يُقيّم</td><td style="color:#334155;font-weight:600">Fact-check Report تقرير تحقق</td><td style="color:#334155;font-style:italic">النقد يقود إلى الإنتاج</td></tr>
+      <tr class="ar-only" style="display:none"><td style="font-weight:700;color:#10B981">الوحدة 4<br>Create</td><td style="color:#334155">أسبوعان 6&ndash;7</td><td style="color:#334155">&bull; Co-creation &bull; Original Work &bull; صاحبية العمل &bull; التوثيق</td><td style="color:#334155">يُصمّم &middot; يُنتج &middot; يُراجع</td><td style="color:#334155;font-weight:600">Original Project مشروع إبداعي</td><td style="color:#334155;font-style:italic">الإبداع يقود إلى المسؤولية</td></tr>
+      <tr class="ar-only" style="display:none"><td style="font-weight:700;color:#F59E0B">الوحدة 5<br>Act</td><td style="color:#334155">أسبوع 8</td><td style="color:#334155">&bull; AI Ethics &bull; النزاهة الأكاديمية &bull; الخصوصية &bull; المواطنة الرقمية</td><td style="color:#334155">يلتزم &middot; يُدافع &middot; يُبادر</td><td style="color:#334155;font-weight:600">AI Charter ميثاق المسؤولية</td><td style="color:#334155;font-style:italic">بداية رحلة مدى الحياة</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- S12: REFERENCES -->
+<div class="sec" id="references">
+  <div class="sh"><div class="sh-icon" style="background:#0A1628"><i class="ti ti-world"></i></div><div><div class="sh-title en-only">International References</div><div class="sh-title ar-only">المراجع الدولية</div><div class="sh-sub en-only">Section 12 — Six frameworks &middot; The academic backbone of this curriculum</div><div class="sh-sub ar-only">القسم 12 — ستة أطر &middot; العمود الأكاديمي لهذا المنهاج</div></div></div>
+  <div style="overflow-x:auto"><table class="ctab">
+  <thead>
+    <tr class="en-only"><th style="color:#fff;width:80px">Source</th><th style="color:#fff">Title</th><th style="color:#fff;width:60px">Year</th><th style="color:#fff">Role in the Curriculum</th></tr>
+    <tr class="ar-only"><th style="color:#fff;width:80px">المصدر</th><th style="color:#fff">العنوان</th><th style="color:#fff;width:60px">السنة</th><th style="color:#fff">التوظيف في المنهاج</th></tr>
+  </thead>
+  <tbody>
+    <tr class="en-only"><td style="font-weight:700;color:#2563EB">UNESCO</td><td style="color:#334155">AI Competency Framework for Students</td><td style="color:#334155">2024</td><td style="color:#334155">Primary framework for designing the five Core Competencies. The direct source for KC-1 through KC-5.</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#1D4ED8;background:#F8FAFC">UNESCO</td><td style="color:#334155;background:#F8FAFC">Guidance for Generative AI in Education and Research</td><td style="color:#334155;background:#F8FAFC">2023</td><td style="color:#334155;background:#F8FAFC">Primary reference for responsible and safe AI use in educational contexts.</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#7C3AED">OECD</td><td style="color:#334155">Framework for AI Literacy &amp; Future Competencies</td><td style="color:#334155">2023</td><td style="color:#334155">Reference for future skills and critical thinking competencies in AI contexts.</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#06B6D4;background:#F8FAFC">DigComp</td><td style="color:#334155;background:#F8FAFC">Digital Competence Framework 2.2</td><td style="color:#334155;background:#F8FAFC">2022</td><td style="color:#334155;background:#F8FAFC">European digital competency framework as a supplementary reference for KC-5.</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#10B981">ISTE</td><td style="color:#334155">Standards for Students</td><td style="color:#334155">2023</td><td style="color:#334155">Standards for digital learning skills for students — informs activity design across all units.</td></tr>
+    <tr class="en-only"><td style="font-weight:700;color:#F59E0B;background:#F8FAFC">UNICEF</td><td style="color:#334155;background:#F8FAFC">Policy Guidance on AI for Children</td><td style="color:#334155;background:#F8FAFC">2021</td><td style="color:#334155;background:#F8FAFC">Reference for protecting children's rights in the AI context. Underpins the ethical framework in KC-5.</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#2563EB">UNESCO</td><td style="color:#334155">AI Competency Framework for Students</td><td style="color:#334155">2024</td><td style="color:#334155">الإطار الرئيسي لتصميم الكفايات الخمس الكبرى. المصدر المباشر لـ KC-1 حتى KC-5.</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#1D4ED8;background:#F8FAFC">UNESCO</td><td style="color:#334155;background:#F8FAFC">Guidance for Generative AI in Education and Research</td><td style="color:#334155;background:#F8FAFC">2023</td><td style="color:#334155;background:#F8FAFC">المرجع الأساسي للاستخدام المسؤول والآمن للذكاء الاصطناعي في السياقات التعليمية.</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#7C3AED">OECD</td><td style="color:#334155">Framework for AI Literacy &amp; Future Competencies</td><td style="color:#334155">2023</td><td style="color:#334155">مرجع لمهارات المستقبل والتفكير النقدي في سياقات الذكاء الاصطناعي.</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#06B6D4;background:#F8FAFC">DigComp</td><td style="color:#334155;background:#F8FAFC">Digital Competence Framework 2.2</td><td style="color:#334155;background:#F8FAFC">2022</td><td style="color:#334155;background:#F8FAFC">إطار الكفايات الرقمية الأوروبي كمرجع تكميلي لـ KC-5.</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#10B981">ISTE</td><td style="color:#334155">Standards for Students</td><td style="color:#334155">2023</td><td style="color:#334155">معايير مهارات التعلم الرقمي للطلاب — تُوجّه تصميم الأنشطة عبر جميع الوحدات.</td></tr>
+    <tr class="ar-only"><td style="font-weight:700;color:#F59E0B;background:#F8FAFC">UNICEF</td><td style="color:#334155;background:#F8FAFC">Policy Guidance on AI for Children</td><td style="color:#334155;background:#F8FAFC">2021</td><td style="color:#334155;background:#F8FAFC">مرجع لحماية حقوق الطفل في سياق الذكاء الاصطناعي. يدعم الإطار الأخلاقي في KC-5.</td></tr>
+  </tbody>
+</table></div></div>
+  <div style="background:#0A1628;border-radius:10px;padding:22px 26px;text-align:center;margin-top:8px">
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:#ffffff;margin-bottom:5px" class="en-only">AI Literacy Curriculum Framework — AI Ready Student</div>
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:#ffffff;margin-bottom:5px" class="ar-only">إطار منهاج محو الأمية بالذكاء الاصطناعي — الطالب المستعد للذكاء الاصطناعي</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.45)" class="en-only">Curriculum Blueprint &middot; Version 1.0 &middot; 2026</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.45)" class="ar-only">المخطط التفصيلي للمنهاج &middot; الإصدار 1.0 &middot; 2026</div>
+  </div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<script>
+function setLang(lang) {
+  var ar = lang === 'ar';
+  document.getElementById('le').className = 'lbtn' + (ar ? '' : ' active');
+  document.getElementById('la').className = 'lbtn' + (ar ? ' active' : '');
+  document.body.className = ar ? 'ar' : '';
+  document.documentElement.lang = ar ? 'ar' : 'en';
+  document.documentElement.dir = ar ? 'rtl' : 'ltr';
+  // Show/hide bilingual rows
+  document.querySelectorAll('.en-only').forEach(function(el){
+    el.style.display = ar ? 'none' : '';
+  });
+  document.querySelectorAll('.ar-only').forEach(function(el){
+    el.style.display = ar ? '' : 'none';
+  });
+}
+
+function act(el) {
+  document.querySelectorAll('.nl').forEach(function(n){ n.className = 'nl'; });
+  el.className = 'nl active';
+}
+
+// Scroll spy
+var sections = document.querySelectorAll('.sec[id]');
+var links = document.querySelectorAll('.nl[href]');
+var obs = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      links.forEach(function(l){
+        l.className = l.getAttribute('href') === '#'+e.target.id ? 'nl active' : 'nl';
+      });
+    }
+  });
+}, {rootMargin:'-20% 0px -70% 0px'});
+sections.forEach(function(s){ obs.observe(s); });
+</script>
+</body>
+</html>
