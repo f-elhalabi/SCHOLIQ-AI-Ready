@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Unit 2 — I Use AI to Learn | AI Ready · Schol-IQ</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0A1628;--navy-dark:#06101F;
+  --blue:#2563EB;--blue-dark:#1D4ED8;
+  --purple:#7C3AED;--violet:#8B5CF6;--cyan:#06B6D4;--cyan-dark:#0891B2;
+  --lightbg:#EEF4FF;--gray-50:#F8FAFC;--gray-100:#F1F5F9;--gray-200:#E2E8F0;
+  --gray-400:#94A3B8;--gray-600:#475569;--gray-800:#1E293B;
+  --sidebar-w:230px;--topbar-h:58px;
+  --font-main:"Inter",sans-serif;--font-display:"Space Grotesk",sans-serif;
+  --radius:10px;--shadow:0 2px 12px rgba(27,58,107,.08);
+}
+html,body{height:100%;font-family:var(--font-main);background:var(--lightbg);color:var(--gray-800);overflow:hidden}
+.shell{display:grid;grid-template-columns:var(--sidebar-w) 1fr;grid-template-rows:var(--topbar-h) 1fr;height:100vh}
+
+/* ── TOPBAR ── */
+.topbar{grid-column:1/-1;background:#0A1628;display:flex;align-items:center;padding:0 18px;gap:12px;z-index:100;box-shadow:0 2px 14px rgba(0,0,0,.25);position:relative}
+.topbar-logo{height:32px;object-fit:contain;flex-shrink:0}
+.tb-div{width:1px;height:22px;background:rgba(255,255,255,.15);flex-shrink:0}
+.unit-pill{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.85);font-size:10.5px;font-weight:600;padding:3px 11px;border-radius:20px;white-space:nowrap}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.view-sw{display:flex;background:rgba(0,0,0,.25);border-radius:8px;padding:3px;gap:2px}
+.vbtn{padding:5px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;color:rgba(255,255,255,.5);transition:all .18s;display:flex;align-items:center;gap:5px;user-select:none}
+.vbtn.active{background:#7C3AED;color:#fff}
+.lang-sw{display:flex;background:rgba(0,0,0,.2);border-radius:6px;padding:2px;gap:1px}
+.lbtn{padding:3px 10px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;color:rgba(255,255,255,.5);user-select:none;transition:all .15s}
+.lbtn.active{background:#fff;color:#0A1628}
+.prog{position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.08)}
+.prog-fill{height:100%;width:0%;background:linear-gradient(90deg,#06B6D4,#7C3AED);transition:width .4s ease}
+
+/* ── SIDEBAR ── */
+.sidebar{background:#fff;border-right:1px solid var(--gray-200);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--gray-200) transparent}
+.sb-header{padding:14px 16px 10px;border-bottom:1px solid var(--gray-100)}
+.sb-journey{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--gray-400);font-weight:700;margin-bottom:4px}
+.sb-unit{font-family:var(--font-display);font-size:11.5px;font-weight:700;color:#0A1628;line-height:1.3}
+.sb-label{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--gray-400);font-weight:700;padding:11px 16px 3px}
+.nl{display:flex;align-items:center;gap:8px;padding:7px 16px;font-size:11.5px;color:var(--gray-600);cursor:pointer;border-left:3px solid transparent;transition:all .15s;user-select:none}
+.nl:hover{background:#EEF4FF;color:#1D4ED8}
+.nl.active{background:var(--lightbg);color:#0A1628;border-left-color:#2563EB;font-weight:600}
+.nl .ni{font-size:13px;width:17px;text-align:center;flex-shrink:0}
+.nbadge{margin-left:auto;font-size:9px;padding:2px 7px;border-radius:10px;font-weight:700;white-space:nowrap}
+.bc{background:#7C3AED;color:#fff}.bd{background:#1B7A5A;color:#fff}
+.bt{background:#06B6D4;color:#fff}.bg{background:#7C3AED;color:#fff}
+.ndiv{height:1px;background:var(--gray-100);margin:5px 14px}
+.slide-num{font-size:9px;color:var(--gray-400);margin-left:auto;font-weight:600}
+
+/* ── MAIN ── */
+.main{overflow:hidden;display:flex;flex-direction:column}
+.panel{display:none;flex-direction:column;height:100%;animation:fi .22s ease}
+.panel.active{display:flex}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.pbody{flex:1;overflow-y:auto;overflow-x:hidden;padding:22px 26px;scrollbar-width:thin;scrollbar-color:var(--gray-200) transparent;max-width:880px;width:100%;margin:0 auto}
+
+/* ── COMPONENTS ── */
+.hero{background:linear-gradient(135deg,#0A1628 0%,#1E3A8A 100%);border-radius:var(--radius);padding:22px 26px;margin-bottom:16px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;bottom:-40px;left:45%;width:200px;height:200px;border-radius:50%;background:rgba(42,127,127,.07);pointer-events:none}
+.hero-eye{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.45);margin-bottom:7px;font-weight:600}
+.hero-t{font-family:var(--font-display);font-size:20px;font-weight:800;color:#fff;margin-bottom:6px;line-height:1.2}
+.hero-s{font-size:13px;color:rgba(255,255,255,.7);line-height:1.55;font-style:italic}
+.hchips{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap}
+.hchip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);color:rgba(255,255,255,.8);font-size:10px;padding:3px 11px;border-radius:20px;display:flex;align-items:center;gap:5px}
+
+.sh{font-family:var(--font-display);font-size:16px;font-weight:700;color:#0A1628;margin-bottom:13px;padding-bottom:9px;border-bottom:2px solid var(--lightbg);display:flex;align-items:center;gap:8px}
+.sh i{font-size:19px;color:#06B6D4}
+
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+.card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:16px}
+.ctit{font-size:11.5px;font-weight:600;color:#0A1628;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.cbody{font-size:12px;color:var(--gray-600);line-height:1.75}
+
+.ibox{border-radius:var(--radius);padding:13px 16px;margin-bottom:14px;display:flex;gap:11px;align-items:flex-start}
+.ibox i{font-size:18px;flex-shrink:0;margin-top:1px}
+.ibox-b{font-size:12.5px;line-height:1.65}
+.ibox-b strong{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.bg-g{background:#F5F3FF;border:1px solid #A78BFA}.bg-g i,.bg-g strong{color:#7C3AED}.bg-g .ibox-b{color:#4C1D95}
+.bg-t{background:#EFF6FF;border:1px solid #67E8F9}.bg-t i,.bg-t strong{color:#06B6D4}.bg-t .ibox-b{color:#0C4A6E}
+.bg-n{background:var(--lightbg);border:1px solid #BFDBFE}.bg-n i,.bg-n strong{color:#0A1628}.bg-n .ibox-b{color:#1E3A8A}
+.bg-r{background:#FEF2F2;border:1px solid #FECACA}.bg-r i,.bg-r strong{color:#DC2626}.bg-r .ibox-b{color:#7F1D1D}
+
+/* story */
+.story{background:#fff;border:1px solid var(--gray-200);border-left:5px solid #7C3AED;border-radius:var(--radius);padding:16px 20px;margin-bottom:14px}
+.stag{font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:#7C3AED;margin-bottom:7px}
+.stxt{font-size:13.5px;line-height:1.75;color:var(--gray-800)}
+
+/* questions */
+.qlist{list-style:none;display:flex;flex-direction:column;gap:7px}
+.qi{background:#fff;border:1px solid var(--gray-200);border-radius:8px;padding:11px 15px;display:flex;gap:11px;align-items:flex-start;cursor:pointer;transition:all .18s}
+.qi:hover{border-color:#0A1628;background:var(--lightbg)}
+.qi.revealed{background:var(--lightbg);border-color:#06B6D4}
+.qn{width:24px;height:24px;border-radius:6px;background:#0A1628;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-display)}
+.qtxt{font-size:12.5px;color:var(--gray-800);line-height:1.5;padding-top:2px}
+.qhint{font-size:11px;color:#06B6D4;margin-top:5px;font-style:italic;display:none}
+.qi.revealed .qhint{display:block}
+
+/* vocab */
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vc{background:#fff;border:1px solid var(--gray-200);border-radius:8px;padding:13px 16px;cursor:pointer;position:relative;overflow:hidden;transition:all .2s}
+.vc::before{content:"";position:absolute;top:0;left:0;width:4px;height:100%;background:#06B6D4;border-radius:4px 0 0 4px}
+.vc:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
+.vc.open{border-color:#06B6D4;background:#EFF6FF}
+.vterm{font-size:13px;font-weight:700;color:#0A1628;margin-bottom:3px;font-family:var(--font-display)}
+.var-label{font-size:10px;color:var(--gray-400);margin-bottom:6px}
+.vdef{font-size:11.5px;color:var(--gray-600);line-height:1.55;display:none}
+.vc.open .vdef{display:block}
+.vtog{font-size:10px;color:#06B6D4;font-weight:600;margin-top:5px}
+
+/* 3-info-cards (What is AI) */
+.info3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+.info-card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:18px 16px;text-align:center}
+.info-icon{font-size:28px;margin-bottom:10px}
+.info-title{font-size:12.5px;font-weight:700;color:#0A1628;margin-bottom:6px;font-family:var(--font-display)}
+.info-desc{font-size:11.5px;color:var(--gray-600);line-height:1.6}
+
+/* flow */
+.flow{display:flex;align-items:center;gap:0;margin-bottom:16px;overflow-x:auto;padding:4px 0}
+.flow-step{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:14px 16px;min-width:140px;flex:1;text-align:center}
+.flow-num{width:24px;height:24px;border-radius:50%;background:#0A1628;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-family:var(--font-display)}
+.flow-icon{font-size:20px;margin-bottom:6px}
+.flow-title{font-size:11px;font-weight:700;color:#0A1628;margin-bottom:4px}
+.flow-desc{font-size:10.5px;color:var(--gray-600);line-height:1.5}
+.flow-arrow{color:var(--gray-400);font-size:20px;flex-shrink:0;padding:0 4px}
+
+/* activity header */
+.ah{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:15px 19px;margin-bottom:14px;display:flex;gap:13px;align-items:flex-start}
+.anum{width:40px;height:40px;border-radius:10px;background:#0A1628;color:#fff;font-size:17px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-display)}
+.atit{font-family:var(--font-display);font-size:14.5px;font-weight:700;color:#0A1628}
+.agoal{font-size:11.5px;color:var(--gray-600);line-height:1.5;margin-top:3px}
+.atime{font-size:10.5px;color:var(--gray-400);margin-top:4px;display:flex;align-items:center;gap:4px}
+.abadge{font-size:9px;padding:2px 8px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+
+/* teacher boxes */
+.tbox{border-radius:var(--radius);padding:13px 17px;margin-bottom:14px}
+.twat{background:#F5F3FF;border:1.5px solid #7C3AED}
+.twhy{background:#EDE9F8;border:1.5px solid #A78BFA}
+.tbtit{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.twat .tbtit{color:#7C3AED}.twhy .tbtit{color:#6D28D9}
+.tbbody{font-size:12px;line-height:1.65;color:var(--gray-700)}
+.t-only{display:none}
+
+/* ACTIVITY 1 - Compare boxes */
+.compare-box{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:16px;margin-bottom:8px}
+.compare-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.compare-input{width:100%;border:1.5px solid var(--gray-200);border-radius:8px;padding:10px 14px;font-size:12px;font-family:var(--font-main);color:var(--gray-800);background:var(--gray-50);outline:none;resize:none;min-height:90px;transition:border-color .15s}
+.compare-input:focus{border-color:#2563EB;background:#fff}
+.compare-input::placeholder{color:var(--gray-400);font-style:italic}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.reflect-input{width:100%;border:1.5px solid var(--gray-200);border-radius:8px;padding:10px 14px;font-size:12px;font-family:var(--font-main);color:var(--gray-800);background:var(--gray-50);outline:none;resize:none;min-height:70px;transition:border-color .15s}
+.reflect-input:focus{border-color:#7C3AED;background:#fff}
+.reflect-input::placeholder{color:var(--gray-400);font-style:italic}
+
+/* ACTIVITY 2 - Situation Cards 3 columns */
+.sit3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.sit-col{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);overflow:hidden}
+.sit-col-head{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:6px}
+.head-yes{background:#DCFCE7;color:#15803D;border-bottom:2px solid #16A34A}
+.head-dep{background:#F5F3FF;color:#4C1D95;border-bottom:2px solid #7C3AED}
+.head-no{background:#FEE2E2;color:#991B1B;border-bottom:2px solid #DC2626}
+.sit-items{padding:10px;display:flex;flex-direction:column;gap:6px}
+.sit-item{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:7px;padding:8px 10px;font-size:11.5px;color:var(--gray-700);cursor:pointer;transition:all .15s;user-select:none;line-height:1.4}
+.sit-item:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
+.sit-item.picked-yes{background:#DCFCE7;border-color:#16A34A;color:#15803D}
+.sit-item.picked-dep{background:#F5F3FF;border-color:#7C3AED;color:#4C1D95}
+.sit-item.picked-no{background:#FEE2E2;border-color:#DC2626;color:#991B1B}
+
+/* ACTIVITY 3 - Concept Map */
+.cma{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:18px;margin-bottom:14px}
+.cma-center{background:#0A1628;color:#fff;font-size:14px;font-weight:700;font-family:var(--font-display);padding:11px 24px;border-radius:30px;text-align:center;margin:0 auto 18px;width:fit-content}
+.cma-branches{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.cma-b{border:1.5px solid var(--gray-200);border-radius:10px;overflow:hidden}
+.cma-head{padding:9px 14px;font-size:11.5px;font-weight:700;color:#0A1628;display:flex;align-items:center;gap:6px;border-bottom:1.5px solid var(--gray-200)}
+.cma-head.hh1{background:#EFF6FF;border-bottom-color:#67E8F9}.cma-head.hh1 i{color:#06B6D4}
+.cma-head.hh2{background:#FEF2F2;border-bottom-color:#FECACA}.cma-head.hh2 i{color:#DC2626}
+.cma-head.hh3{background:#F5F3FF;border-bottom-color:#DDD6FE}.cma-head.hh3 i{color:#7C3AED}
+.cma-inp{padding:10px 12px}
+.cminp{width:100%;border:1.5px solid var(--gray-200);border-radius:7px;padding:8px 11px;font-size:12px;font-family:var(--font-main);color:var(--gray-800);background:var(--gray-50);outline:none;resize:none;min-height:80px;transition:border-color .15s}
+.cminp:focus{border-color:#2563EB;background:#fff}
+.cminp::placeholder{color:var(--gray-400);font-style:italic}
+
+/* can/cannot */
+.cc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.cc-col{border-radius:var(--radius);overflow:hidden;border:1px solid var(--gray-200)}
+.cc-head{padding:10px 16px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px}
+.cc-yes-head{background:#DCFCE7;color:#15803D;border-bottom:2px solid #16A34A}
+.cc-no-head{background:#FEE2E2;color:#991B1B;border-bottom:2px solid #DC2626}
+.cc-items{padding:12px 16px;display:flex;flex-direction:column;gap:8px}
+.cc-item{font-size:12px;color:var(--gray-700);display:flex;gap:8px;align-items:flex-start;line-height:1.5}
+
+/* partnership equation */
+.equation{display:flex;align-items:center;justify-content:center;gap:16px;padding:24px 0;flex-wrap:wrap}
+.eq-part{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:16px 20px;text-align:center;min-width:120px}
+.eq-icon{font-size:32px;margin-bottom:8px}
+.eq-title{font-size:13px;font-weight:700;color:#0A1628;font-family:var(--font-display)}
+.eq-sub{font-size:11px;color:var(--gray-500);margin-top:3px}
+.eq-op{font-size:28px;font-weight:800;color:#7C3AED;flex-shrink:0}
+
+/* exit ticket */
+.exit-q{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:16px 18px;margin-bottom:12px}
+.exit-qn{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;background:#0A1628;color:#fff;font-size:11px;font-weight:700;margin-bottom:8px;font-family:var(--font-display)}
+.exit-qtxt{font-size:13.5px;font-weight:600;color:#0A1628;margin-bottom:10px;line-height:1.5}
+.exit-ta{width:100%;min-height:80px;border:1.5px solid var(--gray-200);border-radius:8px;padding:11px 14px;font-size:12.5px;font-family:var(--font-main);color:var(--gray-800);background:var(--gray-50);outline:none;resize:vertical;transition:border-color .15s}
+.exit-ta:focus{border-color:#2563EB;background:#fff}
+.exit-ta::placeholder{color:var(--gray-400);font-style:italic}
+
+/* closing */
+.closing-q{background:#0A1628;border-radius:var(--radius);padding:28px 30px;margin-bottom:18px;text-align:center}
+.closing-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.4);margin-bottom:12px;font-weight:600}
+.closing-q-text{font-family:var(--font-display);font-size:21px;font-weight:800;color:#fff;line-height:1.35}
+.closing-bar{width:56px;height:3px;background:#7C3AED;border-radius:2px;margin:16px auto 0}
+
+/* nav footer */
+.pnf{display:flex;justify-content:space-between;align-items:center;padding:12px 26px;border-top:1px solid var(--gray-200);background:#fff;flex-shrink:0}
+.pnfl{font-size:11px;color:var(--gray-400)}
+.pnfr{display:flex;gap:8px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 17px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;transition:all .18s;border:none;font-family:var(--font-main)}
+.bn{background:#0A1628;color:#fff}.bn:hover{background:#06101F}
+.bt{background:#06B6D4;color:#fff}.bt:hover{background:#0891B2}
+.bo{background:transparent;color:#0A1628;border:1.5px solid var(--gray-200)}.bo:hover{border-color:#0A1628;background:var(--lightbg)}
+
+/* sc list */
+.sclist{display:flex;flex-direction:column;gap:7px}
+.scitem{display:flex;gap:9px;align-items:flex-start;padding:9px 13px;background:#fff;border:1px solid var(--gray-200);border-radius:8px;font-size:12px;color:var(--gray-700);line-height:1.5}
+.scck{width:19px;height:19px;border-radius:50%;background:#DCFCE7;color:#16A34A;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px}
+
+
+/* ── FORMATIVE PRACTICE (MCQ) ── */
+.fq-card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:18px 20px;margin-bottom:12px}
+.fq-num{font-size:10px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;color:var(--gray-400);margin-bottom:8px}
+.fq-text{font-size:13.5px;font-weight:600;color:#0A1628;line-height:1.5;margin-bottom:12px}
+.fq-opts{display:flex;flex-direction:column;gap:7px}
+.fq-opt{display:flex;align-items:flex-start;gap:10px;padding:9px 14px;border:1.5px solid var(--gray-200);border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--gray-700);transition:all .15s;user-select:none}
+.fq-opt:hover{border-color:#0A1628;background:var(--lightbg)}
+.fq-letter{width:22px;height:22px;border-radius:5px;background:#EEF4FF;color:#0A1628;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-display)}
+.fq-opt.picked-right{border-color:#06B6D4;background:#ECFEFF;color:#0C4A6E;pointer-events:none}
+.fq-opt.picked-right .fq-letter{background:#06B6D4;color:#fff}
+.fq-opt.picked-wrong{border-color:#DC2626;background:#FEE2E2;color:#DC2626;pointer-events:none}
+.fq-opt.picked-wrong .fq-letter{background:#DC2626;color:#fff}
+.fq-opt.revealed-correct{border-color:#06B6D4;background:#ECFEFF;pointer-events:none}
+.fq-fb{font-size:11.5px;margin-top:8px;padding:8px 12px;border-radius:6px;display:none;line-height:1.5}
+.fq-fb.show-right{display:block;background:#DCFCE7;color:#15803D}
+.fq-fb.show-wrong{display:block;background:#FEF2F2;color:#991B1B}
+/* ── SUCCESS CRITERIA BUTTONS ── */
+.sc-btn{background:none;border:1.5px solid var(--gray-200);width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:14px;transition:all .15s;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.sc-btn:hover{border-color:#0A1628;background:var(--lightbg)}
+.sc-btn.picked-g{background:#DCFCE7;border-color:#16A34A;font-size:15px}
+.sc-btn.picked-y{background:#F5F3FF;border-color:#7C3AED;font-size:15px}
+.sc-btn.picked-r{background:#FEE2E2;border-color:#DC2626;font-size:15px}
+/* ── ACTIVITY 4 ANALYSIS ── */
+.ana-toggle-active{background:#0A1628!important;color:#fff!important;border-color:#0A1628!important}
+/* ── ACT2 DRAG CARD ── */
+.sit2-card{background:var(--lightbg);border:1px solid var(--gray-200);border-radius:7px;padding:7px 12px;font-size:12px;color:#0A1628;cursor:grab;user-select:none;transition:all .15s;font-weight:500}
+.sit2-card:hover{box-shadow:var(--shadow);transform:translateY(-1px);background:#fff}
+.sit2-card:active{cursor:grabbing;opacity:.7}
+.sit2-card.placed{display:none}
+.s2-zone.s2-over{opacity:.85}
+.s2-dropped{background:#fff;border:1px solid var(--gray-200);border-radius:6px;padding:6px 10px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.s2-rm{font-size:11px;color:var(--gray-400);cursor:pointer;padding:2px 5px;border-radius:3px;flex-shrink:0}
+.s2-rm:hover{background:#FEE2E2;color:#DC2626}
+.s2-dropped.right{background:#DCFCE7;border-color:#16A34A;color:#15803D}
+.s2-dropped.wrong{background:#FEE2E2;border-color:#DC2626;color:#DC2626}
+
+/* ── MOBILE RESPONSIVE ── */
+@media (max-width: 700px) {
+  :root { --sidebar-w: 0px; --topbar-h: 52px; }
+  .shell { grid-template-columns: 1fr; grid-template-rows: var(--topbar-h) 1fr; }
+  .sidebar {
+    display: none;
+    position: fixed; top: var(--topbar-h); left: 0; bottom: 0;
+    width: 270px; z-index: 500;
+    box-shadow: 4px 0 24px rgba(0,0,0,.18);
+    overflow-y: auto;
+  }
+  .sidebar.open { display: block; }
+  .sidebar-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,.35); z-index: 499;
+  }
+  .sidebar-overlay.open { display: block; }
+  .topbar {
+    padding: 0 10px; gap: 6px;
+    overflow: hidden;
+  }
+  .topbar-logo { height: 24px; flex-shrink: 0; }
+  .unit-pill { display: none; }
+  .tb-div { display: none; }
+  .tb-hide-mobile { display: none !important; }
+  .hamburger {
+    display: flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; border-radius: 8px;
+    background: rgba(255,255,255,.1); border: none; cursor: pointer;
+    color: #fff; font-size: 18px; flex-shrink: 0;
+  }
+  .topbar-right { gap: 5px; flex-shrink: 0; }
+  .view-sw { padding: 2px; gap: 1px; }
+  .vbtn { padding: 4px 7px; font-size: 10px; }
+  .vbtn span { display: none; }
+  .vbtn i { font-size: 13px; }
+  .lang-sw { padding: 2px; }
+  .lbtn { padding: 3px 7px; font-size: 10px; }
+  .nav-pct { display: none; }
+  .pbody { padding: 14px 14px; }
+  .g2, .compare-grid, .cc-grid { grid-template-columns: 1fr !important; }
+  .g3 { grid-template-columns: 1fr 1fr !important; }
+  .info3 { grid-template-columns: 1fr !important; }
+  .cma-branches { grid-template-columns: 1fr !important; }
+  .equation { gap: 8px; }
+  .eq-part { min-width: 90px; padding: 12px 10px; }
+  .eq-op { font-size: 20px; }
+  .sit3 { grid-template-columns: 1fr !important; }
+  .hero-t { font-size: 16px; }
+  .closing-q-text { font-size: 16px; }
+  /* Act2 drop zones stack on mobile */
+  #act2-zones { grid-template-columns: 1fr !important; }
+  /* Differentiation grids */
+  [style*="grid-template-columns:1fr 1fr 1fr"] { display: flex !important; flex-direction: column !important; }
+  .pnf { padding: 10px 14px; }
+  .btn { font-size: 11.5px; padding: 8px 12px; }
+}
+@media (min-width: 701px) {
+  .hamburger { display: none; }
+  .sidebar-overlay { display: none !important; }
+}
+
+/* ── TOUCH-FRIENDLY ACTIVITY 2 (tap-to-select on mobile) ── */
+.sit2-card.tap-selected {
+  background: #0A1628; color: #fff; border-color: #0A1628;
+  box-shadow: 0 0 0 2px #2563EB;
+}
+.s2-zone.tap-ready {
+  border-style: solid !important; border-color: #2563EB !important;
+  background: #EEF4FF !important;
+}
+
+/* ── PORTAL COLOR ALIGNMENT ── */
+/* Topbar already matches portal navy #0A1628 ✓ */
+/* Active nav: blue #2563EB ✓ */
+/* Purple accents: #7C3AED ✓ */
+/* Ensure hero gradient matches portal feel */
+.hero {
+  background: linear-gradient(135deg, #0A1628 0%, #1E3A8A 60%, #1e1b4b 100%) !important;
+}
+/* Progress bar gradient — matches portal accent */
+.prog-fill {
+  background: linear-gradient(90deg, #2563EB, #7C3AED) !important;
+}
+/* Topbar AI Ready pill — match portal gold accent */
+.ai-ready-pill {
+  background: rgba(201,151,43,.22);
+  border: 1px solid rgba(201,151,43,.5);
+  color: #C9972B;
+  font-size: 10px; font-weight: 700;
+  padding: 2px 10px; border-radius: 20px;
+  white-space: nowrap; letter-spacing: .04em;
+}
+
+/* AR mode */
+body.ar{direction:rtl}
+body.ar .sidebar{border-right:none;border-left:1px solid var(--gray-200)}
+body.ar .nl{border-left:none;border-right:3px solid transparent}
+body.ar .nl.active{border-right-color:#0A1628}
+body.ar .story{border-left:none;border-right:5px solid #7C3AED}
+body.ar .vc::before{left:auto;right:0;border-radius:0 4px 4px 0}
+body.ar .cma-branches{direction:rtl}
+
+/* ── NAV PROGRESS % ── */
+.nav-pct{font-size:10.5px;color:rgba(255,255,255,.6);font-weight:700;margin-left:6px;min-width:34px;text-align:right}
+/* ── SC SELF-ASSESSMENT PROGRESS ── */
+.sc-progress-wrap{background:#fff;border:1.5px solid var(--gray-200);border-radius:10px;padding:14px 18px;margin-bottom:16px}
+.sc-pct-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px}
+.sc-pct-label{font-size:11.5px;color:var(--gray-600)}
+.sc-pct-num{font-family:"Space Grotesk",sans-serif;font-size:22px;font-weight:800;color:#0A1628}
+.sc-pct-sub{font-size:10px;color:var(--gray-400);margin-left:4px}
+.sc-meter{height:9px;background:var(--gray-100);border-radius:5px;overflow:hidden}
+.sc-meter-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,#06B6D4,#7C3AED);transition:width .4s ease}
+
+/* ── FLASHCARDS ── */
+.flash-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+@media(max-width:700px){.flash-grid{grid-template-columns:1fr}}
+.flash-card{perspective:1200px;height:150px;cursor:pointer}
+.flash-inner{position:relative;width:100%;height:100%;transition:transform .55s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+.flash-card.flipped .flash-inner{transform:rotateY(180deg)}
+.flash-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.flash-front{background:#fff;border:1.5px solid var(--gray-200);box-shadow:var(--shadow)}
+.flash-front .fic{font-size:26px;margin-bottom:8px}
+.flash-front .ftitle{font-family:var(--font-display);font-size:14px;font-weight:800;color:#0A1628}
+.flash-front .fsub{font-size:10px;color:var(--gray-400);margin-top:6px;text-transform:uppercase;letter-spacing:.06em}
+.flash-back{background:linear-gradient(135deg,#0A1628,#1E3A8A);color:#fff;transform:rotateY(180deg)}
+.flash-back .fdef{font-size:12px;line-height:1.6}
+.flash-progress{font-size:11px;color:var(--gray-500);text-align:center;margin-bottom:10px}
+
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- SIDEBAR OVERLAY for mobile -->
+<div class="sidebar-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+  <img id="logo" src="data:image/png;base64,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" alt="Schol-IQ" class="topbar-logo">
+  <div class="tb-div"></div>
+  <div class="ai-ready-pill tb-hide-mobile">AI Ready</div><div class="unit-pill tb-hide-mobile">Unit 2 &middot; Learn &middot; KC-2</div>
+  <div class="topbar-right">
+    <div class="view-sw">
+      <div class="vbtn active" id="vs" onclick="switchView('student')"><i class="ti ti-user-graduate"></i> Student</div>
+      <div class="vbtn" id="vt" onclick="switchView('teacher')"><i class="ti ti-school"></i> Teacher</div>
+    </div>
+    <div class="lang-sw">
+      <div class="lbtn active" id="le" onclick="switchLang('en')">EN</div>
+      <div class="lbtn" id="la" onclick="switchLang('ar')">AR</div>
+    </div>
+  </div>
+  <div class="prog"><div class="prog-fill" id="pf"></div></div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sb-header">
+    <div class="sb-journey" data-en="Learner Journey &middot; Stage 2 of 5" data-ar="رحلة الطالب &middot; المرحلة 2 من 5">Learner Journey &middot; Stage 2 of 5</div>
+    <div class="sb-unit" data-en="I Use AI to Learn" data-ar="أستخدم الذكاء الاصطناعي لأتعلم">I Use AI to Learn</div>
+  </div>
+
+  <div class="sb-label" data-en="Introduction" data-ar="المقدمة">Introduction</div>
+  <div class="nl active" onclick="go('overview',this)"><span class="ni"><i class="ti ti-home"></i></span><span data-en="Overview" data-ar="نظرة عامة">Overview</span></div>
+  <div class="nl" onclick="go('eq',this)"><span class="ni"><i class="ti ti-help-circle"></i></span><span data-en="Essential Question" data-ar="السؤال الجوهري">Essential Question</span></div>
+
+  <div class="ndiv"></div>
+  <div class="sb-label" data-en="Session 1 &middot; The Prompt That Changes Everything" data-ar="الحصة 1 &middot; الأمر الذي يغيّر كل شيء">Session 1</div>
+  <div class="nl" onclick="go('act1',this)"><span class="ni"><i class="ti ti-alert-triangle"></i></span><span data-en="Activity 1 — Shortcut Trap" data-ar="نشاط 1 — فخ الاختصار">Activity 1 — Shortcut Trap</span><span class="nbadge bc" data-en="Discuss" data-ar="ناقش">Discuss</span></div>
+  <div class="nl" onclick="go('act2',this)"><span class="ni"><i class="ti ti-flask"></i></span><span data-en="Activity 2 — Prompt Anatomy" data-ar="نشاط 2 — تشريح الأمر">Activity 2 — Prompt Anatomy</span><span class="nbadge bd" data-en="Compare" data-ar="قارن">Compare</span></div>
+  <div class="nl" onclick="go('act3',this)"><span class="ni"><i class="ti ti-puzzle"></i></span><span data-en="Activity 3 — 3-Part Formula" data-ar="نشاط 3 — الصيغة الثلاثية">Activity 3 — 3-Part Formula</span><span class="nbadge bt" data-en="Learn" data-ar="تعلّم">Learn</span></div>
+  <div class="nl" onclick="go('act4',this)"><span class="ni"><i class="ti ti-rocket"></i></span><span data-en="Activity 4 — Upgrade My Prompt" data-ar="نشاط 4 — طوّر أمري">Activity 4 — Upgrade My Prompt</span><span class="nbadge bg" data-en="Build" data-ar="ابنِ">Build</span></div>
+  <div class="nl" onclick="go('exit1',this)"><span class="ni"><i class="ti ti-clipboard-check"></i></span><span data-en="Exit Ticket — Session 1" data-ar="بطاقة الخروج — الحصة 1">Exit Ticket — Session 1</span></div>
+
+  <div class="ndiv"></div>
+  <div class="sb-label" data-en="Session 2 &middot; AI as My Learning Partner" data-ar="الحصة 2 &middot; الذكاء الاصطناعي كشريك تعلمي">Session 2</div>
+  <div class="nl" onclick="go('act5',this)"><span class="ni"><i class="ti ti-refresh"></i></span><span data-en="Activity 5 — Recall Warm-Up" data-ar="نشاط 5 — إحماء الاسترجاع">Activity 5 — Recall Warm-Up</span></div>
+  <div class="nl" onclick="go('act6',this)"><span class="ni"><i class="ti ti-map-2"></i></span><span data-en="Activity 6 — Learning Stations" data-ar="نشاط 6 — محطات التعلم">Activity 6 — Learning Stations</span><span class="nbadge bc" data-en="Rotate" data-ar="تناوب">Rotate</span></div>
+  <div class="nl" onclick="go('act7',this)"><span class="ni"><i class="ti ti-message-circle-2"></i></span><span data-en="Activity 7 — Group Share-Out" data-ar="نشاط 7 — مشاركة جماعية">Activity 7 — Group Share-Out</span></div>
+  <div class="nl" onclick="go('act8',this)"><span class="ni"><i class="ti ti-notebook"></i></span><span data-en="Activity 8 — Learning Summary" data-ar="نشاط 8 — ملخصي التعلمي">Activity 8 — Learning Summary</span><span class="nbadge" style="background:#7B3FA8;color:#fff" data-en="Product" data-ar="المنتج">Product</span></div>
+  <div class="nl" onclick="go('exit2',this)"><span class="ni"><i class="ti ti-clipboard-check"></i></span><span data-en="Exit + Reflection — Session 2" data-ar="خروج + تأمل — الحصة 2">Exit + Reflection — Session 2</span></div>
+
+  <div class="ndiv"></div>
+  <div class="sb-label" data-en="Wrap Up" data-ar="الختام">Wrap Up</div>
+  <div class="nl" onclick="go('flash',this)"><span class="ni"><i class="ti ti-cards"></i></span><span data-en="Concept Flashcards" data-ar="بطاقات الخلاصة">Concept Flashcards</span><span class="nbadge" style="background:#06B6D4;color:#fff" data-en="Review" data-ar="راجع">Review</span></div>
+  <div class="nl" onclick="go('quiz',this)"><span class="ni"><i class="ti ti-brain"></i></span><span data-en="Unit Quiz (D3)" data-ar="اختبار الوحدة (D3)">Unit Quiz (D3)</span><span class="nbadge bg" data-en="MCQ" data-ar="MCQ">MCQ</span></div>
+  <div class="nl" onclick="go('rubric',this)"><span class="ni"><i class="ti ti-award"></i></span><span data-en="Learning Summary Rubric (D4)" data-ar="Rubric الملخص (D4)">Learning Summary Rubric (D4)</span></div>
+  <div class="nl" onclick="go('reflection',this)"><span class="ni"><i class="ti ti-mood-smile"></i></span><span data-en="Student Reflection (D5)" data-ar="تأمل الطالب (D5)">Student Reflection (D5)</span></div>
+  <div class="nl" onclick="go('closing',this)"><span class="ni"><i class="ti ti-flag"></i></span><span data-en="Closing — Bridge to Unit 3" data-ar="الختام — الجسر إلى الوحدة 3">Closing — Bridge to Unit 3</span></div>
+
+  <!-- Teacher extras -->
+  <div id="textras" style="display:none">
+    <div class="ndiv"></div>
+    <div class="sb-label" style="color:#7C3AED" data-en="Teacher Guide" data-ar="دليل المعلم">Teacher Guide</div>
+    <div class="nl" onclick="go('tnotes',this)"><span class="ni" style="color:#7C3AED"><i class="ti ti-notes"></i></span><span><span data-en="Lesson Flow Notes" data-ar="سير الحصة">Lesson Flow Notes</span></span></div>
+    <div class="nl" onclick="go('tdiff',this)"><span class="ni" style="color:#7C3AED"><i class="ti ti-adjustments"></i></span><span><span data-en="Differentiation" data-ar="التمايز">Differentiation</span></span></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+<!-- OVERVIEW -->
+<div class="panel active" id="p-overview">
+<div class="pbody">
+  <div class="hero">
+    <div class="hero-eye" data-en="Unit 2 &middot; Learn &middot; KC-2 AI-Assisted Learning" data-ar="الوحدة 2 &middot; تعلّم &middot; KC-2 التعلم بمساعدة الذكاء الاصطناعي">Unit 2 &middot; Learn &middot; KC-2 AI-Assisted Learning</div>
+    <div class="hero-t" data-en="I Use AI to Learn" data-ar="أستخدم الذكاء الاصطناعي لأتعلم">I Use AI to Learn</div>
+    <div class="hero-s" data-en="&ldquo;AI is not a shortcut &mdash; it's a thinking partner. The quality of what I get depends entirely on the quality of how I ask.&rdquo;" data-ar="&laquo;الذكاء الاصطناعي ليس اختصاراً — إنه شريك في التفكير. جودة ما أحصل عليه تعتمد كلياً على جودة كيفية طرحي للسؤال.&raquo;">"AI is not a shortcut &mdash; it's a thinking partner. The quality of what I get depends entirely on the quality of how I ask."</div>
+    <div class="hchips">
+      <div class="hchip"><i class="ti ti-clock"></i> <span data-en="2 Sessions &middot; 100&ndash;120 min" data-ar="حصتان &middot; 100–120 دقيقة">2 Sessions &middot; 100&ndash;120 min</span></div>
+      <div class="hchip"><i class="ti ti-puzzle"></i> <span data-en="8 Activities" data-ar="8 أنشطة">8 Activities</span></div>
+      <div class="hchip"><i class="ti ti-users"></i> <span data-en="Grades 7&ndash;12" data-ar="الصفوف 7–12">Grades 7&ndash;12</span></div>
+      <div class="hchip"><i class="ti ti-award"></i> KC-2</div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ctit"><i class="ti ti-target" style="color:#06B6D4"></i><span data-en="Learning Outcomes" data-ar="نواتج التعلم">Learning Outcomes</span></div>
+      <div class="sclist">
+        <div class="scitem"><div class="scck"><i class="ti ti-check"></i></div><span data-en="LO-1 · Write effective prompts using Role + Task + Context" data-ar="LO-1 · كتابة أوامر فعّالة بالدور + المهمة + السياق">LO-1 · Write effective prompts using Role + Task + Context</span></div>
+        <div class="scitem"><div class="scck"><i class="ti ti-check"></i></div><span data-en="LO-2 · Use AI to explain, summarize, and scaffold learning" data-ar="LO-2 · استخدام الذكاء الاصطناعي للشرح والتلخيص ودعم التعلم">LO-2 · Use AI to explain, summarize, and scaffold learning</span></div>
+        <div class="scitem"><div class="scck"><i class="ti ti-check"></i></div><span data-en="LO-3 · Distinguish passive consumption from active learning" data-ar="LO-3 · التمييز بين الاستهلاك السلبي والتعلم النشط">LO-3 · Distinguish passive consumption from active learning</span></div>
+        <div class="scitem"><div class="scck"><i class="ti ti-check"></i></div><span data-en="LO-4 · Apply the Verify-Reflect cycle after every AI response" data-ar="LO-4 · تطبيق دورة «تحقق - تأمل» بعد كل إجابة">LO-4 · Apply the Verify-Reflect cycle after every AI response</span></div>
+        <div class="scitem"><div class="scck"><i class="ti ti-check"></i></div><span data-en="LO-5 · Demonstrate metacognitive awareness of AI's value" data-ar="LO-5 · إظهار وعي ما وراء معرفي بقيمة الذكاء الاصطناعي">LO-5 · Demonstrate metacognitive awareness of AI's value</span></div>
+        <div class="scitem"><div class="scck"><i class="ti ti-check"></i></div><span data-en="LO-6 · Produce an AI-assisted (not AI-generated) artifact" data-ar="LO-6 · إنتاج ناتج تعلمي مدعوم بالذكاء الاصطناعي لا مولّداً بالكامل">LO-6 · Produce an AI-assisted (not AI-generated) artifact</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctit"><i class="ti ti-route" style="color:#0A1628"></i><span data-en="Session Flow" data-ar="مسار الحصص">Session Flow</span></div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;font-size:12px">
+        <div style="display:flex;gap:9px;align-items:center"><span style="font-size:15px">⚠️</span><div><b style="color:#0A1628">S1</b> &nbsp;<span style="color:var(--gray-600)" data-en="Shortcut Trap → Prompt Anatomy" data-ar="فخ الاختصار ← تشريح الأمر">Shortcut Trap → Prompt Anatomy</span></div></div>
+        <div style="display:flex;gap:9px;align-items:center"><span style="font-size:15px">⚙️</span><div><b style="color:#0A1628">S1</b> &nbsp;<span style="color:var(--gray-600)" data-en="3-Part Formula → Upgrade My Prompt" data-ar="الصيغة الثلاثية ← طوّر أمري">3-Part Formula → Upgrade My Prompt</span></div></div>
+        <div style="display:flex;gap:9px;align-items:center"><span style="font-size:15px">🔄</span><div><b style="color:#0A1628">S2</b> &nbsp;<span style="color:var(--gray-600)" data-en="Recall Warm-Up → Learning Stations" data-ar="إحماء ← محطات التعلم">Recall Warm-Up → Learning Stations</span></div></div>
+        <div style="display:flex;gap:9px;align-items:center"><span style="font-size:15px">📝</span><div><b style="color:#0A1628">S2</b> &nbsp;<span style="color:var(--gray-600)" data-en="Group Share-Out → Learning Summary" data-ar="مشاركة جماعية ← ملخصي التعلمي">Group Share-Out → Learning Summary</span></div></div>
+        <div style="display:flex;gap:9px;align-items:center"><span style="font-size:15px">✍️</span><div><b style="color:#0A1628">D3–D5</b> &nbsp;<span style="color:var(--gray-600)" data-en="Quiz + Rubric + Reflection" data-ar="اختبار + Rubric + تأمل">Quiz + Rubric + Reflection</span></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="ibox bg-g"><i class="ti ti-bulb"></i><div class="ibox-b"><strong data-en="Prerequisite" data-ar="متطلب سابق">Prerequisite</strong><span data-en="Unit 1 completed — students already understand what AI is and its limits. This unit shifts from knowing about AI to using AI." data-ar="إتمام الوحدة 1 — يفهم الطلاب بالفعل ماهية الذكاء الاصطناعي وحدوده. هذه الوحدة تنقل الطلاب من معرفة الذكاء الاصطناعي إلى استخدامه.">Unit 1 completed — students already understand what AI is and its limits. This unit shifts from knowing about AI to using AI.</span></div></div>
+  <div class="tbox twhy t-only"><div class="tbtit"><i class="ti ti-sparkles"></i> <span data-en="Why this unit?" data-ar="لماذا هذه الوحدة؟">Why this unit?</span></div><div class="tbbody" data-en="Your role in Unit 2 is not to teach AI — it is to teach thinking WITH AI. Students will use an AI tool in class; this is intentional. Interrupt passive use and redirect students toward active learning every time a student wants to just copy an AI answer." data-ar="دورك في الوحدة 2 ليس تعليم الذكاء الاصطناعي — بل تعليم التفكير مع الذكاء الاصطناعي. سيستخدم الطلاب أداة ذكاء اصطناعي في الصف؛ هذا مقصود. أوقف الاستخدام السلبي ووجّه الطلاب نحو التعلم النشط في كل مرة يريد فيها طالب نسخ إجابة الذكاء الاصطناعي فقط.">Your role in Unit 2 is not to teach AI — it is to teach thinking WITH AI. Students will use an AI tool in class; this is intentional. Interrupt passive use and redirect students toward active learning every time a student wants to just copy an AI answer.</div></div>
+</div>
+<div class="pnf"><span class="pnfl">Unit 2 of 5</span><div class="pnfr"><button class="btn bn" onclick="go('eq',nl(1))"><span data-en="Next: Essential Question" data-ar="التالي: السؤال الجوهري">Next: Essential Question</span> <i class="ti ti-arrow-right"></i></button></div></div>
+</div>
+
+<!-- ESSENTIAL QUESTION -->
+<div class="panel" id="p-eq">
+<div class="pbody">
+  <div class="closing-q" style="margin-bottom:20px">
+    <div class="closing-label" data-en="Keep this question in mind throughout both sessions" data-ar="احتفظ بهذا السؤال في ذهنك طوال الحصتين">Keep this question in mind throughout both sessions</div>
+    <div class="closing-q-text" data-en="If AI can answer any question instantly&hellip; what makes the difference between a student who uses it wisely and one who simply copies?" data-ar="إذا كان الذكاء الاصطناعي يستطيع الإجابة عن أي سؤال فورًا... فما الذي يميّز الطالب الذي يستخدمه بحكمة عن الذي يكتفي بالنسخ؟">If AI can answer any question instantly&hellip; what makes the difference between a student who uses it wisely and one who simply copies?</div>
+    <div class="closing-bar"></div>
+  </div>
+  <div class="g3">
+    <div class="card" style="border-top:3px solid #06B6D4">
+      <div class="ctit"><i class="ti ti-brain" style="color:#06B6D4"></i><span data-en="My answer NOW" data-ar="إجابتي الآن">My answer NOW</span></div>
+      <textarea class="reflect-input" placeholder="Write your initial answer..." data-plar="اكتب إجابتك الأولية..."></textarea>
+    </div>
+    <div class="card" style="border-top:3px solid #7C3AED">
+      <div class="ctit"><i class="ti ti-message-dots" style="color:#7C3AED"></i><span data-en="Share with a neighbor" data-ar="شارك مع زميل">Share with a neighbor</span></div>
+      <div style="font-size:12px;color:var(--gray-600);line-height:1.6;padding-top:4px" data-en="Talk to the person next to you. What is their answer? Do you agree?" data-ar="تحدث مع الشخص بجانبك. ما إجابته؟ هل تتفق معه؟">Talk to the person next to you. What is their answer? Do you agree?</div>
+    </div>
+    <div class="card" style="border-top:3px solid #0A1628">
+      <div class="ctit"><i class="ti ti-refresh" style="color:#0A1628"></i><span data-en="My answer AFTER" data-ar="إجابتي بعد الحصتين">My answer AFTER</span></div>
+      <div style="font-size:11.5px;color:var(--gray-400);font-style:italic;padding-top:6px" data-en="Return here at the closing of Session 2." data-ar="عد إلى هذا في ختام الحصة 2.">Return here at the closing of Session 2.</div>
+    </div>
+  </div>
+  <div class="tbox twat t-only"><div class="tbtit"><i class="ti ti-alert-triangle"></i> <span data-en="Watch For&hellip;" data-ar="انتبه لـ...">Watch For&hellip;</span></div><div class="tbbody" data-en="Display for a full silent minute before asking for answers. Record 3–4 answers without judging. This is the same question style used in Unit 1 — students should notice the pattern." data-ar="اعرضه لمدة دقيقة كاملة بصمت قبل طلب الإجابات. سجّل 3-4 إجابات دون إصدار حكم. هذا هو نفس أسلوب الأسئلة المستخدم في الوحدة 1 — يجب أن يلاحظ الطلاب النمط.">Display for a full silent minute before asking for answers. Record 3–4 answers without judging. This is the same question style used in Unit 1 — students should notice the pattern.</div></div>
+</div>
+<div class="pnf"><div class="pnfr"><button class="btn bo" onclick="go('overview',nl(0))"><i class="ti ti-arrow-left"></i> Back</button></div><div class="pnfr"><button class="btn bn" onclick="go('act1',nl(2))"><span data-en="Next: Activity 1" data-ar="التالي: النشاط 1">Next: Activity 1</span> <i class="ti ti-arrow-right"></i></button></div></div>
+</div>
+
+<!-- ACTIVITY 1 — SHORTCUT TRAP -->
+<div class="panel" id="p-act1">
+<div class="pbody">
+  <div class="ah">
+    <div class="anum">1</div>
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+        <div class="atit" data-en="The Shortcut Trap" data-ar="فخ الاختصار">The Shortcut Trap</div>
+        <span class="abadge" style="background:#7B3FA8;color:#fff" data-en="Engage &amp; Discuss" data-ar="اشترك وناقش">Engage &amp; Discuss</span>
+      </div>
+      <div class="agoal" data-en="Read Nour's scenario, then answer the discussion questions honestly." data-ar="اقرأ سيناريو نور، ثم أجب على أسئلة النقاش بصدق.">Read Nour's scenario, then answer the discussion questions honestly.</div>
+      <div class="atime"><i class="ti ti-clock"></i> <span data-en="10 min &middot; Session 1 &middot; Engage" data-ar="10 دقائق &middot; الحصة 1 &middot; إشراك">10 min &middot; Session 1 &middot; Engage</span></div>
+    </div>
+  </div>
+  <div class="tbox twhy t-only"><div class="tbtit"><i class="ti ti-sparkles"></i> <span data-en="Why This Activity?" data-ar="لماذا هذا النشاط؟">Why This Activity?</span></div><div class="tbbody" data-en="Students arrive with existing shortcut habits. Before teaching better use, we surface the habit and examine it without shame. A scenario-first opening respects the curriculum's principle: every lesson starts with a real situation, never a definition." data-ar="يصل الطلاب ومعهم عادات اختصار موجودة مسبقًا. قبل تعليم استخدام أفضل، نكشف العادة ونفحصها دون خجل. الافتتاح بسيناريو يحترم مبدأ المنهاج: كل درس يبدأ بموقف حقيقي، لا بتعريف.">Students arrive with existing shortcut habits. Before teaching better use, we surface the habit and examine it without shame. A scenario-first opening respects the curriculum's principle: every lesson starts with a real situation, never a definition.</div></div>
+  <div class="story">
+    <div class="stag" data-en="The Scenario" data-ar="السيناريو">The Scenario</div>
+    <div class="stxt" data-en="Nour has a biology test tomorrow on cell division. She opens an AI tool and types: <em>&ldquo;Explain cell division.&rdquo;</em> AI gives her a clear, detailed explanation. She reads it once. She feels ready. The next morning, she fails the test." data-ar="لدى نور اختبار أحياء غدًا حول انقسام الخلية. تفتح أداة ذكاء اصطناعي وتكتب: <em>&laquo;اشرح انقسام الخلية.&raquo;</em> يعطيها الذكاء الاصطناعي شرحًا واضحًا ومفصلًا. تقرأه مرة واحدة. تشعر بالجاهزية. في الصباح التالي، ترسب في الاختبار.">Nour has a biology test tomorrow on cell division. She opens an AI tool and types: <em>"Explain cell division."</em> AI gives her a clear, detailed explanation. She reads it once. She feels ready. The next morning, she fails the test.</div>
+  </div>
+  <div class="sh" style="font-size:14px;margin-top:2px"><i class="ti ti-message-dots"></i><span data-en="Discuss with a Partner (90 seconds)" data-ar="ناقش مع زميلك (90 ثانية)">Discuss with a Partner (90 seconds)</span></div>
+  <div class="card" style="margin-bottom:8px">
+    <div class="ctit"><i class="ti ti-check" style="color:#06B6D4"></i><span data-en="1. What did Nour do right?" data-ar="1. ماذا فعلت نور بشكل صحيح؟">1. What did Nour do right?</span></div>
+    <textarea class="reflect-input" style="min-height:55px" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+  <div class="card" style="margin-bottom:8px">
+    <div class="ctit"><i class="ti ti-x" style="color:#DC2626"></i><span data-en="2. What did she do wrong?" data-ar="2. ماذا أخطأت فيه؟">2. What did she do wrong?</span></div>
+    <textarea class="reflect-input" style="min-height:55px" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+  <div class="card">
+    <div class="ctit"><i class="ti ti-bulb" style="color:#7C3AED"></i><span data-en="3. What should she have done differently?" data-ar="3. ماذا كان عليها أن تفعل بشكل مختلف؟">3. What should she have done differently?</span></div>
+    <textarea class="reflect-input" style="min-height:55px" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+  <div class="tbox twat t-only" style="margin-top:10px"><div class="tbtit"><i class="ti ti-alert-triangle"></i> <span data-en="Watch For&hellip;" data-ar="انتبه لـ...">Watch For&hellip;</span></div><div class="tbbody" data-en="Students may say &ldquo;Nour was lazy&rdquo; — redirect: &ldquo;Let's focus on the method, not the person.&rdquo; Avoid naming specific AI tools during this discussion." data-ar="قد يقول الطلاب «نور كانت كسولة» — أعد التوجيه: «لنركّز على الأسلوب، لا على الشخص». تجنّب ذكر أدوات ذكاء اصطناعي محددة أثناء هذا النقاش.">Students may say &ldquo;Nour was lazy&rdquo; — redirect: &ldquo;Let's focus on the method, not the person.&rdquo; Avoid naming specific AI tools during this discussion.</div></div>
+</div>
+<div class="pnf"><div class="pnfr"><button class="btn bo" onclick="go('eq',nl(1))"><i class="ti ti-arrow-left"></i> Back</button></div><div class="pnfr"><button class="btn bn" onclick="go('act2',nl(3))"><span data-en="Next: Activity 2" data-ar="التالي: النشاط 2">Next: Activity 2</span> <i class="ti ti-arrow-right"></i></button></div></div>
+</div>
+<!-- ACTIVITY 2 — PROMPT ANATOMY -->
+<div class="panel" id="p-act2">
+<div class="pbody">
+  <div class="ah">
+    <div class="anum">2</div>
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+        <div class="atit" data-en="Prompt Anatomy Workshop" data-ar="ورشة تشريح الأمر">Prompt Anatomy Workshop</div>
+        <span class="abadge" style="background:#1B7A5A;color:#fff" data-en="Compare" data-ar="قارن">Compare</span>
+      </div>
+      <div class="agoal" data-en="Compare three versions of the same prompt, then write your own weak and strong prompt." data-ar="قارن ثلاث نسخ من نفس الأمر، ثم اكتب أمرك الضعيف والقوي الخاص بك.">Compare three versions of the same prompt, then write your own weak and strong prompt.</div>
+      <div class="atime"><i class="ti ti-clock"></i> <span data-en="15 min &middot; Session 1 &middot; Explore" data-ar="15 دقيقة &middot; الحصة 1 &middot; استكشاف">15 min &middot; Session 1 &middot; Explore</span></div>
+    </div>
+  </div>
+  <div class="tbox twhy t-only"><div class="tbtit"><i class="ti ti-sparkles"></i> <span data-en="Why This Activity?" data-ar="لماذا هذا النشاط؟">Why This Activity?</span></div><div class="tbbody" data-en="Before students can use AI as a learning tool, they need a shared language for talking about prompts. The &ldquo;bad → better → best&rdquo; structure uses comparison as a learning strategy — more effective than examples alone." data-ar="قبل أن يستطيع الطلاب استخدام الذكاء الاصطناعي كأداة تعلم، يحتاجون لغة مشتركة للحديث عن الأوامر. بنية «ضعيف ← أفضل ← الأفضل» تستخدم المقارنة كاستراتيجية تعلم — أكثر فعالية من الأمثلة وحدها.">Before students can use AI as a learning tool, they need a shared language for talking about prompts. The &ldquo;bad → better → best&rdquo; structure uses comparison as a learning strategy — more effective than examples alone.</div></div>
+
+  <div class="info3">
+    <div class="info-card" style="border-top:3px solid #DC2626">
+      <div class="info-icon">❌</div>
+      <div class="info-title" data-en="Weak" data-ar="ضعيف">Weak</div>
+      <div class="info-desc" data-en="&ldquo;Explain photosynthesis.&rdquo; — Too vague, AI doesn't know your level or purpose." data-ar="«اشرح عملية التمثيل الضوئي.» — غامض جدًا، لا يعرف الذكاء الاصطناعي مستواك ولا هدفك.">"Explain photosynthesis." — Too vague, AI doesn't know your level or purpose.</div>
+    </div>
+    <div class="info-card" style="border-top:3px solid #F59E0B">
+      <div class="info-icon">⚠️</div>
+      <div class="info-title" data-en="Better" data-ar="أفضل">Better</div>
+      <div class="info-desc" data-en="&ldquo;Explain photosynthesis in simple terms.&rdquo; — Slightly better, still no role or context." data-ar="«اشرح عملية التمثيل الضوئي بعبارات بسيطة.» — أفضل قليلًا، لكن لا يزال بلا دور أو سياق.">"Explain photosynthesis in simple terms." — Slightly better, still no role or context.</div>
+    </div>
+    <div class="info-card" style="border-top:3px solid #16A34A">
+      <div class="info-icon">✅</div>
+      <div class="info-title" data-en="Strong" data-ar="قوي">Strong</div>
+      <div class="info-desc" data-en="&ldquo;You are a science teacher for a 9th-grade student. Explain photosynthesis step-by-step, using an everyday analogy. I have already studied plant cells.&rdquo; — Role + Task + Context." data-ar="«أنت معلم علوم لطالب في الصف التاسع. اشرح التمثيل الضوئي خطوة بخطوة، مستخدمًا تشبيهًا من الحياة اليومية. درست خلايا النبات مسبقًا.» — الدور + المهمة + السياق.">"You are a science teacher for a 9th-grade student. Explain photosynthesis step-by-step, using an everyday analogy. I have already studied plant cells." — Role + Task + Context.</div>
+    </div>
+  </div>
+
+  <div class="card" style="border-left:4px solid #06B6D4">
+    <div class="ctit"><i class="ti ti-pencil" style="color:#06B6D4"></i><span data-en="Write Your Own — pick a topic from any class you have right now" data-ar="اكتب أمرك الخاص — اختر موضوعًا من أي مادة تدرسها الآن">Write Your Own — pick a topic from any class you have right now</span></div>
+    <div class="compare-grid" style="margin-top:8px">
+      <div>
+        <div class="compare-label" style="color:#DC2626"><span data-en="My WEAK prompt (one vague sentence)" data-ar="أمري الضعيف (جملة واحدة غامضة)">My WEAK prompt (one vague sentence)</span></div>
+        <textarea class="compare-input" style="min-height:60px" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+      </div>
+      <div>
+        <div class="compare-label" style="color:#16A34A"><span data-en="My STRONG prompt (Role + Task + Context)" data-ar="أمري القوي (الدور + المهمة + السياق)">My STRONG prompt (Role + Task + Context)</span></div>
+        <textarea class="compare-input" style="min-height:60px" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="tbox twat t-only" style="margin-top:10px"><div class="tbtit"><i class="ti ti-alert-triangle"></i> <span data-en="Watch For&hellip;" data-ar="انتبه لـ...">Watch For&hellip;</span></div><div class="tbbody" data-en="Common mistake: students write &ldquo;You are a helpful assistant&rdquo; as the role — push for subject-specific roles: &ldquo;You are a history teacher,&rdquo; &ldquo;You are a math tutor.&rdquo;" data-ar="خطأ شائع: يكتب الطلاب «أنت مساعد مفيد» كدور — ادفعهم نحو أدوار مرتبطة بمادة محددة: «أنت معلم تاريخ»، «أنت مدرّس رياضيات».">Common mistake: students write &ldquo;You are a helpful assistant&rdquo; as the role — push for subject-specific roles: &ldquo;You are a history teacher,&rdquo; &ldquo;You are a math tutor.&rdquo;</div></div>
+</div>
+<div class="pnf"><div class="pnfr"><button class="btn bo" onclick="go('act1',nl(2))"><i class="ti ti-arrow-left"></i> Back</button></div><div class="pnfr"><button class="btn bn" onclick="go('act3',nl(4))"><span data-en="Next: Activity 3 — 3-Part Formula" data-ar="التالي: النشاط 3 — الصيغة الثلاثية">Next: Activity 3 — 3-Part Formula</span> <i class="ti ti-arrow-right"></i></button></div></div>
+</div>
+
+<!-- ACTIVITY 3 — 3-PART FORMULA (Concept map pattern) -->
+<div class="panel" id="p-act3">
+<div class="pbody">
+  <div class="ah">
+    <div class="anum">3</div>
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+        <div class="atit" data-en="The 3-Part Formula" data-ar="الصيغة ذات الأجزاء الثلاثة">The 3-Part Formula</div>
+        <span class="abadge" style="background:#06B6D4;color:#fff" data-en="Explain &amp; Demo" data-ar="اشرح وطبّق">Explain &amp; Demo</span>
+      </div>
+      <div class="agoal" data-en="Name the three parts of every strong learning prompt, then watch a live demo." data-ar="سمِّ الأجزاء الثلاثة لكل أمر تعلمي قوي، ثم شاهد عرضًا حيًا.">Name the three parts of every strong learning prompt, then watch a live demo.</div>
+      <div class="atime"><i class="ti ti-clock"></i> <span data-en="10 minutes — Session 1 — Explain" data-ar="10 دقائق — الحصة 1 — شرح">10 minutes — Session 1 — Explain</span></div>
+    </div>
+  </div>
+  <div class="tbox twhy t-only"><div class="tbtit"><i class="ti ti-sparkles"></i> <span data-en="Why This Activity?" data-ar="لماذا هذا النشاط؟">Why This Activity?</span></div><div class="tbbody" data-en="After students have struggled with prompts themselves (Explore), they are ready to receive the structured framework — explore before explain, following constructivist principles. The live demo is critical: students need to see the formula produce a better result in real time." data-ar="بعد أن يواجه الطلاب صعوبة في كتابة الأوامر بأنفسهم (استكشاف)، يصبحون جاهزين لتلقي الإطار المنظم — الاستكشاف قبل الشرح، وفق المبادئ البنائية. العرض الحي أساسي: يحتاج الطلاب لرؤية الصيغة تنتج نتيجة أفضل مباشرة.">After students have struggled with prompts themselves (Explore), they are ready to receive the structured framework — explore before explain, following constructivist principles. The live demo is critical: students need to see the formula produce a better result in real time.</div></div>
+  <div class="cma">
+    <div class="cma-center" data-en="✨ Strong Learning Prompt" data-ar="✨ أمر تعلمي قوي">✨ Strong Learning Prompt</div>
+    <div class="cma-branches">
+      <div class="cma-b">
+        <div class="cma-head hh1"><i class="ti ti-user-circle"></i><span data-en="ROLE" data-ar="الدور">ROLE</span></div>
+        <div class="cma-inp"><textarea class="cminp" placeholder="Who should AI act as? e.g. 'You are a history teacher for Grade 10.'" data-plar="من يجب أن يتقمّص الذكاء الاصطناعي دوره؟ مثال: «أنت معلم تاريخ لطالب في الصف العاشر.»"></textarea></div>
+      </div>
+      <div class="cma-b">
+        <div class="cma-head hh2"><i class="ti ti-target-arrow"></i><span data-en="TASK" data-ar="المهمة">TASK</span></div>
+        <div class="cma-inp"><textarea class="cminp" placeholder="What exactly do you want? e.g. 'Explain the causes of WWI in a numbered list.'" data-plar="ما الذي تريده بالتحديد؟ مثال: «اشرح أسباب الحرب العالمية الأولى في قائمة مرقّمة.»"></textarea></div>
+      </div>
+      <div class="cma-b">
+        <div class="cma-head hh3"><i class="ti ti-books"></i><span data-en="CONTEXT" data-ar="السياق">CONTEXT</span></div>
+        <div class="cma-inp"><textarea class="cminp" placeholder="What do you already know? What's your level?" data-plar="ما الذي تعرفه مسبقًا؟ ما مستواك؟"></textarea></div>
+      </div>
+    </div>
+  </div>
+  <div class="tip-box t-only"><div class="tbtit" style="color:#0C4A6E"><i class="ti ti-device-tv"></i> <span data-en="Live Demo" data-ar="عرض حي">Live Demo</span></div><div style="font-size:12px;color:#0C4A6E" data-en="Type a weak prompt first on a topic students are currently studying, then the 3-Part version. Let students observe the difference in depth, clarity, and usefulness." data-ar="اكتب أمرًا ضعيفًا أولًا حول موضوع يدرسه الطلاب حاليًا، ثم النسخة ذات الأجزاء الثلاثة. دع الطلاب يلاحظون الفرق في العمق والوضوح والفائدة.">Type a weak prompt first on a topic students are currently studying, then the 3-Part version. Let students observe the difference in depth, clarity, and usefulness.</div></div>
+  <div class="ibox bg-n"><i class="ti ti-lightbulb"></i><div class="ibox-b"><strong data-en="What was different?" data-ar="ما الذي اختلف؟">What was different?</strong><span data-en="Tell your teacher what changed in the AI response when the 3-Part Formula was used — was it more structured? More appropriate to your level?" data-ar="أخبر معلمك ما الذي تغيّر في إجابة الذكاء الاصطناعي عند استخدام الصيغة ذات الأجزاء الثلاثة — هل كانت أكثر تنظيمًا؟ أكثر ملاءمة لمستواك؟">Tell your teacher what changed in the AI response when the 3-Part Formula was used — was it more structured? More appropriate to your level?</span></div></div>
+  <div class="tbox twat t-only"><div class="tbtit"><i class="ti ti-alert-triangle"></i> <span data-en="Watch For&hellip;" data-ar="انتبه لـ...">Watch For&hellip;</span></div><div class="tbbody" data-en="If your AI tool gives an impressive response to the weak prompt too — acknowledge it: &ldquo;Yes, AI is getting better at guessing. But you are in control — don't rely on AI to guess what you need.&rdquo;" data-ar="إذا أعطت أداة الذكاء الاصطناعي إجابة مبهرة حتى للأمر الضعيف — اعترف بذلك: «نعم، الذكاء الاصطناعي يتحسن في التخمين. لكنك أنت من يتحكم — لا تعتمد على تخمين الذكاء الاصطناعي لما تحتاجه».">If your AI tool gives an impressive response to the weak prompt too — acknowledge it: &ldquo;Yes, AI is getting better at guessing. But you are in control — don't rely on AI to guess what you need.&rdquo;</div></div>
+</div>
+<div class="pnf"><div class="pnfr"><button class="btn bo" onclick="go('act2',nl(3))"><i class="ti ti-arrow-left"></i> Back</button></div><div class="pnfr"><button class="btn bn" onclick="go('act4',nl(5))"><span data-en="Next: Activity 4 — Upgrade My Prompt" data-ar="التالي: النشاط 4 — طوّر أمري">Next: Activity 4 — Upgrade My Prompt</span> <i class="ti ti-arrow-right"></i></button></div></div>
+</div>
+
+<!-- ACTIVITY 4 — UPGRADE MY PROMPT -->
+<div class="panel" id="p-act4">
+<div class="pbody">
+  <div class="ah">
+    <div class="anum">4</div>
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+        <div class="atit" data-en="Upgrade My Prompt" data-ar="طوّر أمري">Upgrade My Prompt</div>
+        <span class="abadge" style="background:#0A1628;color:#fff" data-en="Build &amp; Test" data-ar="ابنِ واختبر">Build &amp; Test</span>
+      </div>
+      <div class="agoal" data-en="Build a real prompt for a topic you are studying right now, test it with AI, then apply the Verify-Reflect Cycle." data-ar="ابنِ أمرًا حقيقيًا لموضوع تدرسه الآن، اختبره مع الذكاء الاصطناعي، ثم طبّق دورة «تحقق - تأمل».">Build a real prompt for a topic you are studying right now, test it with AI, then apply the Verify-Reflect Cycle.</div>
+      <div class="atime"><i class="ti ti-clock"></i> <span data-en="15 min &middot; Session 1 &middot; Elaborate" data-ar="15 دقيقة &middot; الحصة 1 &middot; توسّع">15 min &middot; Session 1 &middot; Elaborate</span></div>
+    </div>
+  </div>
+  <div class="tbox twhy t-only"><div class="tbtit"><i class="ti ti-sparkles"></i> <span data-en="Why This Activity?" data-ar="لماذا هذا النشاط؟">Why This Activity?</span></div><div class="tbbody" data-en="Practice must be generative, not imitative. Students write prompts connected to their actual schoolwork — this creates immediate transfer. The &ldquo;test it&rdquo; step is essential: students must see AI's response and evaluate it." data-ar="يجب أن يكون التدريب توليديًا لا تقليديًا. يكتب الطلاب أوامر مرتبطة بواجباتهم المدرسية الفعلية — هذا يخلق نقل تعلم فوري. خطوة «اختبره» أساسية: يجب أن يرى الطلاب إجابة الذكاء الاصطناعي ويقيّموها.">Practice must be generative, not imitative. Students write prompts connected to their actual schoolwork — this creates immediate transfer. The &ldquo;test it&rdquo; step is essential: students must see AI's response and evaluate it.</div></div>
+
+  <div class="card" style="margin-bottom:10px">
+    <div class="ctit"><i class="ti ti-flag" style="color:#0A1628"></i><span data-en="Step 1 — Pick a topic from any current class" data-ar="الخطوة 1 — اختر موضوعًا من أي مادة حالية">Step 1 — Pick a topic from any current class</span></div>
+    <input type="text" class="compare-input" style="min-height:auto" placeholder="My topic..." data-plar="موضوعي...">
+  </div>
+  <div class="card" style="margin-bottom:10px">
+    <div class="ctit"><i class="ti ti-edit" style="color:#DC2626"></i><span data-en="Step 2 — Write a weak prompt (1 line)" data-ar="الخطوة 2 — اكتب أمرًا ضعيفًا (سطر واحد)">Step 2 — Write a weak prompt (1 line)</span></div>
+    <input type="text" class="compare-input" style="min-height:auto" placeholder="My weak prompt..." data-plar="أمري الضعيف...">
+  </div>
+  <div class="card" style="margin-bottom:10px">
+    <div class="ctit"><i class="ti ti-stars" style="color:#16A34A"></i><span data-en="Step 3 — Upgrade using the 3-Part Formula" data-ar="الخطوة 3 — طوّره باستخدام الصيغة ذات الأجزاء الثلاثة">Step 3 — Upgrade using the 3-Part Formula</span></div>
+    <textarea class="reflect-input" style="min-height:70px" placeholder="Role + Task + Context, all together..." data-plar="الدور + المهمة + السياق، معًا..."></textarea>
+  </div>
+  <div class="card" style="margin-bottom:10px">
+    <div class="ctit"><i class="ti ti-send" style="color:#7C3AED"></i><span data-en="Step 4 — Test it with AI. Summarize the response (do not copy-paste)" data-ar="الخطوة 4 — اختبره مع الذكاء الاصطناعي. لخّص الإجابة (لا تنسخ)">Step 4 — Test it with AI. Summarize the response (do not copy-paste)</span></div>
+    <textarea class="reflect-input" style="min-height:70px" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+  <div class="card">
+    <div class="ctit"><i class="ti ti-recycle" style="color:#06B6D4"></i><span data-en="Step 5 — Verify-Reflect Cycle" data-ar="الخطوة 5 — دورة «تحقق - تأمل»">Step 5 — Verify-Reflect Cycle</span></div>
+    <div class="g2" style="margin-top:6px;margin-bottom:0">
+      <textarea class="reflect-input" style="min-height:55px" data-en-placeholder="✅ Does this make sense to me?" placeholder="✅ Does this make sense to me?" data-plar="✅ هل هذا منطقي بالنسبة لي؟"></textarea>
+      <textarea class="reflect-input" style="min-height:55px" placeholder="🔍 Can I verify this? Where?" data-plar="🔍 هل يمكنني التحقق منه؟ أين؟"></textarea>
+    </div>
+    <textarea class="reflect-input" style="min-height:55px;margin-top:8px" placeholder="💡 What did I actually learn that I didn't know before?" data-plar="💡 ماذا تعلمت فعلًا ولم أكن أعرفه من قبل؟"></textarea>
+  </div>
+  <div class="tbox twat t-only" style="margin-top:10px"><div class="tbtit"><i class="ti ti-alert-triangle"></i> <span data-en="Watch For&hellip;" data-ar="انتبه لـ...">Watch For&hellip;</span></div><div class="tbbody" data-en="Alert: if students start using AI for other homework during this activity — pause the class and redirect: &ldquo;We are learning how to use AI, not using it to do work right now.&rdquo;" data-ar="تنبيه: إذا بدأ الطلاب باستخدام الذكاء الاصطناعي لواجبات أخرى أثناء هذا النشاط — أوقف الصف وأعد التوجيه: «نحن نتعلم كيفية استخدام الذكاء الاصطناعي، لا نستخدمه لإنجاز عمل الآن».">Alert: if students start using AI for other homework during this activity — pause the class and redirect: &ldquo;We are learning how to use AI, not using it to do work right now.&rdquo;</div></div>
+</div>
+<div class="pnf"><div class="pnfr"><button class="btn bo" onclick="go('act3',nl(4))"><i class="ti ti-arrow-left"></i> Back</button></div><div class="pnfr"><button class="btn bn" onclick="go('exit1',nl(6))"><span data-en="Next: Exit Ticket — Session 1" data-ar="التالي: بطاقة الخروج — الحصة 1">Next: Exit Ticket — Session 1</span> <i class="ti ti-arrow-right"></i></button></div></div>
+</div>
+
+<!-- EXIT TICKET 1 -->
+<div class="panel" id="p-exit1">
+<div class="pbody">
+  <div class="sh"><i class="ti ti-clipboard-check"></i><span data-en="Exit Ticket — Session 1 (D1)" data-ar="بطاقة الخروج — الحصة 1 (D1)">Exit Ticket — Session 1 (D1)</span></div>
+  <div class="ibox bg-n" style="margin-bottom:18px"><i class="ti ti-info-circle"></i><div class="ibox-b"><strong data-en="5–10 minutes — Individual and honest" data-ar="5–10 دقائق — فردي وصادق">5–10 minutes — Individual and honest</strong><span data-en="This is not graded — it helps your teacher know how to support you in Session 2." data-ar="هذا غير مُقيَّم — يساعد معلمك على معرفة كيفية دعمك في الحصة 2.">This is not graded — it helps your teacher know how to support you in Session 2.</span></div></div>
+  <div class="exit-q">
+    <div class="exit-qn">1</div>
+    <div class="exit-qtxt" data-en="Write one prompt you wrote today. Label its three parts (Role / Task / Context)." data-ar="اكتب أمرًا واحدًا كتبته اليوم. حدّد أجزاءه الثلاثة (الدور / المهمة / السياق).">Write one prompt you wrote today. Label its three parts (Role / Task / Context).</div>
+    <textarea class="exit-ta" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+  <div class="exit-q">
+    <div class="exit-qn">2</div>
+    <div class="exit-qtxt" data-en="What is the difference between using AI to copy and using AI to learn?" data-ar="ما الفرق بين استخدام الذكاء الاصطناعي للنسخ واستخدامه للتعلم؟">What is the difference between using AI to copy and using AI to learn?</div>
+    <textarea class="exit-ta" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+  <div class="exit-q">
+    <div class="exit-qn">3</div>
+    <div class="exit-qtxt" data-en="Rate your best prompt from today, and explain your rating in one sentence." data-ar="قيّم أفضل أمر كتبته اليوم، واشرح تقييمك بجملة واحدة.">Rate your best prompt from today, and explain your rating in one sentence.</div>
+    <div style="display:flex;gap:8px;margin-bottom:8px">
+      <button class="btn bo" style="font-size:11px;padding:5px 12px" onclick="anaToggle(this,'e1-rate')">⭐ Weak</button>
+      <button class="btn bo" style="font-size:11px;padding:5px 12px" onclick="anaToggle(this,'e1-rate')">⭐⭐ Okay</button>
+      <button class="btn bo" style="font-size:11px;padding:5px 12px" onclick="anaToggle(this,'e1-rate')">⭐⭐⭐ Strong</button>
+    </div>
+    <textarea class="exit-ta" placeholder="Because..." data-plar="لأن..."></textarea>
+  </div>
+  <div class="ibox bg-t"><i class="ti ti-arrow-right-circle"></i><div class="ibox-b"><strong data-en="Before next session, think about" data-ar="قبل الحصة القادمة، فكّر في">Before next session, think about</strong><span data-en="Where in your real school life could you use the 3-Part Formula this week?" data-ar="أين في حياتك المدرسية الحقيقية يمكنك استخدام الصيغة ذات الأجزاء الثلاثة هذا الأسبوع؟">Where in your real school life could you use the 3-Part Formula this week?</span></div></div>
+  <div class="tbox twat t-only"><div class="tbtit"><i class="ti ti-alert-triangle"></i> <span data-en="Watch For&hellip;" data-ar="انتبه لـ...">Watch For&hellip;</span></div><div class="tbbody" data-en="Distribute the Exit Ticket sheet from Package D. 5–10 silent minutes. Collect papers before Session 2." data-ar="وزّع ورقة بطاقة الخروج من الحزمة D. 5-10 دقائق بصمت. اجمع الأوراق قبل الحصة 2.">Distribute the Exit Ticket sheet from Package D. 5–10 silent minutes. Collect papers before Session 2.</div></div>
+</div>
+<div class="pnf"><div class="pnfr"><button class="btn bo" onclick="go('act4',nl(5))"><i class="ti ti-arrow-left"></i> Back</button></div><div class="pnfr"><button class="btn bn" onclick="go('act5',nl(7))"><span data-en="Next: Session 2 — Activity 5" data-ar="التالي: الحصة 2 — النشاط 5">Next: Session 2 — Activity 5</span> <i class="ti ti-arrow-right"></i></button></div></div>
+</div>
+<!-- ACTIVITY 5 — RECALL WARM-UP -->
+<div class="panel" id="p-act5">
+<div class="pbody">
+  <div class="ah">
+    <div class="anum">5</div>
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+        <div class="atit" data-en="Quick Recall Warm-Up" data-ar="إحماء سريع للاسترجاع">Quick Recall Warm-Up</div>
+        <span class="abadge" style="background:#7B3FA8;color:#fff" data-en="Engage" data-ar="إشراك">Engage</span>
+      </div>
+      <div class="agoal" data-en="Without looking at your notes — recall the three parts of a strong learning prompt." data-ar="دون النظر إلى ملاحظاتك — استرجع الأجزاء الثلاثة لأمر تعلمي قوي.">Without looking at your notes — recall the three parts of a strong learning prompt.</div>
+      <div class="atime"><i class="ti ti-clock"></i> <span data-en="8 min &middot; Session 2 &middot; Engage" data-ar="8 دقائق &middot; الحصة 2 &middot; إشراك">8 min &middot; Session 2 &middot; Engage</span></div>
+    </div>
+  </div>
+  <div class="tbox twhy t-only"><div class="tbtit"><i class="ti ti-sparkles"></i> <span data-en="Why This Activity?" data-ar="لماذا هذا النشاط؟">Why This Activity?</span></div><div class="tbbody" data-en="Retrieval practice at the start of Session 2 strengthens memory consolidation from Session 1. This also serves as informal assessment: you can quickly identify students who did not consolidate the formula." data-ar="تدريب الاسترجاع في بداية الحصة 2 يعزّز ترسيخ الذاكرة من الحصة 1. يُستخدم هذا أيضًا كتقييم غير رسمي: يمكنك تحديد الطلاب الذين لم يرسّخوا الصيغة بسرعة.">Retrieval practice at the start of Session 2 strengthens memory consolidation from Session 1. This also serves as informal assessment: you can quickly identify students who did not consolidate the formula.</div></div>
+  <div class="equation">
+    <div class="eq-part" style="border-top:3px solid #2563EB"><div class="eq-icon">🎭</div><div class="eq-title">ROLE</div></div>
+    <div class="eq-op">+</div>
+    <div class="eq-part" style="border-top:3px solid #7C3AED"><div class="eq-icon">🎯</div><div class="eq-title">TASK</div></div>
+    <div class="eq-op">+</div>
+    <div class="eq-part" style="border-top:3px solid #06B6D4"><div class="eq-icon">📚</div><div class="eq-title">CONTEXT</div></div>
+  </div>
+  <div class="card" style="border-left:4px solid #06B6D4">
+    <div class="ctit"><i class="ti ti-world" style="color:#06B6D4"></i><span data-en="🌍 Real-Life Bridge" data-ar="🌍 جسر الحياة الواقعية">🌍 Real-Life Bridge</span></div>
+    <div style="font-size:12px;color:var(--gray-600);margin-bottom:8px" data-en="Since our last session — where did you use (or imagine using) the 3-Part Formula?" data-ar="منذ حصتنا الماضية — أين استخدمت (أو تخيّلت استخدام) الصيغة ذات الأجزاء الثلاثة؟">Since our last session — where did you use (or imagine using) the 3-Part Formula?</div>
+    <textarea class="reflect-input" placeholder="Share the topic and what your prompt would look like..." data-plar="شارك الموضوع وكيف سيكون أمرك..."></textarea>
+  </div>
+  <div class="tbox twat t-only" style="margin-top:10px"><div class="tbtit"><i class="ti ti-alert-triangle"></i> <span data-en="Watch For&hellip;" data-ar="انتبه لـ...">Watch For&hellip;</span></div><div class="tbbody" data-en="If most students cannot recall the formula — do not skip ahead. Spend 3 additional minutes re-teaching it explicitly. Avoid a quiz atmosphere: &ldquo;Who can add to what they said?&rdquo;" data-ar="إذا لم يستطع معظم الطلاب تذكّر الصيغة — لا تنتقل للأمام. اقضِ 3 دقائق إضافية في إعادة تدريسها صراحة. تجنّب أجواء الاختبار: «من يستطيع الإضافة على ما قالوه؟»">If most students cannot recall the formula — do not skip ahead. Spend 3 additional minutes re-teaching it explicitly. Avoid a quiz atmosphere: &ldquo;Who can add to what they said?&rdquo;</div></div>
+</div>
+<div class="pnf"><div class="pnfr"><button class="btn bo" onclick="go('exit1',nl(6))"><i class="ti ti-arrow-left"></i> Back</button></div><div class="pnfr"><button class="btn bn" onclick="go('act6',nl(8))"><span data-en="Next: Activity 6 — Learning Stations" data-ar="التالي: النشاط 6 — محطات التعلم">Next: Activity 6 — Learning Stations</span> <i class="ti ti-arrow-right"></i></button></div></div>
+</div>
+
+<!-- ACTIVITY 6 — LEARNING STATIONS (sit3-style, 4 columns as 2x2) -->
+<div class="panel" id="p-act6">
+<div class="pbody">
+  <div class="ah">
+    <div class="anum">6</div>
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+        <div class="atit" data-en="AI Learning Stations" data-ar="محطات التعلم بالذكاء الاصطناعي">AI Learning Stations</div>
+        <span class="abadge" style="background:#1B7A5A;color:#fff" data-en="Rotate &amp; Apply" data-ar="تناوب وطبّق">Rotate &amp; Apply</span>
+      </div>
+      <div class="agoal" data-en="Use a fresh 3-Part prompt at each station. After AI responds, complete the output task — don't skip it." data-ar="استخدم أمرًا جديدًا في كل محطة. بعد إجابة الذكاء الاصطناعي، أكمل مهمة الإنتاج — لا تتخطها.">Use a fresh 3-Part prompt at each station. After AI responds, complete the output task — don't skip it.</div>
+      <div class="atime"><i class="ti ti-clock"></i> <span data-en="20 min &middot; Session 2 &middot; Explore" data-ar="20 دقيقة &middot; الحصة 2 &middot; استكشاف">20 min &middot; Session 2 &middot; Explore</span></div>
+    </div>
+  </div>
+  <div class="tbox twhy t-only"><div class="tbtit"><i class="ti ti-sparkles"></i> <span data-en="Why This Activity?" data-ar="لماذا هذا النشاط؟">Why This Activity?</span></div><div class="tbbody" data-en="Stations allow differentiated, active engagement across four academic contexts. Rotation builds fluency: writing one strong prompt is a skill; writing four in four contexts is internalization. The verification step prevents passive acceptance of AI output." data-ar="تتيح المحطات انخراطًا نشطًا ومتمايزًا عبر أربعة سياقات أكاديمية. التناوب يبني الطلاقة: كتابة أمر قوي واحد مهارة؛ كتابة أربعة في أربعة سياقات هي استيعاب داخلي. خطوة التحقق تمنع القبول السلبي لمخرجات الذكاء الاصطناعي.">Stations allow differentiated, active engagement across four academic contexts. Rotation builds fluency: writing one strong prompt is a skill; writing four in four contexts is internalization. The verification step prevents passive acceptance of AI output.</div></div>
+
+  <div class="g2">
+    <div class="sit-col" style="border:1px solid var(--gray-200)">
+      <div class="sit-col-head" style="background:#EFF6FF;color:#1D4ED8;border-bottom-color:#2563EB">🔵 <span data-en="Station 1 — History Event" data-ar="المحطة 1 — حدث تاريخي">Station 1 — History Event</span></div>
+      <div style="padding:12px">
+        <div style="font-size:11px;color:var(--gray-500);font-style:italic;margin-bottom:8px" data-en="Starter: You are a history teacher for a [grade] student. Explain the causes of [event] step-by-step. I already know the basic events but not why they connect." data-ar="بداية: أنت معلم تاريخ لطالب في [الصف]. اشرح أسباب [حدث] خطوة بخطوة. أعرف الأحداث الأساسية لكنني لا أفهم كيف ترتبط.">Starter: You are a history teacher for a [grade] student. Explain the causes of [event] step-by-step. I already know the basic events but not why they connect.</div>
+        <textarea class="reflect-input" style="min-height:50px" placeholder="My full prompt..." data-plar="أمري الكامل..."></textarea>
+        <div style="font-size:11px;color:var(--gray-500);margin:8px 0 4px" data-en="Output: 3 connecting ideas in your own words" data-ar="الإنتاج: 3 أفكار رابطة بكلماتك الخاصة">Output: 3 connecting ideas in your own words</div>
+        <textarea class="reflect-input" style="min-height:50px" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+      </div>
+    </div>
+    <div class="sit-col" style="border:1px solid var(--gray-200)">
+      <div class="sit-col-head" style="background:#DCFCE7;color:#15803D;border-bottom-color:#16A34A">🟢 <span data-en="Station 2 — Math Concept" data-ar="المحطة 2 — مفهوم رياضي">Station 2 — Math Concept</span></div>
+      <div style="padding:12px">
+        <div style="font-size:11px;color:var(--gray-500);font-style:italic;margin-bottom:8px" data-en="Starter: You are a math teacher. I'm struggling with [concept]. Walk me through it step-by-step with a worked example, then give me one problem to solve myself." data-ar="بداية: أنت معلم رياضيات. أواجه صعوبة في [مفهوم]. اشرحه خطوة بخطوة مع مثال محلول، ثم أعطني مسألة أحلها بنفسي.">Starter: You are a math teacher. I'm struggling with [concept]. Walk me through it step-by-step with a worked example, then give me one problem to solve myself.</div>
+        <textarea class="reflect-input" style="min-height:50px" placeholder="My full prompt..." data-plar="أمري الكامل..."></textarea>
+        <div style="font-size:11px;color:var(--gray-500);margin:8px 0 4px" data-en="Output: explain in your words, then solve (show work)" data-ar="الإنتاج: اشرح بكلماتك، ثم حل المسألة (أظهر عملك)">Output: explain in your words, then solve (show work)</div>
+        <textarea class="reflect-input" style="min-height:50px" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="sit-col" style="border:1px solid var(--gray-200)">
+      <div class="sit-col-head" style="background:#FEF9C3;color:#854D0E;border-bottom-color:#CA8A04">🟡 <span data-en="Station 3 — Science Process" data-ar="المحطة 3 — عملية علمية">Station 3 — Science Process</span></div>
+      <div style="padding:12px">
+        <div style="font-size:11px;color:var(--gray-500);font-style:italic;margin-bottom:8px" data-en="Starter: You are a science teacher. Explain [process] using an everyday analogy. I'm a [grade] student. I already know [...]." data-ar="بداية: أنت معلم علوم. اشرح [عملية] باستخدام تشبيه من الحياة اليومية. أنا طالب في [الصف]. أعرف بالفعل [...].">Starter: You are a science teacher. Explain [process] using an everyday analogy. I'm a [grade] student. I already know [...].</div>
+        <textarea class="reflect-input" style="min-height:50px" placeholder="My full prompt..." data-plar="أمري الكامل..."></textarea>
+        <div style="font-size:11px;color:var(--gray-500);margin:8px 0 4px" data-en="Output: evaluate the analogy — what's good, what's missed?" data-ar="الإنتاج: قيّم التشبيه — ما الجيد فيه، وما الذي أُغفل؟">Output: evaluate the analogy — what's good, what's missed?</div>
+        <textarea class="reflect-input" style="min-height:50px" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+      </div>
+    </div>
+    <div class="sit-col" style="border:1px solid var(--gray-200)">
+      <div class="sit-col-head" style="background:#FEE2E2;color:#991B1B;border-bottom-color:#DC2626">🔴 <span data-en="Station 4 — Writing Feedback" data-ar="المحطة 4 — تغذية راجعة على الكتابة">Station 4 — Writing Feedback</span></div>
+      <div style="padding:12px">
+        <div style="font-size:11px;color:var(--gray-500);font-style:italic;margin-bottom:8px" data-en="Starter: I wrote this paragraph: [paste]. Give me 3 specific suggestions to improve argument or clarity. Do NOT rewrite it for me." data-ar="بداية: كتبت هذه الفقرة: [الصق]. أعطني 3 اقتراحات محددة لتحسين الحجة أو الوضوح. لا تعد كتابتها لي.">Starter: I wrote this paragraph: [paste]. Give me 3 specific suggestions to improve argument or clarity. Do NOT rewrite it for me.</div>
+        <textarea class="reflect-input" style="min-height:50px" placeholder="My full prompt..." data-plar="أمري الكامل..."></textarea>
+        <div style="font-size:11px;color:var(--gray-500);margin:8px 0 4px" data-en="Output: apply one suggestion, rewrite the sentence, explain why" data-ar="الإنتاج: طبّق اقتراحًا واحدًا، أعد كتابة الجملة، اشرح لماذا">Output: apply one suggestion, rewrite the sentence, explain why</div>
+        <textarea class="reflect-input" style="min-height:50px" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="tbox twat t-only" style="margin-top:6px"><div class="tbtit"><i class="ti ti-alert-triangle"></i> <span data-en="Watch For&hellip;" data-ar="انتبه لـ...">Watch For&hellip;</span></div><div class="tbbody" data-en="The verification step built into each station prevents the most common misuse — accepting AI output without thinking. Rotate every 5 minutes, or run simultaneously if enough devices." data-ar="خطوة التحقق المدمجة في كل محطة تمنع أكثر أنواع سوء الاستخدام شيوعًا — قبول مخرجات الذكاء الاصطناعي دون تفكير. ناوب كل 5 دقائق، أو شغّلها في وقت واحد إذا توفرت أجهزة كافية.">The verification step built into each station prevents the most common misuse — accepting AI output without thinking. Rotate every 5 minutes, or run simultaneously if enough devices.</div></div>
+</div>
+<div class="pnf"><div class="pnfr"><button class="btn bo" onclick="go('act5',nl(7))"><i class="ti ti-arrow-left"></i> Back</button></div><div class="pnfr"><button class="btn bn" onclick="go('act7',nl(9))"><span data-en="Next: Activity 7 — Group Share-Out" data-ar="التالي: النشاط 7 — مشاركة جماعية">Next: Activity 7 — Group Share-Out</span> <i class="ti ti-arrow-right"></i></button></div></div>
+</div>
+
+<!-- ACTIVITY 7 — GROUP SHARE-OUT -->
+<div class="panel" id="p-act7">
+<div class="pbody">
+  <div class="ah">
+    <div class="anum">7</div>
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+        <div class="atit" data-en="Group Share-Out" data-ar="مشاركة جماعية">Group Share-Out</div>
+        <span class="abadge" style="background:#0A1628;color:#fff" data-en="Explain" data-ar="شرح">Explain</span>
+      </div>
+      <div class="agoal" data-en="Share your best prompt today, and what you did with the AI response that showed you were thinking." data-ar="شارك أفضل أمر كتبته اليوم، وما فعلته بإجابة الذكاء الاصطناعي التي أظهرت أنك كنت تفكّر.">Share your best prompt today, and what you did with the AI response that showed you were thinking.</div>
+      <div class="atime"><i class="ti ti-clock"></i> <span data-en="10 min &middot; Session 2 &middot; Explain" data-ar="10 دقائق &middot; الحصة 2 &middot; شرح">10 min &middot; Session 2 &middot; Explain</span></div>
+    </div>
+  </div>
+  <div class="tbox twhy t-only"><div class="tbtit"><i class="ti ti-sparkles"></i> <span data-en="Why This Activity?" data-ar="لماذا هذا النشاط؟">Why This Activity?</span></div><div class="tbbody" data-en="After individual and pair work, whole-class synthesis consolidates learning and surfaces diverse examples. This also serves as informal assessment — you hear what students actually understood, not just what they wrote." data-ar="بعد العمل الفردي والثنائي، يعزّز التوليف الجماعي التعلم ويُظهر أمثلة متنوعة. يُستخدم هذا أيضًا كتقييم غير رسمي — تسمع ما فهمه الطلاب فعليًا، لا فقط ما كتبوه.">After individual and pair work, whole-class synthesis consolidates learning and surfaces diverse examples. This also serves as informal assessment — you hear what students actually understood, not just what they wrote.</div></div>
+  <div class="card" style="border-left:4px solid #7C3AED">
+    <div class="ctit"><i class="ti ti-message-question" style="color:#7C3AED"></i><span data-en="What was the best prompt you wrote today, and what showed you were thinking?" data-ar="ما أفضل أمر كتبته اليوم، وماذا أظهر أنك كنت تفكّر؟">What was the best prompt you wrote today, and what showed you were thinking?</span></div>
+    <textarea class="reflect-input" style="min-height:90px" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+  <div class="tbox twat t-only" style="margin-top:10px"><div class="tbtit"><i class="ti ti-alert-triangle"></i> <span data-en="Watch For&hellip;" data-ar="انتبه لـ...">Watch For&hellip;</span></div><div class="tbbody" data-en="If a group cannot identify a moment of thinking — ask: &ldquo;Did the AI ever say something you weren't sure about? What did you do then?&rdquo; Use a &ldquo;one new voice per round&rdquo; rule." data-ar="إذا لم تستطع مجموعة تحديد لحظة تفكير — اسأل: «هل قال الذكاء الاصطناعي شيئًا لم تكن متأكدًا منه؟ ماذا فعلت حينها؟» استخدم قاعدة «صوت جديد في كل جولة».">If a group cannot identify a moment of thinking — ask: &ldquo;Did the AI ever say something you weren't sure about? What did you do then?&rdquo; Use a &ldquo;one new voice per round&rdquo; rule.</div></div>
+</div>
+<div class="pnf"><div class="pnfr"><button class="btn bo" onclick="go('act6',nl(8))"><i class="ti ti-arrow-left"></i> Back</button></div><div class="pnfr"><button class="btn bn" onclick="go('act8',nl(10))"><span data-en="Next: Activity 8 — Learning Summary" data-ar="التالي: النشاط 8 — ملخصي التعلمي">Next: Activity 8 — Learning Summary</span> <i class="ti ti-arrow-right"></i></button></div></div>
+</div>
+
+<!-- ACTIVITY 8 — LEARNING SUMMARY -->
+<div class="panel" id="p-act8">
+<div class="pbody">
+  <div class="ah">
+    <div class="anum">8</div>
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+        <div class="atit" data-en="My Learning Summary" data-ar="ملخصي التعلمي">My Learning Summary</div>
+        <span class="abadge" style="background:#7B3FA8;color:#fff" data-en="Signature Product" data-ar="المنتج الختامي">Signature Product</span>
+      </div>
+      <div class="agoal" data-en="This is Unit 2's signature artifact — proof you used AI as a thinking partner, not a content provider." data-ar="هذا هو المنتج الختامي المميّز للوحدة 2 — دليل أنك استخدمت الذكاء الاصطناعي كشريك تفكير، لا كمزوّد محتوى.">This is Unit 2's signature artifact — proof you used AI as a thinking partner, not a content provider.</div>
+      <div class="atime"><i class="ti ti-clock"></i> <span data-en="15 min &middot; Session 2 &middot; Elaborate" data-ar="15 دقيقة &middot; الحصة 2 &middot; توسّع">15 min &middot; Session 2 &middot; Elaborate</span></div>
+    </div>
+  </div>
+  <div class="tbox twhy t-only"><div class="tbtit"><i class="ti ti-sparkles"></i> <span data-en="Why This Activity?" data-ar="لماذا هذا النشاط؟">Why This Activity?</span></div><div class="tbbody" data-en="The explicit instruction &ldquo;use AI to help you understand — not to write this for you&rdquo; is pedagogically critical. This task embeds metacognition: students must reflect on the process, not just produce a product." data-ar="التعليمة الصريحة «استخدم الذكاء الاصطناعي لمساعدتك على الفهم — لا لكتابة هذا نيابة عنك» أساسية تربويًا. تُضمِّن هذه المهمة ما وراء المعرفة: يجب أن يتأمل الطلاب في العملية، لا أن ينتجوا منتجًا فقط.">The explicit instruction &ldquo;use AI to help you understand — not to write this for you&rdquo; is pedagogically critical. This task embeds metacognition: students must reflect on the process, not just produce a product.</div></div>
+  <div style="background:#FEF2F2;border:2px solid #DC2626;border-radius:var(--radius);padding:14px 18px;margin-bottom:14px;text-align:center">
+    <div style="font-size:12.5px;color:#7F1D1D;font-weight:600" data-en="AI helps you understand; but this summary is written entirely in YOUR words. No copy-paste. No paraphrasing AI sentences." data-ar="الذكاء الاصطناعي يساعدك على الفهم؛ لكن هذا الملخص يُكتب بالكامل بكلماتك أنت. لا نسخ ولصق. لا إعادة صياغة لجمل الذكاء الاصطناعي.">AI helps you understand; but this summary is written entirely in YOUR words. No copy-paste. No paraphrasing AI sentences.</div>
+  </div>
+  <div class="card" style="margin-bottom:12px">
+    <div class="ctit"><i class="ti ti-tag" style="color:#0A1628"></i><span data-en="My topic" data-ar="موضوعي">My topic</span></div>
+    <input type="text" class="compare-input" style="min-height:auto" placeholder="Topic..." data-plar="الموضوع...">
+  </div>
+  <div class="card" style="margin-bottom:12px">
+    <div class="ctit"><i class="ti ti-number-1" style="color:#0A1628"></i><span data-en="What I Learned — 3–5 sentences, in your own words" data-ar="ماذا تعلمت — 3-5 جمل، بكلماتك الخاصة">What I Learned — 3–5 sentences, in your own words</span></div>
+    <textarea class="reflect-input" style="min-height:90px" placeholder="Explain as if to a friend who knows nothing about it..." data-plar="اشرح كأنك تشرح لصديق لا يعرف شيئًا..."></textarea>
+  </div>
+  <div class="card" style="margin-bottom:12px">
+    <div class="ctit"><i class="ti ti-number-2" style="color:#06B6D4"></i><span data-en="How AI Helped — the prompt you used and HOW it helped your thinking" data-ar="كيف ساعد الذكاء الاصطناعي — الأمر الذي استخدمته وكيف ساعد تفكيرك تحديدًا">How AI Helped — the prompt you used and HOW it helped your thinking</span></div>
+    <textarea class="reflect-input" style="min-height:70px" placeholder="Not 'it explained it' — be specific..." data-plar="ليس «شرحه فقط» — كن محددًا..."></textarea>
+  </div>
+  <div class="card" style="border-left:4px solid #7C3AED">
+    <div class="ctit"><i class="ti ti-number-3" style="color:#7C3AED"></i><span data-en="What I Still Wonder — the most important part" data-ar="ما زلت أتساءل عن — الجزء الأهم">What I Still Wonder — the most important part</span></div>
+    <div style="font-size:12px;color:var(--gray-600);margin-bottom:8px" data-en="A student who used AI well comes out with better questions, not fewer. Write 1–2 questions that came up while using AI today." data-ar="الطالب الذي استخدم الذكاء الاصطناعي جيدًا يخرج بأسئلة أفضل، لا أقل. اكتب 1-2 سؤال ظهر أثناء استخدامك للذكاء الاصطناعي اليوم.">A student who used AI well comes out with better questions, not fewer. Write 1–2 questions that came up while using AI today.</div>
+    <textarea class="reflect-input" style="min-height:70px" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+  <div class="tbox twat t-only" style="margin-top:10px"><div class="tbtit"><i class="ti ti-alert-triangle"></i> <span data-en="Watch For&hellip;" data-ar="انتبه لـ...">Watch For&hellip;</span></div><div class="tbbody" data-en="Most common failure mode: Part 1 paraphrases AI, Part 2 says &ldquo;AI helped me understand the topic&rdquo; with no specifics. Push for specificity in both. Part 3 often produces the richest learning conversations." data-ar="أكثر أنماط الفشل شيوعًا: الجزء 1 يعيد صياغة كلام الذكاء الاصطناعي، والجزء 2 يقول «ساعدني الذكاء الاصطناعي على فهم الموضوع» دون تفاصيل. ادفع نحو التحديد في كليهما. الجزء 3 غالبًا ما ينتج أغنى المحادثات التعلمية.">Most common failure mode: Part 1 paraphrases AI, Part 2 says &ldquo;AI helped me understand the topic&rdquo; with no specifics. Push for specificity in both. Part 3 often produces the richest learning conversations.</div></div>
+</div>
+<div class="pnf"><div class="pnfr"><button class="btn bo" onclick="go('act7',nl(9))"><i class="ti ti-arrow-left"></i> Back</button></div><div class="pnfr"><button class="btn bn" onclick="go('exit2',nl(11))"><span data-en="Next: Exit + Reflection — Session 2" data-ar="التالي: خروج + تأمل — الحصة 2">Next: Exit + Reflection — Session 2</span> <i class="ti ti-arrow-right"></i></button></div></div>
+</div>
+
+<!-- EXIT TICKET 2 -->
+<div class="panel" id="p-exit2">
+<div class="pbody">
+  <div class="sh"><i class="ti ti-clipboard-check"></i><span data-en="Exit Ticket + Reflection — Session 2 (D2)" data-ar="بطاقة الخروج + تأمل — الحصة 2 (D2)">Exit Ticket + Reflection — Session 2 (D2)</span></div>
+  <div class="ibox bg-n" style="margin-bottom:18px"><i class="ti ti-info-circle"></i><div class="ibox-b"><strong data-en="7 minutes — Individual" data-ar="7 دقائق — فردي">7 minutes — Individual</strong><span data-en="Last thing before we close Unit 2." data-ar="آخر شيء قبل أن نختم الوحدة 2.">Last thing before we close Unit 2.</span></div></div>
+  <div class="exit-q">
+    <div class="exit-qn">1</div>
+    <div class="exit-qtxt" data-en="What is one thing you understood better by using AI as a learning partner today?" data-ar="ما الشيء الذي فهمته بشكل أفضل باستخدام الذكاء الاصطناعي كشريك تعلمي اليوم؟">What is one thing you understood better by using AI as a learning partner today?</div>
+    <textarea class="exit-ta" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+  <div class="exit-q">
+    <div class="exit-qn">2</div>
+    <div class="exit-qtxt" data-en="Describe one moment where you had to think for yourself — even though AI gave you an answer." data-ar="صف لحظة اضطررت فيها للتفكير بنفسك — رغم أن الذكاء الاصطناعي أعطاك إجابة.">Describe one moment where you had to think for yourself — even though AI gave you an answer.</div>
+    <textarea class="exit-ta" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+  <div class="exit-q">
+    <div class="exit-qn">3</div>
+    <div class="exit-qtxt" data-en="Self-Rating — How did I use AI today?" data-ar="تقييم ذاتي — كيف استخدمت الذكاء الاصطناعي اليوم؟">Self-Rating — How did I use AI today?</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn bo" onclick="eqPick(this,'e2a')" id="e2-a" data-en="I mostly copied" data-ar="أغلبه نسخ">I mostly copied</button>
+      <button class="btn bo" onclick="eqPick(this,'e2b')" id="e2-b" data-en="I checked my thinking" data-ar="استخدمته لتفقد تفكيري">I checked my thinking</button>
+      <button class="btn bo" onclick="eqPick(this,'e2c')" id="e2-c" data-en="I went deeper" data-ar="استخدمته للتعمّق">I went deeper</button>
+    </div>
+  </div>
+  <div style="text-align:center;background:#0A1628;border-radius:var(--radius);padding:20px 24px;margin:16px 0">
+    <div style="font-family:var(--font-display);font-size:16px;font-weight:800;color:#fff;line-height:1.4" data-en="🎉 Unit 2 is complete. In Unit 3, we ask: when AI gives you an answer — how do you know if it's true?" data-ar="🎉 الوحدة 2 اكتملت. في الوحدة 3 نسأل: عندما يعطيك الذكاء الاصطناعي إجابة — كيف تعرف أنها صحيحة؟">🎉 Unit 2 is complete. In Unit 3, we ask: when AI gives you an answer — how do you know if it's true?</div>
+  </div>
+  <div class="tbox twat t-only"><div class="tbtit"><i class="ti ti-alert-triangle"></i> <span data-en="Watch For&hellip;" data-ar="انتبه لـ...">Watch For&hellip;</span></div><div class="tbbody" data-en="If students self-rate as &ldquo;mostly copied&rdquo; — pair them with on-level peers in Unit 3 activities and increase scaffolding. Celebrate rich, specific &ldquo;Still Wonder&rdquo; questions publicly." data-ar="إذا قيّم الطلاب أنفسهم بـ«أغلبه نسخ» — اجعلهم مع زملاء بمستواهم في أنشطة الوحدة 3 وزد الدعم. احتفِ علنًا بأسئلة «ما زلت أتساءل» الغنية والمحددة.">If students self-rate as &ldquo;mostly copied&rdquo; — pair them with on-level peers in Unit 3 activities and increase scaffolding. Celebrate rich, specific &ldquo;Still Wonder&rdquo; questions publicly.</div></div>
+</div>
+<div class="pnf"><div class="pnfr"><button class="btn bo" onclick="go('act8',nl(10))"><i class="ti ti-arrow-left"></i> Back</button></div><div class="pnfr"><button class="btn bn" onclick="go('flash',nl(12))"><span data-en="Next: Concept Flashcards" data-ar="التالي: بطاقات الخلاصة">Next: Concept Flashcards</span> <i class="ti ti-arrow-right"></i></button></div></div>
+</div>
+<!-- CONCEPT FLASHCARDS -->
+<div class="panel" id="p-flash">
+<div class="pbody">
+  <div class="sh"><i class="ti ti-cards"></i><span data-en="Concept Flashcards — Unit 2 Summary" data-ar="بطاقات الخلاصة — ملخص الوحدة 2">Concept Flashcards — Unit 2 Summary</span></div>
+  <div class="ibox bg-n"><i class="ti ti-info-circle"></i><div class="ibox-b"><strong data-en="How to use" data-ar="كيف تستخدمها">How to use</strong><span data-en="Tap a card to flip it and reveal the concept. Try to recall the definition before flipping — that's the real practice." data-ar="اضغط على البطاقة لتقليبها والكشف عن المفهوم. حاول تذكّر التعريف قبل القلب — هذا هو التدريب الحقيقي.">Tap a card to flip it and reveal the concept. Try to recall the definition before flipping — that's the real practice.</span></div></div>
+  <div class="flash-progress"><span id="flashDoneCount">0</span> / 8 <span data-en="cards flipped" data-ar="بطاقة تم قلبها">cards flipped</span></div>
+
+  <div class="flash-grid">
+    <div class="flash-card" onclick="flipCard(this)">
+      <div class="flash-inner">
+        <div class="flash-face flash-front"><div class="fic">💬</div><div class="ftitle">Prompt</div><div class="fsub" data-en="Tap to flip" data-ar="اضغط للقلب">Tap to flip</div></div>
+        <div class="flash-face flash-back"><div class="fdef" data-en="An instruction you give to AI — not just a question. A well-crafted prompt is the difference between a shallow answer and a genuine learning response." data-ar="تعليمة تُعطيها للذكاء الاصطناعي — وليست مجرد سؤال. الأمر جيد الصياغة هو الفرق بين إجابة سطحية وإجابة تعلمية حقيقية.">An instruction you give to AI — not just a question. A well-crafted prompt is the difference between a shallow answer and a genuine learning response.</div></div>
+      </div>
+    </div>
+    <div class="flash-card" onclick="flipCard(this)">
+      <div class="flash-inner">
+        <div class="flash-face flash-front"><div class="fic">⚙️</div><div class="ftitle" data-en="3-Part Formula" data-ar="الصيغة الثلاثية">3-Part Formula</div><div class="fsub" data-en="Tap to flip" data-ar="اضغط للقلب">Tap to flip</div></div>
+        <div class="flash-face flash-back"><div class="fdef" data-en="Role + Task + Context. &ldquo;You are [role]. [Task]. [Context].&rdquo; This gives AI enough structure to produce a genuinely useful learning response." data-ar="الدور + المهمة + السياق. «أنت [الدور]. [المهمة]. [السياق].» يمنح هذا الذكاء الاصطناعي بنية كافية لإنتاج إجابة تعلمية مفيدة فعلًا.">Role + Task + Context. "You are [role]. [Task]. [Context]." This gives AI enough structure to produce a genuinely useful learning response.</div></div>
+      </div>
+    </div>
+    <div class="flash-card" onclick="flipCard(this)">
+      <div class="flash-inner">
+        <div class="flash-face flash-front"><div class="fic">🆚</div><div class="ftitle" data-en="AI-Assisted vs. AI-Generated" data-ar="مدعوم بالذكاء الاصطناعي مقابل مولَّد بالكامل">AI-Assisted vs. AI-Generated</div><div class="fsub" data-en="Tap to flip" data-ar="اضغط للقلب">Tap to flip</div></div>
+        <div class="flash-face flash-back"><div class="fdef" data-en="Assisted: you think first, then use AI to deepen or verify. Generated: you get the answer and copy it. The difference is your cognitive effort." data-ar="مدعوم: تفكر أولًا، ثم تستخدم الذكاء الاصطناعي للتعميق أو التحقق. مولَّد: تحصل على الإجابة وتنسخها. الفرق هو جهدك المعرفي.">Assisted: you think first, then use AI to deepen or verify. Generated: you get the answer and copy it. The difference is your cognitive effort.</div></div>
+      </div>
+    </div>
+    <div class="flash-card" onclick="flipCard(this)">
+      <div class="flash-inner">
+        <div class="flash-face flash-front"><div class="fic">🔄</div><div class="ftitle" data-en="Verify-Reflect Cycle" data-ar="دورة تحقق-تأمل">Verify-Reflect Cycle</div><div class="fsub" data-en="Tap to flip" data-ar="اضغط للقلب">Tap to flip</div></div>
+        <div class="flash-face flash-back"><div class="fdef" data-en="After every AI response, ask: (1) Does this make sense? (2) Can I verify this? (3) What do I now understand that I didn't before?" data-ar="بعد كل إجابة من الذكاء الاصطناعي، اسأل: (1) هل هذا منطقي؟ (2) هل يمكنني التحقق منه؟ (3) ماذا فهمت الآن ولم أكن أفهمه؟">After every AI response, ask: (1) Does this make sense? (2) Can I verify this? (3) What do I now understand that I didn't before?</div></div>
+      </div>
+    </div>
+    <div class="flash-card" onclick="flipCard(this)">
+      <div class="flash-inner">
+        <div class="flash-face flash-front"><div class="fic">🎯</div><div class="ftitle" data-en="Active vs. Passive Use" data-ar="الاستخدام النشط مقابل السلبي">Active vs. Passive Use</div><div class="fsub" data-en="Tap to flip" data-ar="اضغط للقلب">Tap to flip</div></div>
+        <div class="flash-face flash-back"><div class="fdef" data-en="Active: you question, verify, and build on AI's response. Passive: you read and accept it without doing anything with it." data-ar="نشط: تتساءل وتتحقق وتبني على إجابة الذكاء الاصطناعي. سلبي: تقرأ وتقبل دون أن تفعل شيئًا بها.">Active: you question, verify, and build on AI's response. Passive: you read and accept it without doing anything with it.</div></div>
+      </div>
+    </div>
+    <div class="flash-card" onclick="flipCard(this)">
+      <div class="flash-inner">
+        <div class="flash-face flash-front"><div class="fic">🤝</div><div class="ftitle" data-en="AI as Thinking Partner" data-ar="الذكاء الاصطناعي كشريك تفكير">AI as Thinking Partner</div><div class="fsub" data-en="Tap to flip" data-ar="اضغط للقلب">Tap to flip</div></div>
+        <div class="flash-face flash-back"><div class="fdef" data-en="AI is not a shortcut or an answer machine — it's a partner that helps you think more deeply, if you stay in control of the thinking." data-ar="الذكاء الاصطناعي ليس اختصارًا أو آلة إجابات — إنه شريك يساعدك على التفكير بعمق أكبر، إذا بقيت أنت المسيطر على التفكير.">AI is not a shortcut or an answer machine — it's a partner that helps you think more deeply, if you stay in control of the thinking.</div></div>
+      </div>
+    </div>
+    <div class="flash-card" onclick="flipCard(this)">
+      <div class="flash-inner">
+        <div class="flash-face flash-front"><div class="fic">🧠</div><div class="ftitle">Metacognition</div><div class="fsub" data-en="Tap to flip" data-ar="اضغط للقلب">Tap to flip</div></div>
+        <div class="flash-face flash-back"><div class="fdef" data-en="Awareness of your own thinking — knowing when AI is genuinely helping you learn, and when it's replacing your learning instead." data-ar="الوعي بتفكيرك الخاص — معرفة متى يساعدك الذكاء الاصطناعي فعلًا على التعلم، ومتى يحل محل تعلمك بدلًا من ذلك.">Awareness of your own thinking — knowing when AI is genuinely helping you learn, and when it's replacing your learning instead.</div></div>
+      </div>
+    </div>
+    <div class="flash-card" onclick="flipCard(this)">
+      <div class="flash-inner">
+        <div class="flash-face flash-front"><div class="fic">📝</div><div class="ftitle" data-en="Learning Summary" data-ar="الملخص التعلمي">Learning Summary</div><div class="fsub" data-en="Tap to flip" data-ar="اضغط للقلب">Tap to flip</div></div>
+        <div class="flash-face flash-back"><div class="fdef" data-en="A product written entirely in YOUR own words that proves you thought with AI, not just copied from it — the signature artifact of Unit 2." data-ar="منتج مكتوب بالكامل بكلماتك أنت يثبت أنك فكّرت مع الذكاء الاصطناعي، لا أنك نسخت منه فقط — المنتج المميّز للوحدة 2.">A product written entirely in YOUR own words that proves you thought with AI, not just copied from it — the signature artifact of Unit 2.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="pnf"><div class="pnfr"><button class="btn bo" onclick="go('exit2',nl(11))"><i class="ti ti-arrow-left"></i> Back</button></div><div class="pnfr"><button class="btn bn" onclick="go('quiz',nl(13))"><span data-en="Next: Unit Quiz (D3)" data-ar="التالي: اختبار الوحدة (D3)">Next: Unit Quiz (D3)</span> <i class="ti ti-arrow-right"></i></button></div></div>
+</div>
+
+<!-- QUIZ D3 -->
+<div class="panel" id="p-quiz">
+<div class="pbody">
+  <div class="ah">
+    <div class="anum" style="background:#7C3AED"><i class="ti ti-brain" style="font-size:16px"></i></div>
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+        <div class="atit" data-en="Unit Quiz — D3" data-ar="اختبار الوحدة — D3">Unit Quiz — D3</div>
+        <span class="abadge" style="background:#7C3AED;color:#fff" data-en="10 Questions" data-ar="10 أسئلة">10 Questions</span>
+      </div>
+      <div class="agoal" data-en="Part A: multiple choice, instant feedback. Part B: short answer, for teacher review." data-ar="القسم أ: اختيار من متعدد، تعليق فوري. القسم ب: إجابة قصيرة، لمراجعة المعلم.">Part A: multiple choice, instant feedback. Part B: short answer, for teacher review.</div>
+      <div class="atime"><i class="ti ti-clock"></i> <span data-en="15–20 min · Individual" data-ar="15–20 دقيقة · فردي">15–20 min · Individual</span></div>
+    </div>
+  </div>
+
+  <div class="fq-card" id="fq1">
+    <div class="fq-num" data-en="Part A · Question 1" data-ar="القسم أ · السؤال 1">Part A · Question 1</div>
+    <div class="fq-text" data-en="Which is the BEST example of a strong learning prompt?" data-ar="ما هو أفضل مثال على أمر تعلمي قوي؟">Which is the BEST example of a strong learning prompt?</div>
+    <div class="fq-opts">
+      <div class="fq-opt" onclick="fqPick(this,'fq1','a')"><span class="fq-letter">A</span><span>"Explain the water cycle."</span></div>
+      <div class="fq-opt" onclick="fqPick(this,'fq1','b')"><span class="fq-letter">B</span><span>"Explain the water cycle in simple terms."</span></div>
+      <div class="fq-opt fq-correct" onclick="fqPick(this,'fq1','c')"><span class="fq-letter">C</span><span>"You are a geography teacher. Explain the water cycle step-by-step using a diagram analogy. I'm a 9th-grade student who understands evaporation."</span></div>
+      <div class="fq-opt" onclick="fqPick(this,'fq1','d')"><span class="fq-letter">D</span><span>"Tell me everything about water."</span></div>
+    </div>
+    <div class="fq-fb" id="fq1-fb"></div>
+  </div>
+
+  <div class="fq-card" id="fq2">
+    <div class="fq-num" data-en="Question 2" data-ar="السؤال 2">Question 2</div>
+    <div class="fq-text" data-en="A student asks AI a question, then submits the response as homework without reading it. This is an example of:" data-ar="طالب يسأل الذكاء الاصطناعي سؤالاً ثم يسلّم الإجابة كواجب دون قراءتها. هذا مثال على:">A student asks AI a question, then submits the response as homework without reading it. This is an example of:</div>
+    <div class="fq-opts">
+      <div class="fq-opt" onclick="fqPick(this,'fq2','a')"><span class="fq-letter">A</span><span data-en="AI-Assisted Learning" data-ar="التعلم بمساعدة الذكاء الاصطناعي">AI-Assisted Learning</span></div>
+      <div class="fq-opt" onclick="fqPick(this,'fq2','b')"><span class="fq-letter">B</span><span data-en="Active use of AI" data-ar="استخدام نشط للذكاء الاصطناعي">Active use of AI</span></div>
+      <div class="fq-opt fq-correct" onclick="fqPick(this,'fq2','c')"><span class="fq-letter">C</span><span data-en="AI-Generated work / Passive use" data-ar="عمل مولَّد بالكامل / استخدام سلبي">AI-Generated work / Passive use</span></div>
+      <div class="fq-opt" onclick="fqPick(this,'fq2','d')"><span class="fq-letter">D</span><span data-en="The Verify-Reflect Cycle" data-ar="دورة تحقق-تأمل">The Verify-Reflect Cycle</span></div>
+    </div>
+    <div class="fq-fb" id="fq2-fb"></div>
+  </div>
+
+  <div class="fq-card" id="fq3">
+    <div class="fq-num" data-en="Question 3" data-ar="السؤال 3">Question 3</div>
+    <div class="fq-text" data-en="What does the CONTEXT part of the 3-Part Formula tell AI?" data-ar="ماذا يخبر جزء «السياق» في الصيغة ذات الأجزاء الثلاثة الذكاء الاصطناعي؟">What does the CONTEXT part of the 3-Part Formula tell AI?</div>
+    <div class="fq-opts">
+      <div class="fq-opt" onclick="fqPick(this,'fq3','a')"><span class="fq-letter">A</span><span data-en="What role AI should act as" data-ar="الدور الذي يجب أن يتقمّصه الذكاء الاصطناعي">What role AI should act as</span></div>
+      <div class="fq-opt" onclick="fqPick(this,'fq3','b')"><span class="fq-letter">B</span><span data-en="What task you want AI to do" data-ar="المهمة المطلوبة">What task you want AI to do</span></div>
+      <div class="fq-opt fq-correct" onclick="fqPick(this,'fq3','c')"><span class="fq-letter">C</span><span data-en="What you already know and your level" data-ar="ما تعرفه مسبقًا ومستواك">What you already know and your level</span></div>
+      <div class="fq-opt" onclick="fqPick(this,'fq3','d')"><span class="fq-letter">D</span><span data-en="How long the response should be" data-ar="طول الإجابة المطلوب">How long the response should be</span></div>
+    </div>
+    <div class="fq-fb" id="fq3-fb"></div>
+  </div>
+
+  <div class="fq-card" id="fq4">
+    <div class="fq-num" data-en="Question 4" data-ar="السؤال 4">Question 4</div>
+    <div class="fq-text" data-en="Which question is NOT part of the Verify-Reflect Cycle?" data-ar="أي سؤال ليس جزءًا من دورة «تحقق - تأمل»؟">Which question is NOT part of the Verify-Reflect Cycle?</div>
+    <div class="fq-opts">
+      <div class="fq-opt" onclick="fqPick(this,'fq4','a')"><span class="fq-letter">A</span><span data-en="Does this make sense to me?" data-ar="هل هذا منطقي بالنسبة لي؟">Does this make sense to me?</span></div>
+      <div class="fq-opt" onclick="fqPick(this,'fq4','b')"><span class="fq-letter">B</span><span data-en="Can I verify this?" data-ar="هل يمكنني التحقق منه؟">Can I verify this?</span></div>
+      <div class="fq-opt fq-correct" onclick="fqPick(this,'fq4','c')"><span class="fq-letter">C</span><span data-en="Is this response longer than 200 words?" data-ar="هل الإجابة أطول من 200 كلمة؟">Is this response longer than 200 words?</span></div>
+      <div class="fq-opt" onclick="fqPick(this,'fq4','d')"><span class="fq-letter">D</span><span data-en="What did I actually learn?" data-ar="ماذا تعلمت فعلًا؟">What did I actually learn?</span></div>
+    </div>
+    <div class="fq-fb" id="fq4-fb"></div>
+  </div>
+
+  <div class="fq-card" id="fq5">
+    <div class="fq-num" data-en="Question 5" data-ar="السؤال 5">Question 5</div>
+    <div class="fq-text" data-en="&ldquo;You are a math teacher. I'm struggling with fractions. Walk me through dividing fractions step-by-step with one example I solve at the end. I understand multiplication already.&rdquo; — Which parts of the formula are present?" data-ar="«أنت معلم رياضيات. أواجه صعوبة في الكسور. اشرحها خطوة بخطوة مع مثال أحله بنفسي. أفهم الضرب مسبقًا.» — أي أجزاء الصيغة موجودة؟">"You are a math teacher. I'm struggling with fractions. Walk me through dividing fractions step-by-step with one example I solve at the end. I understand multiplication already." — Which parts of the formula are present?</div>
+    <div class="fq-opts">
+      <div class="fq-opt" onclick="fqPick(this,'fq5','a')"><span class="fq-letter">A</span><span data-en="Role only" data-ar="الدور فقط">Role only</span></div>
+      <div class="fq-opt" onclick="fqPick(this,'fq5','b')"><span class="fq-letter">B</span><span data-en="Task and Context only" data-ar="المهمة والسياق فقط">Task and Context only</span></div>
+      <div class="fq-opt" onclick="fqPick(this,'fq5','c')"><span class="fq-letter">C</span><span data-en="Role and Task only" data-ar="الدور والمهمة فقط">Role and Task only</span></div>
+      <div class="fq-opt fq-correct" onclick="fqPick(this,'fq5','d')"><span class="fq-letter">D</span><span data-en="Role, Task, and Context — all three" data-ar="الدور والمهمة والسياق — الثلاثة">Role, Task, and Context — all three</span></div>
+    </div>
+    <div class="fq-fb" id="fq5-fb"></div>
+  </div>
+
+  <div class="fq-card" id="fq6">
+    <div class="fq-num" data-en="Question 6" data-ar="السؤال 6">Question 6</div>
+    <div class="fq-text" data-en="Which behavior best describes AI-ASSISTED learning?" data-ar="أي سلوك يصف التعلم المدعوم بالذكاء الاصطناعي بشكل أفضل؟">Which behavior best describes AI-ASSISTED learning?</div>
+    <div class="fq-opts">
+      <div class="fq-opt" onclick="fqPick(this,'fq6','a')"><span class="fq-letter">A</span><span data-en="The student reads the AI response and submits it." data-ar="يقرأ الطالب الإجابة ويسلّمها.">The student reads the AI response and submits it.</span></div>
+      <div class="fq-opt fq-correct" onclick="fqPick(this,'fq6','b')"><span class="fq-letter">B</span><span data-en="The student uses AI, then writes it in their own words after thinking." data-ar="يستخدم الطالب الذكاء الاصطناعي، ثم يكتبه بكلماته بعد التفكير.">The student uses AI, then writes it in their own words after thinking.</span></div>
+      <div class="fq-opt" onclick="fqPick(this,'fq6','c')"><span class="fq-letter">C</span><span data-en="The student asks AI to write the essay." data-ar="يطلب الطالب من الذكاء الاصطناعي كتابة المقال.">The student asks AI to write the essay.</span></div>
+      <div class="fq-opt" onclick="fqPick(this,'fq6','d')"><span class="fq-letter">D</span><span data-en="The student copies the response into their notes." data-ar="ينسخ الطالب الإجابة في دفتره.">The student copies the response into their notes.</span></div>
+    </div>
+    <div class="fq-fb" id="fq6-fb"></div>
+  </div>
+
+  <div id="fq-summary" style="display:none;margin-top:4px" class="ibox bg-t"><i class="ti ti-star"></i><div class="ibox-b"><strong id="fq-score-lbl">Score</strong><span id="fq-score-txt"></span></div></div>
+
+  <div class="sh" style="font-size:14px;margin-top:18px"><i class="ti ti-pencil"></i><span data-en="Part B — Short Answer" data-ar="القسم ب — إجابة قصيرة">Part B — Short Answer</span></div>
+  <div class="card" style="margin-bottom:10px">
+    <div class="ctit"><span data-en="7. Write your own 3-Part prompt on any topic. Label each part." data-ar="7. اكتب أمرًا من ثلاثة أجزاء على أي موضوع. حدّد كل جزء.">7. Write your own 3-Part prompt on any topic. Label each part.</span></div>
+    <textarea class="reflect-input" style="min-height:60px" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+  <div class="card" style="margin-bottom:10px">
+    <div class="ctit"><span data-en="8. A classmate says: &ldquo;AI gave a detailed answer, so it must be correct.&rdquo; How would you respond?" data-ar="8. زميل يقول: «الذكاء الاصطناعي أعطاني إجابة مفصّلة، إذن لا بد أنها صحيحة». كيف تردّ؟">8. A classmate says: "AI gave a detailed answer, so it must be correct." How would you respond?</span></div>
+    <textarea class="reflect-input" style="min-height:60px" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+  <div class="card" style="margin-bottom:10px">
+    <div class="ctit"><span data-en="9. Describe passive vs. active use of AI, with one example of each." data-ar="9. صف الاستخدام السلبي مقابل النشط، مع مثال لكل منهما.">9. Describe passive vs. active use of AI, with one example of each.</span></div>
+    <textarea class="reflect-input" style="min-height:60px" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+  <div class="card">
+    <div class="ctit"><span data-en="10. Why is it important to have questions AFTER using AI — not fewer?" data-ar="10. لماذا من المهم أن يكون لديك أسئلة بعد استخدام الذكاء الاصطناعي — لا أسئلة أقل؟">10. Why is it important to have questions AFTER using AI — not fewer?</span></div>
+    <textarea class="reflect-input" style="min-height:60px" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+</div>
+<div class="pnf"><div class="pnfr"><button class="btn bo" onclick="go('flash',nl(12))"><i class="ti ti-arrow-left"></i> Back</button></div><div class="pnfr"><button class="btn bn" onclick="go('rubric',nl(14))"><span data-en="Next: Learning Summary Rubric (D4)" data-ar="التالي: Rubric الملخص (D4)">Next: Learning Summary Rubric (D4)</span> <i class="ti ti-arrow-right"></i></button></div></div>
+</div>
+
+<!-- RUBRIC D4 -->
+<div class="panel" id="p-rubric">
+<div class="pbody">
+  <div class="sh"><i class="ti ti-award"></i><span data-en="Learning Summary Rubric — D4" data-ar="Rubric ملخصي التعلمي — D4">Learning Summary Rubric — D4</span></div>
+  <div class="ibox bg-n"><i class="ti ti-info-circle"></i><div class="ibox-b"><strong data-en="Self-assess or teacher-assess Activity 8" data-ar="قيّم نفسك أو دع معلمك يقيّم النشاط 8">Self-assess or teacher-assess Activity 8</strong><span data-en="Click the column that best describes your Learning Summary for each criterion." data-ar="انقر على العمود الذي يصف ملخصك التعلمي بدقة أكبر لكل معيار.">Click the column that best describes your Learning Summary for each criterion.</span></div></div>
+
+  <div class="sc-progress-wrap" id="sc-progress-wrap">
+    <div class="sc-pct-row">
+      <div><span class="sc-pct-label" data-en="Rubric score" data-ar="نتيجة Rubric">Rubric score</span></div>
+      <div><span class="sc-pct-num" id="rub-pct-num">0</span><span class="sc-pct-sub" id="rub-pct-sub" data-en="/ 16 points" data-ar="/ 16 نقطة">/ 16 points</span></div>
+    </div>
+    <div class="sc-meter"><div class="sc-meter-fill" id="rub-meter-fill" style="width:0%"></div></div>
+  </div>
+
+  <div style="overflow-x:auto;margin-bottom:14px">
+    <table style="width:100%;border-collapse:collapse;font-size:12px;background:#fff;border-radius:var(--radius);overflow:hidden;border:1px solid var(--gray-200)">
+      <thead>
+        <tr style="background:#0A1628;color:#fff">
+          <th style="padding:9px 12px;text-align:left;font-weight:600;width:20%" data-en="Criterion" data-ar="المعيار">Criterion</th>
+          <th style="padding:9px 10px;text-align:left;font-weight:600">4 · <span data-en="Excellent" data-ar="ممتاز">Excellent</span></th>
+          <th style="padding:9px 10px;text-align:left;font-weight:600">3 · <span data-en="Good" data-ar="جيد">Good</span></th>
+          <th style="padding:9px 10px;text-align:left;font-weight:600">2 · <span data-en="Developing" data-ar="متطور">Developing</span></th>
+          <th style="padding:9px 10px;text-align:left;font-weight:600">1 · <span data-en="Beginning" data-ar="مبتدئ">Beginning</span></th>
+        </tr>
+      </thead>
+      <tbody id="rub-tbody">
+        <tr class="rub-row" style="border-bottom:1px solid var(--gray-100)">
+          <td style="padding:9px 12px;font-weight:600;color:#0A1628" data-en="1. What I Learned" data-ar="1. ماذا تعلمت">1. What I Learned</td>
+          <td class="rub-lvl" data-pts="4" onclick="rubPick(this,0)" style="padding:9px 10px;cursor:pointer" data-en="Fully own words, clear understanding" data-ar="بكلماته بالكامل، فهم واضح">Fully own words, clear understanding</td>
+          <td class="rub-lvl" data-pts="3" onclick="rubPick(this,0)" style="padding:9px 10px;cursor:pointer" data-en="Mostly own words, evident understanding" data-ar="معظمه بكلماته، فهم جيد">Mostly own words, evident understanding</td>
+          <td class="rub-lvl" data-pts="2" onclick="rubPick(this,0)" style="padding:9px 10px;cursor:pointer" data-en="Closely mirrors AI output" data-ar="يقارب مخرجات الذكاء الاصطناعي">Closely mirrors AI output</td>
+          <td class="rub-lvl" data-pts="1" onclick="rubPick(this,0)" style="padding:9px 10px;cursor:pointer" data-en="Directly copied, no synthesis" data-ar="نسخ مباشر بلا توليف">Directly copied, no synthesis</td>
+        </tr>
+        <tr class="rub-row" style="border-bottom:1px solid var(--gray-100);background:var(--gray-50)">
+          <td style="padding:9px 12px;font-weight:600;color:#0A1628" data-en="2. How AI Helped" data-ar="2. كيف ساعد الذكاء الاصطناعي">2. How AI Helped</td>
+          <td class="rub-lvl" data-pts="4" onclick="rubPick(this,1)" style="padding:9px 10px;cursor:pointer" data-en="Clear metacognitive awareness" data-ar="وعي ما وراء معرفي واضح">Clear metacognitive awareness</td>
+          <td class="rub-lvl" data-pts="3" onclick="rubPick(this,1)" style="padding:9px 10px;cursor:pointer" data-en="Some metacognitive awareness" data-ar="وعي جزئي">Some metacognitive awareness</td>
+          <td class="rub-lvl" data-pts="2" onclick="rubPick(this,1)" style="padding:9px 10px;cursor:pointer" data-en="Vague description" data-ar="وصف غامض">Vague description</td>
+          <td class="rub-lvl" data-pts="1" onclick="rubPick(this,1)" style="padding:9px 10px;cursor:pointer" data-en="&ldquo;Gave me the answer&rdquo;, no reflection" data-ar="«أعطاني الإجابة» بلا تأمل">"Gave me the answer", no reflection</td>
+        </tr>
+        <tr class="rub-row" style="border-bottom:1px solid var(--gray-100)">
+          <td style="padding:9px 12px;font-weight:600;color:#0A1628" data-en="3. What I Still Wonder" data-ar="3. ما زلت أتساءل">3. What I Still Wonder</td>
+          <td class="rub-lvl" data-pts="4" onclick="rubPick(this,2)" style="padding:9px 10px;cursor:pointer" data-en="2 meaningful, specific questions" data-ar="سؤالان عميقان ومحددان">2 meaningful, specific questions</td>
+          <td class="rub-lvl" data-pts="3" onclick="rubPick(this,2)" style="padding:9px 10px;cursor:pointer" data-en="1–2 questions, one specific" data-ar="1-2 سؤال، واحد محدد">1–2 questions, one specific</td>
+          <td class="rub-lvl" data-pts="2" onclick="rubPick(this,2)" style="padding:9px 10px;cursor:pointer" data-en="Generic or superficial" data-ar="أسئلة عامة أو سطحية">Generic or superficial</td>
+          <td class="rub-lvl" data-pts="1" onclick="rubPick(this,2)" style="padding:9px 10px;cursor:pointer" data-en="Empty, or statements not questions" data-ar="فارغ أو عبارات وليست أسئلة">Empty, or statements not questions</td>
+        </tr>
+        <tr class="rub-row" style="background:var(--gray-50)">
+          <td style="padding:9px 12px;font-weight:600;color:#0A1628" data-en="4. Active vs. Passive Evidence" data-ar="4. دليل النشط مقابل السلبي">4. Active vs. Passive Evidence</td>
+          <td class="rub-lvl" data-pts="4" onclick="rubPick(this,3)" style="padding:9px 10px;cursor:pointer" data-en="Clear active thinking throughout" data-ar="دليل واضح على التفكير النشط طوال العمل">Clear active thinking throughout</td>
+          <td class="rub-lvl" data-pts="3" onclick="rubPick(this,3)" style="padding:9px 10px;cursor:pointer" data-en="Mostly active use" data-ar="استخدام نشط في الغالب">Mostly active use</td>
+          <td class="rub-lvl" data-pts="2" onclick="rubPick(this,3)" style="padding:9px 10px;cursor:pointer" data-en="Mix of active and passive" data-ar="مزيج من النشط والسلبي">Mix of active and passive</td>
+          <td class="rub-lvl" data-pts="1" onclick="rubPick(this,3)" style="padding:9px 10px;cursor:pointer" data-en="Predominantly passive use" data-ar="استخدام سلبي في الغالب">Predominantly passive use</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <div class="ctit"><i class="ti ti-message" style="color:#7C3AED"></i><span data-en="Teacher comments" data-ar="ملاحظات المعلم">Teacher comments</span></div>
+    <textarea class="reflect-input" style="min-height:60px" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+</div>
+<div class="pnf"><div class="pnfr"><button class="btn bo" onclick="go('quiz',nl(13))"><i class="ti ti-arrow-left"></i> Back</button></div><div class="pnfr"><button class="btn bn" onclick="go('reflection',nl(15))"><span data-en="Next: Student Reflection (D5)" data-ar="التالي: تأمل الطالب (D5)">Next: Student Reflection (D5)</span> <i class="ti ti-arrow-right"></i></button></div></div>
+</div>
+
+<!-- REFLECTION D5 -->
+<div class="panel" id="p-reflection">
+<div class="pbody">
+  <div class="sh"><i class="ti ti-mood-smile"></i><span data-en="Student Reflection Form — D5" data-ar="استمارة تأمل الطالب — D5">Student Reflection Form — D5</span></div>
+  <div class="ibox bg-n"><i class="ti ti-info-circle"></i><div class="ibox-b"><strong data-en="This form is for YOU" data-ar="هذه الاستمارة لك أنت">This form is for YOU</strong><span data-en="Not graded on correctness — graded on honesty and depth of thinking." data-ar="غير مُقيَّمة على الصحة — بل على الصدق وعمق التفكير.">Not graded on correctness — graded on honesty and depth of thinking.</span></div></div>
+
+  <div class="exit-q">
+    <div class="exit-qn">1</div>
+    <div class="exit-qtxt" data-en="The most important thing I learned in Unit 2 is:" data-ar="أهم شيء تعلمته في الوحدة 2 هو:">The most important thing I learned in Unit 2 is:</div>
+    <textarea class="exit-ta" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+  <div class="exit-q">
+    <div class="exit-qn">2</div>
+    <div class="exit-qtxt" data-en="Before Unit 2, I used AI like this:" data-ar="قبل الوحدة 2، كنت أستخدم الذكاء الاصطناعي هكذا:">Before Unit 2, I used AI like this:</div>
+    <textarea class="exit-ta" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+  <div class="exit-q">
+    <div class="exit-qn">3</div>
+    <div class="exit-qtxt" data-en="After Unit 2, I will use AI differently in this way:" data-ar="بعد الوحدة 2، سأستخدم الذكاء الاصطناعي بشكل مختلف بهذه الطريقة:">After Unit 2, I will use AI differently in this way:</div>
+    <textarea class="exit-ta" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+  <div class="card" style="margin-bottom:12px">
+    <div class="ctit"><i class="ti ti-list-check" style="color:#0A1628"></i><span data-en="4. In Unit 2, I mostly used AI as:" data-ar="4. في الوحدة 2، استخدمت الذكاء الاصطناعي غالبًا كـ:">4. In Unit 2, I mostly used AI as:</span></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn bo" onclick="eqPick(this,'r4a')" id="r4-a" data-en="A shortcut" data-ar="اختصار">A shortcut</button>
+      <button class="btn bo" onclick="eqPick(this,'r4b')" id="r4-b" data-en="A tool" data-ar="أداة">A tool</button>
+      <button class="btn bo" onclick="eqPick(this,'r4c')" id="r4-c" data-en="A thinking partner" data-ar="شريك تفكير">A thinking partner</button>
+    </div>
+  </div>
+  <div class="exit-q">
+    <div class="exit-qn">5</div>
+    <div class="exit-qtxt" data-en="The activity that pushed my thinking the most was — because:" data-ar="النشاط الذي دفع تفكيري أكثر كان — لأن:">The activity that pushed my thinking the most was — because:</div>
+    <textarea class="exit-ta" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+  <div class="exit-q">
+    <div class="exit-qn">6</div>
+    <div class="exit-qtxt" data-en="One moment I should have thought more for myself, instead of relying on AI:" data-ar="لحظة كان عليّ أن أفكّر فيها أكثر بدل الاعتماد على الذكاء الاصطناعي:">One moment I should have thought more for myself, instead of relying on AI:</div>
+    <textarea class="exit-ta" placeholder="Write here..." data-plar="اكتب هنا..."></textarea>
+  </div>
+</div>
+<div class="pnf"><div class="pnfr"><button class="btn bo" onclick="go('rubric',nl(14))"><i class="ti ti-arrow-left"></i> Back</button></div><div class="pnfr"><button class="btn bn" onclick="go('closing',nl(16))"><span data-en="Next: Closing" data-ar="التالي: الختام">Next: Closing</span> <i class="ti ti-arrow-right"></i></button></div></div>
+</div>
+
+<!-- CLOSING -->
+<div class="panel" id="p-closing">
+<div class="pbody">
+  <div class="sh"><i class="ti ti-refresh"></i><span data-en="We return to our Essential Question&hellip;" data-ar="نعود إلى سؤالنا الجوهري&hellip;">We return to our Essential Question&hellip;</span></div>
+  <div class="closing-q" style="margin-bottom:16px">
+    <div class="closing-label" data-en="30 seconds of silent thinking — then share" data-ar="30 ثانية من التفكير الصامت — ثم شارك">30 seconds of silent thinking — then share</div>
+    <div class="closing-q-text" data-en="If AI can answer any question instantly&hellip; what makes the difference between a student who uses it wisely and one who simply copies?" data-ar="إذا كان الذكاء الاصطناعي يستطيع الإجابة عن أي سؤال فورًا... فما الذي يميّز الطالب الذي يستخدمه بحكمة عن الذي يكتفي بالنسخ؟">If AI can answer any question instantly&hellip; what makes the difference between a student who uses it wisely and one who simply copies?</div>
+    <div class="closing-bar"></div>
+  </div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="ctit"><i class="ti ti-refresh" style="color:#06B6D4"></i><span data-en="Has your answer changed since the beginning?" data-ar="هل تغيرت إجابتك منذ البداية؟">Has your answer changed since the beginning?</span></div>
+    <textarea class="reflect-input" style="min-height:80px" placeholder="Compare your answer now to what you wrote at the start..." data-plar="قارن إجابتك الآن بما كتبته في البداية..."></textarea>
+  </div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="ctit"><i class="ti ti-arrows-left-right" style="color:#0A1628"></i><span data-en="The Bridge" data-ar="الجسر">The Bridge</span></div>
+    <div class="cbody" data-en="In Unit 1, you asked: What is AI? In Unit 2, you answered: How do I use it well? In Unit 3, we will ask the most important question of all — How do I know when to trust it?" data-ar="في الوحدة 1، سألت: ما هو الذكاء الاصطناعي؟ في الوحدة 2، أجبت: كيف أستخدمه جيدًا؟ في الوحدة 3، سنسأل أهم سؤال — كيف أعرف متى أثق به؟">In Unit 1, you asked: What is AI? In Unit 2, you answered: How do I use it well? In Unit 3, we will ask the most important question of all — How do I know when to trust it?</div>
+  </div>
+  <div class="ibox bg-t"><i class="ti ti-arrow-right-circle"></i><div class="ibox-b"><strong data-en="Coming up — Unit 3" data-ar="القادم — الوحدة 3">Coming up — Unit 3</strong><span data-en="We will learn to evaluate AI's outputs critically — Can I Trust It?" data-ar="سنتعلم تقييم مخرجات الذكاء الاصطناعي نقديًا — هل أثق بما يقوله؟">We will learn to evaluate AI's outputs critically — Can I Trust It?</span></div></div>
+  <div style="text-align:center;padding:16px 0 4px">
+    <div style="font-family:var(--font-display);font-size:19px;font-weight:800;color:#0A1628;margin-bottom:6px" data-en="🎉 Unit 2 Complete!" data-ar="🎉 الوحدة 2 مكتملة!">🎉 Unit 2 Complete!</div>
+    <div style="font-size:12.5px;color:var(--gray-600);margin-bottom:14px" data-en="AI Literacy Curriculum Framework — Unit 2 — Package C" data-ar="إطار منهج محو الأمية في الذكاء الاصطناعي — الوحدة 2 — الحزمة C">AI Literacy Curriculum Framework — Unit 2 — Package C</div>
+    <button class="btn bt" style="font-size:13.5px;padding:11px 22px" data-en="→ Proceed to Unit 3" data-ar="→ الانتقال إلى الوحدة 3">→ Proceed to Unit 3</button>
+  </div>
+  <div class="tbox twat t-only" style="margin-top:14px"><div class="tbtit"><i class="ti ti-alert-triangle"></i> <span data-en="Watch For&hellip;" data-ar="انتبه لـ...">Watch For&hellip;</span></div><div class="tbbody" data-en="Leave the Essential Question on screen and give students 30 seconds of silent thinking. Then ask: &ldquo;Has your answer changed?&rdquo; The Bridge statement prepares them for Unit 3." data-ar="اترك السؤال الجوهري على الشاشة وامنح الطلاب 30 ثانية من التفكير الصامت. ثم اسأل: «هل تغيّرت إجابتك؟» تُحضّرهم عبارة الجسر للوحدة 3.">Leave the Essential Question on screen and give students 30 seconds of silent thinking. Then ask: &ldquo;Has your answer changed?&rdquo; The Bridge statement prepares them for Unit 3.</div></div>
+</div>
+<div class="pnf"><div class="pnfr"><button class="btn bo" onclick="go('reflection',nl(15))"><i class="ti ti-arrow-left"></i> Back</button></div><span class="pnfl" data-en="End of Unit 2" data-ar="نهاية الوحدة 2">End of Unit 2</span></div>
+</div>
+
+<!-- TEACHER: NOTES -->
+<div class="panel" id="p-tnotes">
+<div class="pbody">
+  <div class="hero" style="background:#1E1B4B"><div class="hero-eye" data-en="Teacher Guide &middot; Unit 2 &middot; Package A" data-ar="دليل المعلم &middot; الوحدة 2 &middot; الحزمة A">Teacher Guide &middot; Unit 2 &middot; Package A</div><div class="hero-t" data-en="Lesson Flow Notes" data-ar="ملاحظات سير الحصة">Lesson Flow Notes</div><div class="hero-s" data-en="Timing and facilitation tips across both sessions." data-ar="توقيتات وإرشادات التيسير عبر الحصتين.">Timing and facilitation tips across both sessions.</div></div>
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div class="card"><div class="ctit"><i class="ti ti-clock" style="color:#7C3AED"></i> <span data-en="Session 1 · 0–10 min · Activity 1" data-ar="الحصة 1 · 0–10 د · النشاط 1">Session 1 · 0–10 min · Activity 1</span></div><div class="cbody" data-en="Ask the show-of-hands question, no comment. Read Nour's scenario aloud. 90 seconds pair discussion, then 3–4 responses on the board." data-ar="اطرح سؤال رفع الأيدي دون تعليق. اقرأ سيناريو نور بصوت عالٍ. 90 ثانية نقاش ثنائي، ثم 3-4 إجابات على اللوح.">Ask the show-of-hands question, no comment. Read Nour's scenario aloud. 90 seconds pair discussion, then 3–4 responses on the board.</div></div>
+    <div class="card"><div class="ctit"><i class="ti ti-clock" style="color:#7C3AED"></i> <span data-en="Session 1 · 10–25 min · Activity 2" data-ar="الحصة 1 · 10–25 د · النشاط 2">Session 1 · 10–25 min · Activity 2</span></div><div class="cbody" data-en="Write the 3 prompt versions on the board. Circulate — push for subject-specific roles and real context, not generic phrasing." data-ar="اكتب نسخ الأمر الثلاث على اللوح. تجوّل — ادفع نحو أدوار مرتبطة بمادة وسياق حقيقي، لا صياغة عامة.">Write the 3 prompt versions on the board. Circulate — push for subject-specific roles and real context, not generic phrasing.</div></div>
+    <div class="card"><div class="ctit"><i class="ti ti-clock" style="color:#7C3AED"></i> <span data-en="Session 1 · 25–35 min · Activity 3" data-ar="الحصة 1 · 25–35 د · النشاط 3">Session 1 · 25–35 min · Activity 3</span></div><div class="cbody" data-en="Live demo is critical — type a weak prompt, then the 3-Part version, on a topic students currently study. Let them observe the difference." data-ar="العرض الحي أساسي — اكتب أمرًا ضعيفًا ثم النسخة الثلاثية حول موضوع يدرسه الطلاب حاليًا. دعهم يلاحظون الفرق.">Live demo is critical — type a weak prompt, then the 3-Part version, on a topic students currently study. Let them observe the difference.</div></div>
+    <div class="card"><div class="ctit"><i class="ti ti-clock" style="color:#7C3AED"></i> <span data-en="Session 1 · 35–50 min · Activity 4 + Exit" data-ar="الحصة 1 · 35–50 د · النشاط 4 + خروج">Session 1 · 35–50 min · Activity 4 + Exit</span></div><div class="cbody" data-en="Circulate actively during testing. Watch for students drifting to other homework — redirect immediately. Collect Exit Ticket 1 before dismissal." data-ar="تجوّل بفعالية أثناء الاختبار. راقب انحراف الطلاب نحو واجبات أخرى — أعد التوجيه فورًا. اجمع بطاقة الخروج 1 قبل الانصراف.">Circulate actively during testing. Watch for students drifting to other homework — redirect immediately. Collect Exit Ticket 1 before dismissal.</div></div>
+    <div class="card"><div class="ctit"><i class="ti ti-clock" style="color:#7C3AED"></i> <span data-en="Session 2 · 0–8 min · Activity 5" data-ar="الحصة 2 · 0–8 د · النشاط 5">Session 2 · 0–8 min · Activity 5</span></div><div class="cbody" data-en="Cold-call 3 students for the formula. If most cannot recall it, spend 3 extra minutes re-teaching before moving on." data-ar="اسأل 3 طلاب مباشرة عن الصيغة. إذا لم يستطع معظمهم تذكّرها، اقضِ 3 دقائق إضافية في إعادة التدريس قبل المتابعة.">Cold-call 3 students for the formula. If most cannot recall it, spend 3 extra minutes re-teaching before moving on.</div></div>
+    <div class="card"><div class="ctit"><i class="ti ti-clock" style="color:#7C3AED"></i> <span data-en="Session 2 · 8–28 min · Activity 6" data-ar="الحصة 2 · 8–28 د · النشاط 6">Session 2 · 8–28 min · Activity 6</span></div><div class="cbody" data-en="Rotate stations every 5 minutes, or run simultaneously with enough devices. The verification step at each station is not optional." data-ar="ناوب المحطات كل 5 دقائق، أو شغّلها في وقت واحد مع توفر أجهزة كافية. خطوة التحقق في كل محطة ليست اختيارية.">Rotate stations every 5 minutes, or run simultaneously with enough devices. The verification step at each station is not optional.</div></div>
+    <div class="card"><div class="ctit"><i class="ti ti-clock" style="color:#7C3AED"></i> <span data-en="Session 2 · 28–38 min · Activity 7" data-ar="الحصة 2 · 28–38 د · النشاط 7">Session 2 · 28–38 min · Activity 7</span></div><div class="cbody" data-en="Use a &ldquo;one new voice per round&rdquo; rule. Listen for evidence of verification, building on AI, or noticing errors." data-ar="استخدم قاعدة «صوت جديد في كل جولة». استمع لأدلة التحقق، أو البناء على الذكاء الاصطناعي، أو ملاحظة الأخطاء.">Use a "one new voice per round" rule. Listen for evidence of verification, building on AI, or noticing errors.</div></div>
+    <div class="card"><div class="ctit"><i class="ti ti-clock" style="color:#7C3AED"></i> <span data-en="Session 2 · 38–53 min · Activity 8" data-ar="الحصة 2 · 38–53 د · النشاط 8">Session 2 · 38–53 min · Activity 8</span></div><div class="cbody" data-en="Check Part 3 (Still Wonder) specifically while circulating. If empty, sit with the student and ask: &ldquo;What's one thing AI said you're not 100% sure about?&rdquo;" data-ar="راجع الجزء 3 (ما زلت أتساءل) تحديدًا أثناء التجوّل. إذا كان فارغًا، اجلس مع الطالب واسأل: «ما شيء قاله الذكاء الاصطناعي لست متأكدًا منه؟»">Check Part 3 (Still Wonder) specifically while circulating. If empty, sit with the student and ask: "What's one thing AI said you're not 100% sure about?"</div></div>
+    <div class="card"><div class="ctit"><i class="ti ti-clock" style="color:#7C3AED"></i> <span data-en="Session 2 · 53–60 min · Exit + Closing" data-ar="الحصة 2 · 53–60 د · خروج + ختام">Session 2 · 53–60 min · Exit + Closing</span></div><div class="cbody" data-en="7 minutes for Exit Ticket 2. Return to the Essential Question — 30 seconds silence before asking for changed answers. Bridge briefly to Unit 3." data-ar="7 دقائق لبطاقة الخروج 2. عد للسؤال الجوهري — 30 ثانية صمت قبل طلب الإجابات المتغيرة. اربط باختصار بالوحدة 3.">7 minutes for Exit Ticket 2. Return to the Essential Question — 30 seconds silence before asking for changed answers. Bridge briefly to Unit 3.</div></div>
+  </div>
+</div>
+<div class="pnf"><span class="pnfl">Teacher Guide &middot; Unit 2</span><button class="btn bo" onclick="go('tdiff',nl(18))"><span data-en="Differentiation" data-ar="التمايز">Differentiation</span> <i class="ti ti-arrow-right"></i></button></div>
+</div>
+
+<!-- TEACHER: DIFFERENTIATION -->
+<div class="panel" id="p-tdiff">
+<div class="pbody">
+  <div class="hero" style="background:#1E1B4B">
+    <div class="hero-eye" data-en="Teacher Guide &middot; Unit 2 &middot; Package A" data-ar="دليل المعلم &middot; الوحدة 2 &middot; الحزمة A">Teacher Guide &middot; Unit 2 &middot; Package A</div>
+    <div class="hero-t" data-en="Differentiation by Cognitive Level" data-ar="التمايز حسب المستوى المعرفي">Differentiation by Cognitive Level</div>
+    <div class="hero-s" data-en="Every activity in this unit can be adjusted to meet students at three levels — not a rigid prescription." data-ar="كل نشاط في هذه الوحدة يمكن تعديله لتلبية ثلاثة مستويات من الطلاب — ليس وصفة جامدة.">Every activity in this unit can be adjusted to meet students at three levels — not a rigid prescription.</div>
+  </div>
+
+  <div class="sh" style="font-size:15px"><i class="ti ti-table"></i><span data-en="5.1 · Grade-Band Adaptation Matrix" data-ar="5.1 · مصفوفة التكييف حسب الفئة العمرية">5.1 · Grade-Band Adaptation Matrix</span></div>
+  <div class="g3" style="margin-bottom:10px">
+    <div class="card" style="border-top:3px solid #06B6D4;padding:12px 14px">
+      <div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#06B6D4;margin-bottom:4px" data-en="Grades 7–8" data-ar="الصفوف 7–8">Grades 7–8</div>
+      <div style="font-size:12.5px;font-weight:700;color:#0A1628" data-en="Remember &amp; Understand" data-ar="التذكر والفهم">Remember &amp; Understand</div>
+      <div style="font-size:11px;color:var(--gray-500);margin-top:3px" data-en="Follow → Apply → Describe" data-ar="اتّبع ← طبّق ← صف">Follow → Apply → Describe</div>
+    </div>
+    <div class="card" style="border-top:3px solid #7C3AED;padding:12px 14px">
+      <div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#7C3AED;margin-bottom:4px" data-en="Grades 9–10" data-ar="الصفوف 9–10">Grades 9–10</div>
+      <div style="font-size:12.5px;font-weight:700;color:#0A1628" data-en="Apply &amp; Analyze" data-ar="التطبيق والتحليل">Apply &amp; Analyze</div>
+      <div style="font-size:11px;color:var(--gray-500);margin-top:3px" data-en="Construct → Compare → Refine" data-ar="ابنِ ← قارن ← نقّح">Construct → Compare → Refine</div>
+    </div>
+    <div class="card" style="border-top:3px solid #16A34A;padding:12px 14px">
+      <div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#16A34A;margin-bottom:4px" data-en="Grades 11–12" data-ar="الصفوف 11–12">Grades 11–12</div>
+      <div style="font-size:12.5px;font-weight:700;color:#0A1628" data-en="Evaluate &amp; Create" data-ar="التقييم والإنشاء">Evaluate &amp; Create</div>
+      <div style="font-size:11px;color:var(--gray-500);margin-top:3px" data-en="Design → Critique → Transfer" data-ar="صمّم ← انقد ← انقل">Design → Critique → Transfer</div>
+    </div>
+  </div>
+
+  <div style="overflow-x:auto;margin-bottom:18px">
+    <table style="width:100%;border-collapse:collapse;font-size:12px;background:#fff;border-radius:var(--radius);overflow:hidden;border:1px solid var(--gray-200)">
+      <thead>
+        <tr style="background:#0A1628;color:#fff">
+          <th style="padding:9px 12px;text-align:left;font-weight:600;width:16%" data-en="Activity" data-ar="النشاط">Activity</th>
+          <th style="padding:9px 10px;text-align:left;font-weight:600;color:#67E8F9">🟦 <span data-en="Grades 7–8" data-ar="الصفوف 7–8">Grades 7–8</span></th>
+          <th style="padding:9px 10px;text-align:left;font-weight:600;color:#DDD6FE">🟪 <span data-en="Grades 9–10" data-ar="الصفوف 9–10">Grades 9–10</span></th>
+          <th style="padding:9px 10px;text-align:left;font-weight:600;color:#BBF7D0">🟩 <span data-en="Grades 11–12" data-ar="الصفوف 11–12">Grades 11–12</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--gray-100)">
+          <td style="padding:9px 12px;font-weight:700;color:#0A1628" data-en="A1 · The Shortcut Trap" data-ar="ن1 · فخ الاختصار">A1 · The Shortcut Trap</td>
+          <td style="padding:9px 10px" data-en="Name what Nour did in one verb — do not open the debate yet." data-ar="سمِّ ما فعلته نور بفعل واحد — لا تفتح النقاش بعد.">Name what Nour did in one verb — do not open the debate yet.</td>
+          <td style="padding:9px 10px" data-en="Name the step Nour skipped; predict her result and give the reason." data-ar="سمِّ الخطوة التي تخطّتها نور؛ توقّع نتيجتها واذكر السبب.">Name the step Nour skipped; predict her result and give the reason.</td>
+          <td style="padding:9px 10px" data-en="Is the problem Nour, or the way we assess learning?" data-ar="هل المشكلة في نور، أم في طريقة تقييمنا للتعلم؟">Is the problem Nour, or the way we assess learning?</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gray-100);background:var(--gray-50)">
+          <td style="padding:9px 12px;font-weight:700;color:#0A1628" data-en="A2 · Prompt Anatomy Workshop" data-ar="ن2 · ورشة تشريح الأمر">A2 · Prompt Anatomy Workshop</td>
+          <td style="padding:9px 10px" data-en="Label which prompt is weak/medium/strong; underline what makes the strong one strong." data-ar="صنّف أي أمر ضعيف/متوسط/قوي؛ ضع خطًا تحت ما يجعل القوي قويًا.">Label which prompt is weak/medium/strong; underline what makes the strong one strong.</td>
+          <td style="padding:9px 10px" data-en="Write the strong version themselves, then compare with the model." data-ar="اكتب النسخة القوية بنفسك، ثم قارنها بالنموذج.">Write the strong version themselves, then compare with the model.</td>
+          <td style="padding:9px 10px" data-en="Write a deliberately weak prompt that still looks plausible — explain why plausibility is the real danger." data-ar="اكتب أمرًا ضعيفًا عمدًا لكنه يبدو معقولًا — اشرح لماذا المعقولية هي الخطر الحقيقي.">Write a deliberately weak prompt that still looks plausible — explain why plausibility is the real danger.</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gray-100)">
+          <td style="padding:9px 12px;font-weight:700;color:#0A1628" data-en="A3 · The 3-Part Formula" data-ar="ن3 · الصيغة الثلاثية">A3 · The 3-Part Formula</td>
+          <td style="padding:9px 10px" data-en="Copy the Role/Task/Context structure using their own subject, from a worked example." data-ar="انسخ بنية الدور/المهمة/السياق باستخدام مادته الخاصة، من مثال محلول.">Copy the Role/Task/Context structure using their own subject, from a worked example.</td>
+          <td style="padding:9px 10px" data-en="List three specific differences the live demo produced — not &ldquo;better,&rdquo; but what changed." data-ar="اذكر ثلاثة فروقات محددة أنتجها العرض الحي — ليس «أفضل» فقط، بل ما الذي تغيّر.">List three specific differences the live demo produced — not "better," but what changed.</td>
+          <td style="padding:9px 10px" data-en="Critique the formula: propose and defend a fourth part it is missing." data-ar="انقد الصيغة: اقترح وادافع عن جزء رابع ينقصها.">Critique the formula: propose and defend a fourth part it is missing.</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gray-100);background:var(--gray-50)">
+          <td style="padding:9px 12px;font-weight:700;color:#0A1628" data-en="A4 · Upgrade My Prompt" data-ar="ن4 · طوّر أمري">A4 · Upgrade My Prompt</td>
+          <td style="padding:9px 10px" data-en="Use the sentence stem; one prompt, one revision." data-ar="استخدم القالب الجاهز؛ أمر واحد، تنقيح واحد.">Use the sentence stem; one prompt, one revision.</td>
+          <td style="padding:9px 10px" data-en="Write their own 3-part prompt, run it, revise once, log the change." data-ar="اكتب أمره الثلاثي، شغّله، نقّحه مرة، وسجّل التغيير.">Write their own 3-part prompt, run it, revise once, log the change.</td>
+          <td style="padding:9px 10px" data-en="Write a multi-turn sequence — opening prompt plus two follow-ups that build on each response." data-ar="اكتب تسلسلًا متعدد الأدوار — أمر افتتاحي مع متابعتين تبنيان على كل إجابة.">Write a multi-turn sequence — opening prompt plus two follow-ups that build on each response.</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gray-100)">
+          <td style="padding:9px 12px;font-weight:700;color:#0A1628" data-en="A6 · AI Learning Stations" data-ar="ن6 · محطات التعلم">A6 · AI Learning Stations</td>
+          <td style="padding:9px 10px" data-en="Two stations, teacher-modelled; verify one fact against the textbook." data-ar="محطتان، يمثّلهما المعلم؛ تحقق من حقيقة واحدة مقابل الكتاب.">Two stations, teacher-modelled; verify one fact against the textbook.</td>
+          <td style="padding:9px 10px" data-en="All four stations; apply the Verify–Reflect Cycle at each." data-ar="المحطات الأربع كاملة؛ طبّق دورة تحقق-تأمل في كل واحدة.">All four stations; apply the Verify–Reflect Cycle at each.</td>
+          <td style="padding:9px 10px" data-en="Choose a topic where AI is likely to err; document the error and the prompt fix." data-ar="اختر موضوعًا يُرجَّح أن يخطئ فيه الذكاء الاصطناعي؛ وثّق الخطأ وإصلاح الأمر.">Choose a topic where AI is likely to err; document the error and the prompt fix.</td>
+        </tr>
+        <tr style="background:var(--gray-50)">
+          <td style="padding:9px 12px;font-weight:700;color:#0A1628" data-en="A8 · Learning Summary" data-ar="ن8 · ملخصي التعلمي">A8 · Learning Summary</td>
+          <td style="padding:9px 10px" data-en="Parts 1–2 only; a drawing may replace writing." data-ar="الجزءان 1-2 فقط؛ يمكن للرسم أن يحل محل الكتابة.">Parts 1–2 only; a drawing may replace writing.</td>
+          <td style="padding:9px 10px" data-en="All three parts, with one specific example of AI changing their thinking." data-ar="الأجزاء الثلاثة، مع مثال محدد على تغيير الذكاء الاصطناعي لتفكيره.">All three parts, with one specific example of AI changing their thinking.</td>
+          <td style="padding:9px 10px" data-en="Add Part 4 — the next question to ask — and name a subject where this method would fail." data-ar="أضف جزءًا 4 — السؤال التالي الذي سيُطرح — وسمِّ مادة يفشل فيها هذا الأسلوب.">Add Part 4 — the next question to ask — and name a subject where this method would fail.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ibox bg-r" style="margin-bottom:18px"><i class="ti ti-plug-connected-x"></i><div class="ibox-b"><strong data-en="No-Device / Low-Tech Fallback — All Grade Bands" data-ar="بديل بلا أجهزة / تقنية محدودة — لكل الفئات العمرية">No-Device / Low-Tech Fallback — All Grade Bands</strong><span data-en="The teacher models every AI interaction on the projector; students write their prompts on paper and predict the response before it is revealed. Prediction-first raises metacognitive demand rather than lowering it." data-ar="يعرض المعلم كل تفاعل مع الذكاء الاصطناعي على جهاز العرض؛ يكتب الطلاب أوامرهم على ورق ويتنبؤون بالإجابة قبل كشفها. التنبؤ أولًا يرفع الطلب المعرفي بدل أن يخفضه.">The teacher models every AI interaction on the projector; students write their prompts on paper and predict the response before it is revealed. Prediction-first raises metacognitive demand rather than lowering it.</span></div></div>
+  <div class="ibox bg-g" style="margin-bottom:18px"><i class="ti ti-users-group"></i><div class="ibox-b"><strong data-en="Grades 11–12 without devices" data-ar="الصفوف 11–12 بدون أجهزة">Grades 11–12 without devices</strong><span data-en="Run A6 as a whole-class adversarial exercise — the class writes a prompt designed to make the projected model fail, then analyses the result together." data-ar="نفّذ النشاط 6 كتمرين جماعي تحدّي — يكتب الصف أمرًا مصمّمًا لجعل النموذج المعروض يخطئ، ثم يحلّلون النتيجة معًا.">Run A6 as a whole-class adversarial exercise — the class writes a prompt designed to make the projected model fail, then analyses the result together.</span></div></div>
+
+  <div class="sh" style="font-size:15px"><i class="ti ti-adjustments-horizontal"></i><span data-en="5.2 · Within-Band Support Levels" data-ar="5.2 · مستويات الدعم ضمن الفئة الواحدة">5.2 · Within-Band Support Levels</span></div>
+  <p style="font-size:12px;color:var(--gray-600);margin-bottom:10px" data-en="Every activity in this unit can be adjusted to meet students at three levels. Use this as a reference during planning, not as a rigid prescription." data-ar="يمكن تعديل كل نشاط في هذه الوحدة لتلبية ثلاثة مستويات من الطلاب. استخدم هذا كمرجع أثناء التخطيط، لا كوصفة جامدة.">Every activity in this unit can be adjusted to meet students at three levels. Use this as a reference during planning, not as a rigid prescription.</p>
+
+  <div style="overflow-x:auto;margin-bottom:14px">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;background:#fff;border-radius:var(--radius);overflow:hidden;border:1px solid var(--gray-200)">
+      <thead>
+        <tr style="background:#0A1628;color:#fff">
+          <th style="padding:10px 14px;text-align:left;font-weight:600;width:13%" data-en="Level" data-ar="المستوى">Level</th>
+          <th style="padding:10px 14px;text-align:left;font-weight:600;width:18%" data-en="Profile" data-ar="الوصف">Profile</th>
+          <th style="padding:10px 14px;text-align:left;font-weight:600" data-en="Prompt Writing" data-ar="كتابة الأمر">Prompt Writing</th>
+          <th style="padding:10px 14px;text-align:left;font-weight:600" data-en="AI Interaction" data-ar="التفاعل مع الذكاء الاصطناعي">AI Interaction</th>
+          <th style="padding:10px 14px;text-align:left;font-weight:600" data-en="Learning Summary" data-ar="ملخصي التعلمي">Learning Summary</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--gray-100)">
+          <td style="padding:10px 14px"><span style="background:#06B6D4;color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px" data-en="🟡 Foundational" data-ar="🟡 أساسي">🟡 Foundational</span></td>
+          <td style="padding:10px 14px;font-size:11.5px;color:var(--gray-600)" data-en="Limited prior tech experience; may feel uncertain about using AI" data-ar="خبرة تقنية محدودة سابقًا؛ قد يشعر بعدم اليقين حول استخدام الذكاء الاصطناعي">Limited prior tech experience; may feel uncertain about using AI</td>
+          <td style="padding:10px 14px" data-en="Use the sentence stem: 'You are a [subject] teacher. Explain [topic] in simple steps. I am a Grade [X] student.'" data-ar="استخدم القالب: «أنت معلم [مادة]. اشرح [موضوع] بخطوات بسيطة. أنا طالب في الصف [X].»">Use the sentence stem: 'You are a [subject] teacher. Explain [topic] in simple steps. I am a Grade [X] student.'</td>
+          <td style="padding:10px 14px" data-en="Work with teacher-modeled prompts; verify one fact using a textbook" data-ar="اعمل بأوامر يمثّلها المعلم؛ تحقق من حقيقة واحدة باستخدام الكتاب">Work with teacher-modeled prompts; verify one fact using a textbook</td>
+          <td style="padding:10px 14px" data-en="Complete Parts 1–2 only; draw or diagram instead of writing if needed" data-ar="أكمل الجزءين 1–2 فقط؛ ارسم بدل الكتابة إذا لزم">Complete Parts 1–2 only; draw or diagram instead of writing if needed</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gray-100);background:var(--gray-50)">
+          <td style="padding:10px 14px"><span style="background:#7C3AED;color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px" data-en="🔵 On-Level" data-ar="🔵 متوسط">🔵 On-Level</span></td>
+          <td style="padding:10px 14px;font-size:11.5px;color:var(--gray-600)" data-en="Comfortable using digital tools; familiar with AI from Unit 1" data-ar="مرتاح في استخدام الأدوات الرقمية؛ متعرّف على الذكاء الاصطناعي من الوحدة 1">Comfortable using digital tools; familiar with AI from Unit 1</td>
+          <td style="padding:10px 14px" data-en="Write their own 3-Part prompt independently; revise once based on response quality" data-ar="يكتب أمره الثلاثي بمفرده؛ ينقّحه مرة بناءً على جودة الإجابة">Write their own 3-Part prompt independently; revise once based on response quality</td>
+          <td style="padding:10px 14px" data-en="Complete all four Learning Stations; apply Verify-Reflect at each one" data-ar="أكمل جميع المحطات الأربع؛ طبّق تحقق-تأمل في كل واحدة">Complete all four Learning Stations; apply Verify-Reflect at each one</td>
+          <td style="padding:10px 14px" data-en="Complete all three parts; include one specific example of changed thinking" data-ar="أكمل الأجزاء الثلاثة؛ أضف مثالًا محددًا على تغيّر تفكيره">Complete all three parts; include one specific example of changed thinking</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 14px"><span style="background:#16A34A;color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px" data-en="🟢 Advanced" data-ar="🟢 متقدم">🟢 Advanced</span></td>
+          <td style="padding:10px 14px;font-size:11.5px;color:var(--gray-600)" data-en="Confident with AI; has used it independently before this curriculum" data-ar="واثق من استخدام الذكاء الاصطناعي؛ استخدمه بمفرده قبل هذا المنهاج">Confident with AI; has used it independently before this curriculum</td>
+          <td style="padding:10px 14px" data-en="Write a multi-turn sequence: initial prompt + two follow-ups that build on each response" data-ar="اكتب تسلسلًا متعدد الأدوار: أمر أولي + متابعتان تبنيان على كل إجابة">Write a multi-turn sequence: initial prompt + two follow-ups that build on each response</td>
+          <td style="padding:10px 14px" data-en="Choose a topic where AI is likely to err; document the error and correction" data-ar="اختر موضوعًا يُرجَّح أن يخطئ فيه الذكاء الاصطناعي؛ وثّق الخطأ والتصحيح">Choose a topic where AI is likely to err; document the error and correction</td>
+          <td style="padding:10px 14px" data-en="Add a Part 4: 'What question would I ask next?' and write that next prompt" data-ar="أضف جزءًا 4: «ما السؤال التالي؟» واكتب ذلك الأمر التالي">Add a Part 4: 'What question would I ask next?' and write that next prompt</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sh" style="font-size:15px"><i class="ti ti-plug-off"></i><span data-en="5.3 · No-Device / Low-Tech Fallback" data-ar="5.3 · بديل بلا أجهزة / تقنية محدودة">5.3 · No-Device / Low-Tech Fallback</span></div>
+  <div class="ibox bg-n"><i class="ti ti-device-mobile-off"></i><div class="ibox-b"><strong data-en="Prediction-first strategy" data-ar="استراتيجية التنبؤ أولًا">Prediction-first strategy</strong><span data-en="Teacher models all AI interactions via projector; students write their prompts on paper and predict the AI response before seeing it. Students who predict what AI will say must think about the topic first — this constraint increases metacognitive engagement rather than reducing learning quality." data-ar="يعرض المعلم كل التفاعلات عبر جهاز العرض؛ يكتب الطلاب أوامرهم على ورق ويتنبؤون بإجابة الذكاء الاصطناعي قبل رؤيتها. الطلاب الذين يتنبؤون بما سيقوله الذكاء الاصطناعي يجب أن يفكروا في الموضوع أولًا — هذا القيد يزيد الانخراط المعرفي بدل أن يقلل جودة التعلم.">Teacher models all AI interactions via projector; students write their prompts on paper and predict the AI response before seeing it. Students who predict what AI will say must think about the topic first — this constraint increases metacognitive engagement rather than reducing learning quality.</span></div></div>
+</div>
+<div class="pnf"><div class="pnfr"><button class="btn bo" onclick="go('tnotes',nl(17))"><i class="ti ti-arrow-left"></i> Back</button></div><span class="pnfl">Teacher Guide &middot; Unit 2 &middot; End</span></div>
+</div>
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<script>
+// nav links indexed exactly as they appear in sidebar
+// 0:overview 1:eq 2:act1 3:act2 4:act3 5:act4 6:exit1
+// 7:act5 8:act6 9:act7 10:act8 11:exit2 12:flash
+// 13:quiz 14:rubric 15:reflection 16:closing
+// 17:tnotes 18:tdiff
+const STUDENT_PANELS=['overview','eq','act1','act2','act3','act4','exit1','act5','act6','act7','act8','exit2','flash','quiz','rubric','reflection','closing'];
+let isTeacher=false, isAr=false;
+
+function nl(i){return document.querySelectorAll('.nl')[i];}
+
+function go(id,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  var p=document.getElementById('p-'+id);
+  if(p)p.classList.add('active');
+  document.querySelectorAll('.nl').forEach(n=>n.classList.remove('active'));
+  if(el)el.classList.add('active');
+  var idx=STUDENT_PANELS.indexOf(id);
+  var pct=idx<0?0:Math.round(idx/(STUDENT_PANELS.length-1)*100);
+  document.getElementById('pf').style.width=pct+'%';
+  var lbl=document.getElementById('nav-pct');
+  if(lbl) lbl.textContent=pct+'%';
+}
+
+function switchView(v){
+  isTeacher=(v==='teacher');
+  document.getElementById('vs').classList.toggle('active',!isTeacher);
+  document.getElementById('vt').classList.toggle('active',isTeacher);
+  document.getElementById('textras').style.display=isTeacher?'block':'none';
+  document.querySelectorAll('.t-only').forEach(function(el){el.style.display=isTeacher?'block':'none';});
+}
+
+function switchLang(lang){
+  isAr=(lang==='ar');
+  document.getElementById('le').classList.toggle('active',!isAr);
+  document.getElementById('la').classList.toggle('active',isAr);
+  document.body.classList.toggle('ar',isAr);
+  document.documentElement.dir=isAr?'rtl':'ltr';
+  document.documentElement.lang=isAr?'ar':'en';
+  var attr=isAr?'data-ar':'data-en';
+  document.querySelectorAll('['+attr+']').forEach(function(el){
+    var val=el.getAttribute(attr);
+    if(!val)return;
+    var tag=el.tagName;
+    if(tag==='TEXTAREA'||tag==='INPUT'){
+      var ph=el.getAttribute('data-plar');
+      if(isAr&&ph)el.placeholder=ph;
+    } else if(tag==='BUTTON'){
+      el.textContent=val;
+    } else if(el.children.length===0){
+      el.innerHTML=val;
+    } else {
+      var classes=['stxt','hero-s','cbody','ibox-b','tbbody','agoal','info-desc','flow-desc','cc-item','closing-q-text'];
+      var match=classes.some(function(c){return el.classList.contains(c);});
+      if(match||el.getAttribute(attr)){
+        var hasText=false;
+        for(var i=0;i<el.childNodes.length;i++){if(el.childNodes[i].nodeType===3&&el.childNodes[i].textContent.trim()){hasText=true;break;}}
+        if(hasText)el.innerHTML=val;
+      }
+    }
+  });
+}
+
+function eqPick(btn,choice){
+  btn.parentElement.querySelectorAll('.btn').forEach(function(b){ b.classList.remove('bn'); b.classList.add('bo'); });
+  btn.classList.remove('bo'); btn.classList.add('bn');
+}
+
+// ── Hamburger sidebar
+function toggleSidebar(){
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('sb-overlay').classList.toggle('open');
+}
+function closeSidebar(){
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('sb-overlay').classList.remove('open');
+}
+document.querySelectorAll('.nl').forEach(function(nl){
+  nl.addEventListener('click', function(){ if(window.innerWidth<=700) closeSidebar(); });
+});
+
+// ── Formative / Quiz MCQ (D3)
+var fqFeedback = {
+  fq1:{ correct:'c', fb:{ a:"Too vague — AI doesn't know your level or purpose.", b:"Better, but still no role or context.", c:"Exactly right — Role + Task + Context gives AI what it needs.", d:"Far too broad to produce a useful learning response." }},
+  fq2:{ correct:'c', fb:{ a:"Not quite — no thinking or verification happened here.", b:"This is passive use, not active use.", c:"Correct. Submitting an unread AI answer is passive, AI-generated work.", d:"The Verify-Reflect Cycle wasn't applied in this scenario at all." }},
+  fq3:{ correct:'c', fb:{ a:"That's the Role part, not Context.", b:"That's the Task part, not Context.", c:"Correct! Context tells AI what you already know and your level.", d:"Response length isn't part of the 3-Part Formula." }},
+  fq4:{ correct:'c', fb:{ a:"This IS part of the cycle — sense-checking matters.", b:"This IS part of the cycle — verification matters.", c:"Correct — length has nothing to do with whether the response is trustworthy or understood.", d:"This IS part of the cycle — reflecting on new learning matters." }},
+  fq5:{ correct:'d', fb:{ a:"There's also a clear Task and Context here.", b:"There's also a clear Role ('math teacher') here.", c:"There's also clear Context ('I understand multiplication already') here.", d:"Correct! All three parts are present: Role, Task, and Context." }},
+  fq6:{ correct:'b', fb:{ a:"This is passive, AI-generated work — no thinking involved.", b:"Exactly — using AI, then thinking and rewriting in your own words, is AI-assisted learning.", c:"This skips the student's own thinking entirely.", d:"Copying without processing is passive use." }}
+};
+var fqScores = {};
+function fqPick(el, qid, choice){
+  var q=fqFeedback[qid];
+  if(!q) return;
+  var opts=document.getElementById(qid).querySelectorAll('.fq-opt');
+  opts.forEach(function(o){ o.classList.remove('picked-right','picked-wrong','revealed-correct'); o.style.pointerEvents='none'; });
+  var isRight=(choice===q.correct);
+  el.classList.add(isRight?'picked-right':'picked-wrong');
+  if(!isRight){ opts.forEach(function(o,i){ var letters=['a','b','c','d']; if(letters[i]===q.correct) o.classList.add('revealed-correct'); }); }
+  var fb=document.getElementById(qid+'-fb');
+  if(fb){ fb.textContent=q.fb[choice]||''; fb.className='fq-fb '+(isRight?'show-right':'show-wrong'); }
+  if(!(qid in fqScores)){ fqScores[qid]=isRight; var scored=Object.keys(fqScores).length; if(scored===6){ var correct=Object.values(fqScores).filter(Boolean).length; var sum=document.getElementById('fq-summary'); sum.style.display='flex'; document.getElementById('fq-score-lbl').textContent=correct+'/6 correct'; document.getElementById('fq-score-txt').textContent=' — '+(correct>=5?"Excellent! You're ready for Part B.":correct>=4?"Great work — review the ones you missed.":"Good try — revisit the 3-Part Formula and try again."); }}
+}
+
+// ── Activity 4 / Exit ticket toggles (weak/okay/strong, yes/no etc.)
+function anaToggle(btn,group){
+  btn.parentElement.querySelectorAll('.btn').forEach(function(b){ b.classList.remove('bn'); b.classList.add('bo'); });
+  btn.classList.remove('bo'); btn.classList.add('bn');
+}
+
+// ── Flashcards
+var flashFlipped = {};
+function flipCard(card){
+  card.classList.toggle('flipped');
+  var idx = Array.from(document.querySelectorAll('.flash-card')).indexOf(card);
+  if(card.classList.contains('flipped')) flashFlipped[idx]=true;
+  var count = Object.keys(flashFlipped).length;
+  var el = document.getElementById('flashDoneCount');
+  if(el) el.textContent = count;
+}
+
+// ── Rubric D4 — 4-level click scoring, weighted like Unit 1's success criteria
+function rubPick(td, row){
+  var tr=document.querySelectorAll('.rub-row')[row];
+  if(!tr) return;
+  tr.querySelectorAll('.rub-lvl').forEach(function(c){ c.style.background=''; c.style.outline=''; c.classList.remove('rub-picked'); });
+  td.style.background='rgba(6,182,212,.15)';
+  td.style.outline='2px solid #06B6D4';
+  td.classList.add('rub-picked');
+  td.dataset.rowScore=td.dataset.pts;
+  updateRubricProgress();
+}
+function updateRubricProgress(){
+  var rows=document.querySelectorAll('.rub-row');
+  var total=0;
+  rows.forEach(function(r){
+    var picked=r.querySelector('.rub-lvl.rub-picked');
+    if(picked) total+=parseInt(picked.dataset.pts,10);
+  });
+  var pct=Math.round((total/16)*100);
+  var numEl=document.getElementById('rub-pct-num');
+  var fillEl=document.getElementById('rub-meter-fill');
+  if(numEl) numEl.textContent=total;
+  if(fillEl){
+    fillEl.style.width=pct+'%';
+    var col=pct>=80?'linear-gradient(90deg,#16A34A,#06B6D4)':pct>=50?'linear-gradient(90deg,#F59E0B,#06B6D4)':'linear-gradient(90deg,#DC2626,#F59E0B)';
+    fillEl.style.background=col;
+  }
+}
+</script>
+</body>
+</html>
